@@ -1,10 +1,12 @@
-package com.ee5.mobile;
+package com.ee5.mobile.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Bundle;
 import android.widget.ProgressBar;
+
+import com.ee5.mobile.R;
 
 public class OverviewActivity extends AppCompatActivity {
 
@@ -15,7 +17,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         ConstraintLayout constraintLayout = findViewById(R.id.overview_layout);
 
-        ProgressBar progressBar = findViewById(R.id.);
+        ProgressBar progressBar = findViewById(R.id.progressBar);
         progressBar.setProgress(50);
     }
 }
