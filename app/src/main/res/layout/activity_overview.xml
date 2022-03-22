@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/overview_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Beige">
+
+    <Button
+        android:id="@+id/viewProfile_Btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="#C4C4C4"
+        android:fontFamily="@font/sfproregular"
+        android:includeFontPadding="false"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:stateListAnimator="@null"
+        android:text="View Profile"
+        android:textAllCaps="false"
+        android:textAppearance="@style/InputText"
+        android:textColor="@color/Dark"
+        android:textSize="14sp"
+        app:cornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.946"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="200dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="54dp"
+        android:text="TextView"
+        android:textColor="@color/Grey"
+        app:layout_constraintEnd_toEndOf="@+id/viewProfile_Btn"
+        app:layout_constraintTop_toBottomOf="@+id/viewProfile_Btn" />
+
+    <EditText
+        android:id="@+id/stepsleft_text"
+        android:layout_width="110dp"
+        android:layout_height="47dp"
+        android:ems="10"
+        android:text="Steps left"
+        android:textAppearance="@style/ButtonText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/stepsLeft_num"
+        tools:layout_editor_absoluteY="214dp" />
+
+    <EditText
+        android:id="@+id/stepsLeft_num"
+        android:layout_width="93dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="104dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="@+id/stepsleft_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/stepsleft_text"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="293dp"
+        android:layout_height="47dp"
+        android:max="100"
+        android:progress="50"
+        android:progressBackgroundTint="@color/Grey"
+        android:progressDrawable="@drawable/ic_launcher_foreground"
+        android:progressTint="@color/StepBlue"
+        android:progressTintMode="src_atop"
+        app:layout_constraintEnd_toEndOf="@+id/stepsleft_text"
+        app:layout_constraintStart_toStartOf="@+id/stepsLeft_num"
+        app:layout_constraintTop_toBottomOf="@+id/stepsleft_text" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
