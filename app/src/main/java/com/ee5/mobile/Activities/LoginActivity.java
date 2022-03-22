@@ -47,5 +47,13 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    //Setup connection to database
+
+    // GET request
+    // SELECT password FROM User WHERE email = "email"
+
+    //if query result returns none > wrong email
+    //else if passwords do not match > wrong password
+
 
 }
