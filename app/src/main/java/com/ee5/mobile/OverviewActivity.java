@@ -15,7 +15,5 @@ public class OverviewActivity extends AppCompatActivity {
 
         ConstraintLayout constraintLayout = findViewById(R.id.overview_layout);
 
-        ProgressBar progressBar = findViewById(R.id.);
-        progressBar.setProgress(50);
     }
 }
