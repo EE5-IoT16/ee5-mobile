@@ -14,7 +14,7 @@ public class OverviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_overview);
 
         ConstraintLayout constraintLayout = findViewById(R.id.overview_layout);
 
@@ -23,6 +23,8 @@ public class OverviewActivity extends AppCompatActivity {
 
         viewProfile_btn.setOnClickListener(v -> {
             Intent intent = new Intent(OverviewActivity.this, ProfileActivity.class);
+            startActivity(intent);
+
         });
 
     }
