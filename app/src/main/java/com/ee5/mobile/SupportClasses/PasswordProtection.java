@@ -1,4 +1,4 @@
-package com.ee5.mobile;
+package com.ee5.mobile.SupportClasses;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

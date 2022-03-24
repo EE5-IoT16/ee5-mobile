@@ -9,7 +9,7 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/Continue_Btn"
+        android:id="@+id/btnContinue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -26,18 +26,18 @@
         android:textSize="18sp"
         android:translationZ="10dp"
         app:cornerRadius="12dp"
-        app:layout_constraintEnd_toEndOf="@+id/editTextTextPassword"
+        app:layout_constraintEnd_toEndOf="@+id/passwordInput"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordInput" />
 
     <EditText
-        android:id="@+id/email_Input"
+        android:id="@+id/emailInput"
         android:layout_width="312dp"
         android:layout_height="45dp"
         android:background="@drawable/ic_rounded_input"
         android:ems="10"
-        android:hint="E-mail/Username"
+        android:hint="E-mail"
         android:inputType="textEmailAddress"
         android:paddingLeft="8dp"
         android:textAppearance="@style/InputText"
@@ -46,7 +46,7 @@
         android:textColorHint="@color/Grey"
         android:textColorLink="@color/HeartRed"
         android:textCursorDrawable="@null"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextPassword"
+        app:layout_constraintBottom_toTopOf="@+id/passwordInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +54,7 @@
         app:layout_constraintVertical_bias="0.913" />
 
     <EditText
-        android:id="@+id/editTextTextPassword"
+        android:id="@+id/passwordInput"
         android:layout_width="312dp"
         android:layout_height="45dp"
         android:layout_marginBottom="340dp"
@@ -70,8 +70,8 @@
         android:textColorLink="@color/HeartRed"
         android:textCursorDrawable="@null"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/email_Input"
+        app:layout_constraintEnd_toEndOf="@+id/emailInput"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/email_Input" />
+        app:layout_constraintStart_toStartOf="@+id/emailInput" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
