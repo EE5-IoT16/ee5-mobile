@@ -7,6 +7,118 @@
     android:layout_height="match_parent"
     android:background="@color/Beige">
 
+    <TextView
+        android:id="@+id/liveActivity_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="Live Activity"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="52dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stepsleft_text">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="12dp"
+            android:paddingEnd="6dp">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_tempcard" />
+
+            <TextView
+                android:id="@+id/temp_num"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:fontFamily="@font/sfprobold"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="37.1"
+                android:textColor="@color/BodyPurple"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+                app:layout_constraintEnd_toEndOf="@+id/imageView4"
+                app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp">
+
+            <ImageView
+                android:id="@+id/hr_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_hrcard" />
+
+            <TextView
+                android:id="@+id/hr_num"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:fontFamily="@font/sfprobold"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="82"
+                android:textColor="@color/HeartRed"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="@+id/hr_card"
+                app:layout_constraintEnd_toEndOf="@+id/hr_card"
+                app:layout_constraintTop_toTopOf="@+id/hr_card" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="6dp"
+            android:paddingEnd="12dp">
+
+            <ImageView
+                android:id="@+id/step_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_stepscard" />
+
+            <TextView
+                android:id="@+id/step_num"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:fontFamily="@font/sfprobold"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="2,113"
+                android:textColor="@color/StepBlue"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/step_card"
+                app:layout_constraintEnd_toEndOf="@+id/step_card"
+                app:layout_constraintTop_toTopOf="@+id/step_card" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/viewProfile_Btn"
         android:layout_width="wrap_content"
@@ -44,10 +156,13 @@
 
     <TextView
         android:id="@+id/stepsleft_text"
-        android:layout_width="110dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="44dp"
+        android:layout_width="108dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
+        android:fontFamily="@font/sfproregular"
+        android:gravity="bottom|center_vertical"
+        android:includeFontPadding="false"
         android:text="Steps left"
         android:textAppearance="@style/ButtonText"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,14 +172,30 @@
 
     <TextView
         android:id="@+id/stepsLeft_num"
-        android:layout_width="93dp"
-        android:layout_height="46dp"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="104dp"
         android:ems="10"
+        android:fontFamily="@font/sfprobold"
+        android:gravity="bottom"
+        android:includeFontPadding="false"
+        android:text="312"
+        android:textColor="@color/StepBlue"
+        android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="@+id/stepsleft_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/stepsleft_text"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="@+id/stepsleft_text" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="392dp"
+        android:layout_height="429dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stepsleft_text"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="0dp" >
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
