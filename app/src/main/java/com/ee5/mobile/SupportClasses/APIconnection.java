@@ -38,30 +38,24 @@ public class APIconnection extends AppCompatActivity {
 
 
 
-    public APIconnection (String requestType, String node, ArrayList<String> parameters){
+    public APIconnection (String node, ArrayList<String> parameters, ArrayList<String> values){
 
-        requestURL = requestURL + node + "/";
+        requestURL = requestURL + node + "?";
 
         for (int i = 0; i < parameters.size(); i++) {
 
-            requestURL = requestURL + parameters.get(i) + "/";
-
+            if (i == parameters.size() - 1) {
+                requestURL = requestURL + parameters.get(i) + "=" + values.get(i);
+            } else {
+                requestURL = requestURL + parameters.get(i) + "=" + values.get(i) + "&";
+            }
         }
-
-        if (requestType == "GET") {
-            GETRequest();
-        }
-
-    }
-
-    public JSONObject getJSONResponse() {
-        return JSONResponse;
     }
 
     /**
      * Retrieve information from DB with Volley JSONRequest
      */
-    public void GETRequest()
+    public JSONObject GETRequest()
     {
         requestQueue = Volley.newRequestQueue( this );
 
@@ -75,7 +69,7 @@ public class APIconnection extends AppCompatActivity {
                     {
                         try {
                             for( int i = 0; i < response.length(); i++ ) {
-                                JSONObject curObject = response.getJSONObject(i);
+                                JSONResponse = response.getJSONObject(i);
                                 //responseString += curObject.getString("name") + " : " + curObject.getString("email") + "\n";
                             }
                         }
@@ -97,6 +91,7 @@ public class APIconnection extends AppCompatActivity {
         );
 
         requestQueue.add(submitRequest);
+        return JSONResponse;
     }
 }
 

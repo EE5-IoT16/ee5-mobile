@@ -11,15 +11,20 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ee5.mobile.R;
+import com.ee5.mobile.SupportClasses.APIconnection;
+
+import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
 
-    String email, password;
+    private String email, password;
+    private ArrayList<String> loginData;
+    private ArrayList<String> loginParameters;
 
-    EditText emailInput;
-    EditText passwordInput;
+    private EditText emailInput;
+    private EditText passwordInput;
 
-    Button continueButton;
+    private Button continueButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +47,21 @@ public class LoginActivity extends AppCompatActivity {
 
                 email = emailInput.getText().toString();
                 password = passwordInput.getText().toString();
+                loginData.add(email);
+                loginData.add(password);
+                loginParameters.add("email");
+                loginParameters.add("password");
+                login();
 
             }
         });
+    }
+
+    public void login() {
+
+        APIconnection loginRequest = new APIconnection("User", loginParameters, loginData);
+        loginRequest.GETRequest();
+
     }
 
     //Setup connection to database
