@@ -16,6 +16,7 @@
         android:backgroundTint="@color/Grey"
         android:elevation="10dp"
         android:fontFamily="@font/sfproregular"
+
         android:includeFontPadding="false"
         android:stateListAnimator="@null"
         android:text="Continue"

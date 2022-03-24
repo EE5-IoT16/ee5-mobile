@@ -31,7 +31,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/quote_tv"
         android:layout_width="200dp"
         android:layout_height="64dp"
         android:layout_marginTop="54dp"
@@ -40,44 +40,29 @@
         app:layout_constraintEnd_toEndOf="@+id/viewProfile_Btn"
         app:layout_constraintTop_toBottomOf="@+id/viewProfile_Btn" />
 
-    <EditText
+    <TextView
         android:id="@+id/stepsleft_text"
         android:layout_width="110dp"
         android:layout_height="47dp"
+        android:layout_marginTop="44dp"
         android:ems="10"
         android:text="Steps left"
         android:textAppearance="@style/ButtonText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/stepsLeft_num"
-        tools:layout_editor_absoluteY="214dp" />
+        app:layout_constraintTop_toBottomOf="@+id/quote_tv" />
 
-    <EditText
+    <TextView
         android:id="@+id/stepsLeft_num"
         android:layout_width="93dp"
         android:layout_height="46dp"
         android:layout_marginStart="104dp"
         android:ems="10"
-        android:inputType="number"
         app:layout_constraintBottom_toBottomOf="@+id/stepsleft_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/stepsleft_text"
         app:layout_constraintVertical_bias="1.0" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="293dp"
-        android:layout_height="47dp"
-        android:max="100"
-        android:progress="50"
-        android:progressBackgroundTint="@color/Grey"
-        android:progressDrawable="@drawable/ic_launcher_foreground"
-        android:progressTint="@color/StepBlue"
-        android:progressTintMode="src_atop"
-        app:layout_constraintEnd_toEndOf="@+id/stepsleft_text"
-        app:layout_constraintStart_toStartOf="@+id/stepsLeft_num"
-        app:layout_constraintTop_toBottomOf="@+id/stepsleft_text" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
