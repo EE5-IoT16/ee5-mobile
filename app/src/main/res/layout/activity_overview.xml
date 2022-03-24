@@ -7,11 +7,50 @@
     android:layout_height="match_parent"
     android:background="@color/Beige">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/liveActivity_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/quote_tv">
+
+        <TextView
+            android:id="@+id/stepsleft_text"
+            android:layout_width="113dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:fontFamily="@font/sfproregular"
+            android:gravity="bottom|center_vertical"
+            android:includeFontPadding="false"
+            android:text="Steps left"
+            android:textAppearance="@style/ButtonText"
+            app:layout_constraintBottom_toBottomOf="@+id/stepsLeft_num"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/stepsLeft_num" />
+
+        <TextView
+            android:id="@+id/stepsLeft_num"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:fontFamily="@font/sfprobold"
+            android:gravity="bottom"
+            android:includeFontPadding="false"
+            android:text="312"
+            android:textColor="@color/StepBlue"
+            android:textSize="34sp"
+            app:layout_constraintEnd_toStartOf="@+id/stepsleft_text"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="17dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <TextView
         android:id="@+id/liveActivity_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="22dp"
         android:layout_marginBottom="8dp"
         android:text="Live Activity"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
@@ -25,8 +64,7 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stepsleft_text">
+        app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
@@ -153,38 +191,6 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/viewProfile_Btn"
         app:layout_constraintTop_toBottomOf="@+id/viewProfile_Btn" />
-
-    <TextView
-        android:id="@+id/stepsleft_text"
-        android:layout_width="108dp"
-        android:layout_height="34dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:fontFamily="@font/sfproregular"
-        android:gravity="bottom|center_vertical"
-        android:includeFontPadding="false"
-        android:text="Steps left"
-        android:textAppearance="@style/ButtonText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/stepsLeft_num"
-        app:layout_constraintTop_toBottomOf="@+id/quote_tv" />
-
-    <TextView
-        android:id="@+id/stepsLeft_num"
-        android:layout_width="64dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="104dp"
-        android:ems="10"
-        android:fontFamily="@font/sfprobold"
-        android:gravity="bottom"
-        android:includeFontPadding="false"
-        android:text="312"
-        android:textColor="@color/StepBlue"
-        android:textSize="34sp"
-        app:layout_constraintBottom_toBottomOf="@+id/stepsleft_text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/stepsleft_text" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
