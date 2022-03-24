@@ -40,7 +40,7 @@
         app:layout_constraintEnd_toEndOf="@+id/viewProfile_Btn"
         app:layout_constraintTop_toBottomOf="@+id/viewProfile_Btn" />
 
-    <EditText
+    <TextView
         android:id="@+id/stepsleft_text"
         android:layout_width="110dp"
         android:layout_height="47dp"
@@ -53,13 +53,12 @@
         app:layout_constraintStart_toEndOf="@+id/stepsLeft_num"
         app:layout_constraintTop_toBottomOf="@+id/quote_tv" />
 
-    <EditText
+    <TextView
         android:id="@+id/stepsLeft_num"
         android:layout_width="93dp"
         android:layout_height="46dp"
         android:layout_marginStart="104dp"
         android:ems="10"
-        android:inputType="number"
         app:layout_constraintBottom_toBottomOf="@+id/stepsleft_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/stepsleft_text"

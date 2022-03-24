@@ -25,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 
         continue_btn.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, OverviewActivity.class);
+            startActivity(intent);
         });
     }
 }
