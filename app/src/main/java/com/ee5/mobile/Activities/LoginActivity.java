@@ -6,12 +6,16 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.APIconnection;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -59,8 +63,15 @@ public class LoginActivity extends AppCompatActivity {
 
     public void login() {
 
+        String responseString = "";
         APIconnection loginRequest = new APIconnection("User", loginParameters, loginData);
-        loginRequest.GETRequest();
+        JSONObject loginResponse = loginRequest.GETRequest();
+        try {
+            responseString += loginResponse.getString("password") + " : " + loginResponse.getString("salt") + "\n";
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.i("API response", responseString);
 
     }
 
