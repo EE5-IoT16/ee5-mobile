@@ -1,21 +1,20 @@
 package com.ee5.mobile.Activities;
 
+import android.os.Bundle;
+import android.widget.LinearLayout;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import android.os.Bundle;
-import android.widget.ProgressBar;
-
 import com.ee5.mobile.R;
 
-public class OverviewActivity extends AppCompatActivity {
-
+public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_profile);
 
-        ConstraintLayout constraintLayout = findViewById(R.id.overview_layout);
+        LinearLayout linearLayout = findViewById(R.id.profile_layout);
 
         //ProgressBar progressBar = findViewById(R.id.progressBar);
         //progressBar.setProgress(50);

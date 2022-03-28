@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rectem_layout"
     android:layout_width="match_parent"
     android:layout_height="128dp"
     android:layout_marginLeft="8dp"
@@ -9,104 +10,88 @@
     android:layout_marginRight="8dp"
     android:layout_marginBottom="2dp"
     android:background="@drawable/ic_recyclercard"
-    android:orientation="horizontal">
-    <!--android:padding="8dp"-->
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="3dp"
-        android:orientation="vertical"
-        tools:ignore="MissingConstraints">
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            tools:ignore="MissingConstraints">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/rv_title_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                tools:ignore="MissingConstraints">
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/sfproregular"
+                android:text="title name"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/rv_title_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/sfproregular"
-                    android:text="title name"
-                    android:textColor="#FFFFFF"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/rv_time_indicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:alpha="0.7"
-                    android:fontFamily="@font/sfproregular"
-                    android:text="time indicator"
-                    android:textColor="#FFFFFF"
-                    android:textSize="7sp" />
-
-            </LinearLayout>
-
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="280dp"
-                android:layout_width="0dp"
-                android:layout_height="10dp"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/ic_arrow" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:orientation="horizontal"
-            tools:ignore="MissingConstraints">
-
-            <LinearLayout
-                android:layout_width="80dp"
+            <TextView
+                android:id="@+id/rv_time_indicator"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:orientation="vertical"
-                tools:ignore="MissingConstraints">
+                android:layout_marginTop="5dp"
+                android:alpha="0.7"
+                android:fontFamily="@font/sfproregular"
+                android:text="time indicator"
+                android:textColor="#FFFFFF"
+                android:textSize="7sp" />
 
-                <TextView
-                    android:id="@+id/rv_activity_data"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/sfprobold"
-                    android:text="4,383"
-                    android:textColor="@color/StepBlue"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/rv_activity_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.7"
-                    android:fontFamily="@font/sfproregular"
-                    android:text="activity text"
-                    android:textColor="#FFFFFF"
-                    android:textSize="7sp" />
-
-            </LinearLayout>
-
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/BarChart"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" />
         </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+            android:layout_marginStart="280dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_arrow" />
+
+
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/rv_activity_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sfprobold"
+                android:text="4,383"
+                android:textColor="@color/StepBlue"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/rv_activity_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.7"
+                android:fontFamily="@font/sfproregular"
+                android:text="activity text"
+                android:textColor="#FFFFFF"
+                android:textSize="7sp" />
+
+        </LinearLayout>
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/BarChart"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+    </LinearLayout>
+</LinearLayout>
