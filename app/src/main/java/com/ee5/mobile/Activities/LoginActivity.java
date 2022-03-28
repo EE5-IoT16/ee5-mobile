@@ -3,6 +3,7 @@ package com.ee5.mobile.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -43,6 +44,8 @@ public class LoginActivity extends AppCompatActivity {
                 email = emailInput.getText().toString();
                 password = passwordInput.getText().toString();
 
+                Intent intent = new Intent(LoginActivity.this, OverviewActivity.class);
+                startActivity(intent);
             }
         });
     }
