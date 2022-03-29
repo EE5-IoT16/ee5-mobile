@@ -198,6 +198,18 @@
         app:layout_constraintEnd_toEndOf="@+id/viewProfile_Btn"
         app:layout_constraintTop_toBottomOf="@+id/viewProfile_Btn" />
 
+    <Button
+        android:id="@+id/setupBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Setup"
+        app:layout_constraintBottom_toBottomOf="@+id/viewProfile_Btn"
+        app:layout_constraintEnd_toStartOf="@+id/viewProfile_Btn"
+        app:layout_constraintHorizontal_bias="0.083"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="392dp"
