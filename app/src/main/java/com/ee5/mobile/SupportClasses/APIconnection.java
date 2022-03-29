@@ -36,11 +36,14 @@ public class APIconnection extends AppCompatActivity {
     private String responseString = "";
     private JSONObject JSONResponse;
 
+    private Context activityContext;
 
 
-    public APIconnection (String node, ArrayList<String> parameters, ArrayList<String> values){
+
+    public APIconnection (Context context, String node, ArrayList<String> parameters, ArrayList<String> values){
 
         requestURL = requestURL + node + "?";
+        activityContext = context;
 
         for (int i = 0; i < parameters.size(); i++) {
 
@@ -50,14 +53,15 @@ public class APIconnection extends AppCompatActivity {
                 requestURL = requestURL + parameters.get(i) + "=" + values.get(i) + "&";
             }
         }
+        Log.i("requestURL:", requestURL);
     }
 
     /**
      * Retrieve information from DB with Volley JSONRequest
      */
-    public JSONObject GETRequest()
+    public String GETRequest()
     {
-        requestQueue = Volley.newRequestQueue( this );
+        requestQueue = Volley.newRequestQueue( activityContext );
 
 
         JsonArrayRequest submitRequest = new JsonArrayRequest(Request.Method.GET, requestURL, null,
@@ -67,10 +71,11 @@ public class APIconnection extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response)
                     {
+                        JSONResponse = new JSONObject();
                         try {
                             for( int i = 0; i < response.length(); i++ ) {
                                 JSONResponse = response.getJSONObject(i);
-                                //responseString += curObject.getString("name") + " : " + curObject.getString("email") + "\n";
+                                responseString += JSONResponse.getString("email") + " : " + JSONResponse.getString("salt") + "\n";
                             }
                         }
                         catch( JSONException e )
@@ -91,7 +96,7 @@ public class APIconnection extends AppCompatActivity {
         );
 
         requestQueue.add(submitRequest);
-        return JSONResponse;
+        return responseString;
     }
 }
 

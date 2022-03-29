@@ -22,8 +22,8 @@ import java.util.ArrayList;
 public class LoginActivity extends AppCompatActivity {
 
     private String email, password;
-    private ArrayList<String> loginData;
-    private ArrayList<String> loginParameters;
+    private ArrayList<String> loginData = new ArrayList<String>();
+    private ArrayList<String> loginParameters = new ArrayList<String>();
 
     private EditText emailInput;
     private EditText passwordInput;
@@ -64,7 +64,8 @@ public class LoginActivity extends AppCompatActivity {
     public void login() {
 
         String responseString = "";
-        APIconnection loginRequest = new APIconnection("User", loginParameters, loginData);
+        APIconnection loginRequest = new APIconnection(this,"User", loginParameters, loginData);
+        /*
         JSONObject loginResponse = loginRequest.GETRequest();
         try {
             responseString += loginResponse.getString("password") + " : " + loginResponse.getString("salt") + "\n";
@@ -72,6 +73,9 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         Log.i("API response", responseString);
+        */
+        responseString = loginRequest.GETRequest();
+        Log.i("response:", responseString);
 
     }
 
