@@ -20,11 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.location.LocationManagerCompat;
 
-import com.ee5.mobile.R;
 
-import blufi.espressif.BlufiCallback;
-import blufi.espressif.BlufiClient;
-import software.amazon.freertos.amazonfreertossdk.AmazonFreeRTOSManager;
+import com.ee5.mobile.R;
 
 import java.util.Set;
 
@@ -32,11 +29,10 @@ import java.util.Set;
 public class SetupActivity extends AppCompatActivity {
     private static final int REQUEST_PERMISSION = 0x01;
 
-    BluetoothAdapter bleAdapter;
-    BluetoothLeScanner bleScanner;
-    ScanCallback bleCallBack;
-    BluetoothDevice bleDevice;
-
+    private BluetoothAdapter bleAdapter;
+    private BluetoothLeScanner bleScanner;
+    private ScanCallback bleCallBack;
+    private BluetoothDevice bleDevice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +41,7 @@ public class SetupActivity extends AppCompatActivity {
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION);
 
-        /*bleAdapter = BluetoothAdapter.getDefaultAdapter();
+        bleAdapter = BluetoothAdapter.getDefaultAdapter();
 
         if(bleAdapter != null){
             System.out.println("bleAdapter not null");
@@ -65,10 +61,14 @@ public class SetupActivity extends AppCompatActivity {
                 super.onScanFailed(errorCode);
                 System.out.println("scan failed");
             }
+
+            
         };
 
-        bleScanner.startScan(bleCallBack);*/
-        AmazonFreeRTOSManager
+        bleScanner.startScan(bleCallBack);
+
+        String scannedAddress = bleDevice.getAddress();
+        System.out.println(scannedAddress);
 
 
         //Set<BluetoothDevice> BondedSet = bleAdapter.getBondedDevices(); //Returns set of all devices my phone remembers
