@@ -14,6 +14,7 @@ import android.widget.EditText;
 import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.APIconnection;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,10 +31,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private Button continueButton;
 
+    private APIconnection loginRequest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        APIconnection.getInstance(this);
 
         ConstraintLayout constraintLayout = findViewById(R.id.login_layout);
         AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
@@ -52,9 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                 email = emailInput.getText().toString();
                 password = passwordInput.getText().toString();
                 loginData.add(email);
-                loginData.add(password);
                 loginParameters.add("email");
-                loginParameters.add("password");
                 login();
 
             }
@@ -64,18 +67,20 @@ public class LoginActivity extends AppCompatActivity {
     public void login() {
 
         String responseString = "";
-        APIconnection loginRequest = new APIconnection(this,"User", loginParameters, loginData);
+
+        APIconnection.getInstance().GETRequest("user", loginData);
         /*
-        JSONObject loginResponse = loginRequest.GETRequest();
         try {
             responseString += loginResponse.getString("password") + " : " + loginResponse.getString("salt") + "\n";
         } catch (JSONException e) {
             e.printStackTrace();
         }
         Log.i("API response", responseString);
-        */
-        responseString = loginRequest.GETRequest();
-        Log.i("response:", responseString);
+
+        //responseString = loginRequest.GETRequest(loginData);
+
+         */
+        //Log.i("response:", String.valueOf(loginResponse));
 
     }
 
