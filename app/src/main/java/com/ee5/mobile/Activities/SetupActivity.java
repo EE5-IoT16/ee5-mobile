@@ -2,37 +2,28 @@ package com.ee5.mobile.Activities;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
-import android.bluetooth.le.BluetoothLeScanner;
-import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanResult;
-import android.content.pm.PackageManager;
-import android.location.LocationManager;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
+import android.widget.ImageButton;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.location.LocationManagerCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.ee5.mobile.R;
-
-import java.util.Set;
+import com.ee5.mobile.SupportClasses.Ble.BleService;
 
 
 public class SetupActivity extends AppCompatActivity {
     private static final int REQUEST_PERMISSION = 0x01;
 
     private BluetoothAdapter bleAdapter;
-    private BluetoothLeScanner bleScanner;
-    private ScanCallback bleCallBack;
-    private BluetoothDevice bleDevice;
+    BleService mBleService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,46 +32,30 @@ public class SetupActivity extends AppCompatActivity {
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION);
 
-        bleAdapter = BluetoothAdapter.getDefaultAdapter();
+        ImageButton back_btn = findViewById(R.id.back_btn);
+        RecyclerView bleDeviceRecycler = findViewById(R.id.Ble_rv);
+        bleDeviceRecycler.setLayoutManager(new LinearLayoutManager(this));
 
-        if(bleAdapter != null){
-            System.out.println("bleAdapter not null");
+        back_btn.setOnClickListener(v -> {
+            Intent intent = new Intent(SetupActivity.this, OverviewActivity.class);
+            startActivity(intent);
+        });
+
+        String espAddress = "C4:DD:57:9E:88:0E";
+
+
+        mBleService = new BleService();
+
+        if(!mBleService.init(this)){
+            Log.d("SetupActivity", "mBleService not correctly initialised");
         }
 
-        bleScanner = bleAdapter.getBluetoothLeScanner();
+        mBleService.connect(espAddress); //address needs to be dynamically set from UI
 
-        bleCallBack = new ScanCallback() {
-            @Override
-            public void onScanResult(int callbackType, ScanResult result) {
-                super.onScanResult(callbackType, result);
-                bleDevice = result.getDevice();
-            }
-
-            @Override
-            public void onScanFailed(int errorCode) {
-                super.onScanFailed(errorCode);
-                System.out.println("scan failed");
-            }
-
-            
-        };
-
-        bleScanner.startScan(bleCallBack);
-
-        String scannedAddress = bleDevice.getAddress();
-        System.out.println(scannedAddress);
-
-
-        //Set<BluetoothDevice> BondedSet = bleAdapter.getBondedDevices(); //Returns set of all devices my phone remembers
-
-        /*BondedSet.stream()
-                .forEach(bluetoothDevice -> Log.d("Bluetooth",bluetoothDevice.getAddress()));*/
-
-        String espAddress = "C4:DD:57:9E:88:40";
-
-        //BluetoothDevice device = bleAdapter.getRemoteDevice();
-
-        //BlufiClient client = new BlufiClient(this, device);
     }
+
+    private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
+        //TODO: maybe implementation of some functions
+    };
 
 }
