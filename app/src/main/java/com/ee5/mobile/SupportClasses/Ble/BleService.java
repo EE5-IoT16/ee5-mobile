@@ -6,13 +6,21 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BleService extends Service {
 
@@ -22,6 +30,8 @@ public class BleService extends Service {
     private BluetoothAdapter mBluetoothAdapter;
     private String mBluetoothDeviceAddress;
     private BluetoothGatt mBluetoothGatt;
+    private BluetoothLeScanner mBleScanner;
+    private ArrayList<BluetoothDevice> deviceList;
 
     private static final boolean AUTO_CONNECT = false;
 
@@ -43,6 +53,26 @@ public class BleService extends Service {
             return BleService.this;
         }
     }
+
+    ScanCallback scanCallback = new ScanCallback() {
+        @Override
+        public void onScanResult(int callbackType, ScanResult result) {
+            super.onScanResult(callbackType, result);
+            deviceList.add(result.getDevice());
+        }
+
+        @Override
+        public void onBatchScanResults(List<ScanResult> results) {
+            super.onBatchScanResults(results);
+            for (ScanResult sr : results) deviceList.add(sr.getDevice());
+        }
+
+        @Override
+        public void onScanFailed(int errorCode) {
+            super.onScanFailed(errorCode);
+            Log.e(TAG, String.valueOf(errorCode));
+        }
+    };
 
     public boolean init(Context context){
         if(mBluetoothManager == null){
@@ -96,6 +126,35 @@ public class BleService extends Service {
             mBluetoothGatt = null;
         }
     }
+
+    public BluetoothDevice getDeviceAtPosition(int position){
+        return deviceList.get(position);
+    }
+
+    public String getDeviceNameAtPosition(int position){
+        BluetoothDevice device = deviceList.get(position);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return device.getAlias();
+        }
+        else return device.getName();
+    }
+
+    public int getDeviceListSize(){
+        return deviceList.size();
+    }
+
+    private void getScanner() {
+        if (mBleScanner == null) {
+            BluetoothAdapter bluetoothAdapter = mBluetoothManager.getAdapter();
+            if (bluetoothAdapter != null) {
+                mBleScanner = bluetoothAdapter.getBluetoothLeScanner();
+            }
+            if (mBleScanner == null) {
+                Log.e(TAG, "Failed to make new Android L scanner");
+            }
+        }
+    }
+
 
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         //TODO: maybe implementation of some functions

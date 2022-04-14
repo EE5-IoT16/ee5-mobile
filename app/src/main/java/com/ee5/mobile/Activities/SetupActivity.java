@@ -2,7 +2,11 @@ package com.ee5.mobile.Activities;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,15 +19,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.ee5.mobile.R;
+import com.ee5.mobile.SupportClasses.Ble.BleAdapter;
 import com.ee5.mobile.SupportClasses.Ble.BleService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class SetupActivity extends AppCompatActivity {
+    String TAG = "SetupActivity";
     private static final int REQUEST_PERMISSION = 0x01;
-
-    private BluetoothAdapter bleAdapter;
-    BleService mBleService;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,11 @@ public class SetupActivity extends AppCompatActivity {
 
         ImageButton back_btn = findViewById(R.id.back_btn);
         RecyclerView bleDeviceRecycler = findViewById(R.id.Ble_rv);
+
+
+        BleAdapter bleAdapter = new BleAdapter();
+        bleDeviceRecycler.setAdapter(bleAdapter);
+
         bleDeviceRecycler.setLayoutManager(new LinearLayoutManager(this));
 
         back_btn.setOnClickListener(v -> {
@@ -43,14 +53,7 @@ public class SetupActivity extends AppCompatActivity {
 
         String espAddress = "C4:DD:57:9E:88:0E";
 
-
-        mBleService = new BleService();
-
-        if(!mBleService.init(this)){
-            Log.d("SetupActivity", "mBleService not correctly initialised");
-        }
-
-        mBleService.connect(espAddress); //address needs to be dynamically set from UI
+        //mBleService.connect(espAddress); //address needs to be dynamically set from UI
 
     }
 
