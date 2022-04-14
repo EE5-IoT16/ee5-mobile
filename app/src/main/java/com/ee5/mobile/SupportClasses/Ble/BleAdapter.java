@@ -58,6 +58,7 @@ public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHold
                 mBleService.connect(device.getAddress());
                 stopRecycler();
                 Log.d(TAG, "onClick: row " + position);
+                //mBleService.wifiProvisionDevice(device, );
             }
         });
     }
