@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ee5.mobile.R;
@@ -31,6 +32,10 @@ public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHold
         mBleService.stopScan();
     }
 
+    public void restartRecycler() {
+        mBleService.startScan();
+    }
+
     @NonNull
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -44,20 +49,34 @@ public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHold
         String name = mBleService.getDeviceNameAtPosition(position);
         Log.d(TAG, "onBindViewHolder: " + name);
         textView.setText(name);
+
+        BluetoothDevice device = mBleService.getDeviceAtPosition(position);
+
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBleService.connect(device.getAddress());
+                stopRecycler();
+                Log.d(TAG, "onClick: row " + position);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
+        Log.d(TAG, "getItemCount: " + mBleService.getDeviceListSize());
         return mBleService.getDeviceListSize();
     }
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder{
 
         public TextView deviceName;
+        public ConstraintLayout layout;
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             deviceName = (TextView) itemView.findViewById(R.id.deviceName_tv);
+            layout = (ConstraintLayout) itemView.findViewById(R.id.recycler_item_layout);
         }
     }
 }

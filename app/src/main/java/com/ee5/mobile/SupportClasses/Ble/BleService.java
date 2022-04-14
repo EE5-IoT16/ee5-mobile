@@ -44,7 +44,6 @@ public class BleService extends Service {
         this.context = context;
         init();
         getScanner();
-        startScan();
     }
 
     private final IBinder mBinder = new LocalBinder();
@@ -89,8 +88,6 @@ public class BleService extends Service {
                 }
                 //deviceList.add(sr.getDevice());
             }
-            Log.d(TAG, "onBatchScanResults: size is " + results.size());
-            Log.d(TAG, "onBatchScanResults: scanned multiple devices");
 
             Log.d(TAG, "deviceList: " + deviceList.toString());
         }
@@ -104,7 +101,6 @@ public class BleService extends Service {
 
     private boolean init(){
         if(mBluetoothManager == null){
-
             mBluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
             if (mBluetoothManager == null){
                 Log.d(TAG, "init: BluetoothManager not initialised");
@@ -131,7 +127,7 @@ public class BleService extends Service {
         }
     }
 
-    private void startScan(){
+    public void startScan(){
         if(mBleScanner != null){
             ScanSettings settings = new ScanSettings.Builder()
                     .setReportDelay(1000)
@@ -146,8 +142,8 @@ public class BleService extends Service {
     }
 
     public boolean connect(String address){
-        if(mBluetoothAdapter == null || BluetoothAdapter.checkBluetoothAddress(address)){
-            Log.e(TAG, "BleAdapter is null or incorrect address");
+        if(mBluetoothAdapter == null || !BluetoothAdapter.checkBluetoothAddress(address)){
+            Log.e(TAG, "connect: BleAdapter is null or incorrect address");
             return false;
         }
         if((mBluetoothGatt != null) && (address.equals(mBluetoothDeviceAddress))){

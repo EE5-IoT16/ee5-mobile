@@ -10,6 +10,7 @@ import android.bluetooth.le.ScanResult;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +39,7 @@ public class SetupActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION);
 
         ImageButton back_btn = findViewById(R.id.back_btn);
+        Button refresh_btn = findViewById(R.id.refresh_btn);
         RecyclerView bleDeviceRecycler = findViewById(R.id.Ble_rv);
 
 
@@ -50,6 +52,11 @@ public class SetupActivity extends AppCompatActivity {
             bleAdapter.stopRecycler();
             Intent intent = new Intent(SetupActivity.this, OverviewActivity.class);
             startActivity(intent);
+        });
+
+        refresh_btn.setOnClickListener(v -> {
+            bleAdapter.restartRecycler();
+            bleAdapter.notifyDataSetChanged();
         });
 
         String espAddress = "C4:DD:57:9E:88:0E";
