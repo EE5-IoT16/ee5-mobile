@@ -8,7 +8,9 @@ import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
@@ -28,12 +30,22 @@ public class BleService extends Service {
 
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
+    private BluetoothLeScanner mBleScanner;
+
     private String mBluetoothDeviceAddress;
     private BluetoothGatt mBluetoothGatt;
-    private BluetoothLeScanner mBleScanner;
-    private ArrayList<BluetoothDevice> deviceList;
+
+    private List<BluetoothDevice> deviceList = new ArrayList<>();
+    private Context context;
 
     private static final boolean AUTO_CONNECT = false;
+
+    public BleService(Context context){
+        this.context = context;
+        init();
+        getScanner();
+        startScan();
+    }
 
     private final IBinder mBinder = new LocalBinder();
 
@@ -59,12 +71,28 @@ public class BleService extends Service {
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
             deviceList.add(result.getDevice());
+           // if (result == null)
+            Log.d(TAG, result.toString());
         }
 
         @Override
         public void onBatchScanResults(List<ScanResult> results) {
             super.onBatchScanResults(results);
-            for (ScanResult sr : results) deviceList.add(sr.getDevice());
+            if (results == null){
+                Log.e(TAG, "onBatchScanResults: results is null" );
+            }
+
+            for (ScanResult sr : results) {
+                if(sr.getDevice().getName() != null && !deviceList.contains(sr.getDevice())){
+                    deviceList.add(sr.getDevice());
+                    Log.d(TAG, "onBatchScanResults: " + sr.getDevice().getName());
+                }
+                //deviceList.add(sr.getDevice());
+            }
+            Log.d(TAG, "onBatchScanResults: size is " + results.size());
+            Log.d(TAG, "onBatchScanResults: scanned multiple devices");
+
+            Log.d(TAG, "deviceList: " + deviceList.toString());
         }
 
         @Override
@@ -74,21 +102,47 @@ public class BleService extends Service {
         }
     };
 
-    public boolean init(Context context){
+    private boolean init(){
         if(mBluetoothManager == null){
 
             mBluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
             if (mBluetoothManager == null){
-                Log.d(TAG, "BluetoothManager not initialised");
+                Log.d(TAG, "init: BluetoothManager not initialised");
                 return false;
             }
         }
         mBluetoothAdapter = mBluetoothManager.getAdapter();
         if (mBluetoothAdapter == null){
-            Log.e(TAG, "BluetoothAdapter not obtained");
+            Log.e(TAG, "init: BluetoothAdapter not obtained");
             return false;
         }
         return true;
+    }
+
+    private void getScanner() {
+        if (mBleScanner == null) {
+            BluetoothAdapter bluetoothAdapter = mBluetoothManager.getAdapter();
+            if (bluetoothAdapter != null) {
+                mBleScanner = bluetoothAdapter.getBluetoothLeScanner();
+            }
+            if (mBleScanner == null) {
+                Log.e(TAG, "getScanner: Failed to make new Android L scanner");
+            }
+        }
+    }
+
+    private void startScan(){
+        if(mBleScanner != null){
+            ScanSettings settings = new ScanSettings.Builder()
+                    .setReportDelay(1000)
+                    .build();
+
+            mBleScanner.startScan(null, settings, scanCallback); //TODO: add filter
+        }
+    }
+
+    public void stopScan(){
+        mBleScanner.stopScan(scanCallback);
     }
 
     public boolean connect(String address){
@@ -114,7 +168,7 @@ public class BleService extends Service {
 
     public void disconnect() {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.e("BleService","BluetoothAdapter not initialized");
+            Log.e(TAG,"BluetoothAdapter not initialized");
             return;
         }
         mBluetoothGatt.disconnect();
@@ -141,18 +195,6 @@ public class BleService extends Service {
 
     public int getDeviceListSize(){
         return deviceList.size();
-    }
-
-    private void getScanner() {
-        if (mBleScanner == null) {
-            BluetoothAdapter bluetoothAdapter = mBluetoothManager.getAdapter();
-            if (bluetoothAdapter != null) {
-                mBleScanner = bluetoothAdapter.getBluetoothLeScanner();
-            }
-            if (mBleScanner == null) {
-                Log.e(TAG, "Failed to make new Android L scanner");
-            }
-        }
     }
 
 

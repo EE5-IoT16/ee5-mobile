@@ -41,12 +41,13 @@ public class SetupActivity extends AppCompatActivity {
         RecyclerView bleDeviceRecycler = findViewById(R.id.Ble_rv);
 
 
-        BleAdapter bleAdapter = new BleAdapter();
+        BleAdapter bleAdapter = new BleAdapter(this);
         bleDeviceRecycler.setAdapter(bleAdapter);
 
         bleDeviceRecycler.setLayoutManager(new LinearLayoutManager(this));
 
         back_btn.setOnClickListener(v -> {
+            bleAdapter.stopRecycler();
             Intent intent = new Intent(SetupActivity.this, OverviewActivity.class);
             startActivity(intent);
         });
