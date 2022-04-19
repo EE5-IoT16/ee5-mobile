@@ -38,70 +38,41 @@ import java.util.UUID;
 public class BleService extends Service {
 
     private final static String TAG = "BleService";
+    private static final boolean AUTO_CONNECT = false;
+    private final IBinder mBinder = new LocalBinder();
 
+    private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
+        //TODO: maybe implementation of some functions
+    };
+
+    private Context context;
+    private Handler handler;
+    private Boolean isConnected;
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBleScanner;
-
     private String mBluetoothDeviceAddress;
     private BluetoothGatt mBluetoothGatt;
-
     private List<BluetoothDevice> deviceList = new ArrayList<>();
-    private Context context;
-    private Handler handler;
-
-    private interface MessageConstants {
-        public static final int MESSAGE_READ = 0;
-        public static final int MESSAGE_WRITE = 1;
-        public static final int MESSAGE_TOAST = 2;
-        //add more if wanted
-    }
-
-    private static final boolean AUTO_CONNECT = false;
-
-    public BleService(Context context){
-        this.context = context;
-        init();
-        getScanner();
-    }
-
-    private final IBinder mBinder = new LocalBinder();
-
-    @Override
-    public boolean onUnbind(Intent intent) {
-        return super.onUnbind(intent);
-    }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mBinder;
-    }
-
-    public class LocalBinder extends Binder {
-        public BleService getService() {
-            return BleService.this;
-        }
-    }
 
     ScanCallback scanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
             deviceList.add(result.getDevice());
-           // if (result == null)
+            // if (result == null)
             Log.d(TAG, result.toString());
         }
 
         @Override
         public void onBatchScanResults(List<ScanResult> results) {
             super.onBatchScanResults(results);
-            if (results == null){
-                Log.e(TAG, "onBatchScanResults: results is null" );
+            if (results == null) {
+                Log.e(TAG, "onBatchScanResults: results is null");
             }
 
             for (ScanResult sr : results) {
-                if(sr.getDevice().getName() != null && !deviceList.contains(sr.getDevice())){
+                if (sr.getDevice().getName() != null && !deviceList.contains(sr.getDevice())) {
                     deviceList.add(sr.getDevice());
                     Log.d(TAG, "onBatchScanResults: " + sr.getDevice().getName());
                 }
@@ -118,16 +89,42 @@ public class BleService extends Service {
         }
     };
 
-    private boolean init(){
-        if(mBluetoothManager == null){
+    public BleService(Context context) {
+        this.context = context;
+        this.isConnected = false;
+        init();
+        getScanner();
+    }
+
+    public Boolean isConnected() {
+        return isConnected;
+    }
+
+    public String getConnectedAddress(){
+        return mBluetoothDeviceAddress;
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        return super.onUnbind(intent);
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
+    }
+
+    private boolean init() {
+        if (mBluetoothManager == null) {
             mBluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
-            if (mBluetoothManager == null){
+            if (mBluetoothManager == null) {
                 Log.d(TAG, "init: BluetoothManager not initialised");
                 return false;
             }
         }
         mBluetoothAdapter = mBluetoothManager.getAdapter();
-        if (mBluetoothAdapter == null){
+        if (mBluetoothAdapter == null) {
             Log.e(TAG, "init: BluetoothAdapter not obtained");
             return false;
         }
@@ -146,8 +143,8 @@ public class BleService extends Service {
         }
     }
 
-    public void startScan(){
-        if(mBleScanner != null){
+    public void startScan() {
+        if (mBleScanner != null) {
             ScanSettings settings = new ScanSettings.Builder()
                     .setReportDelay(1000)
                     .build();
@@ -156,37 +153,43 @@ public class BleService extends Service {
         }
     }
 
-    public void stopScan(){
+    public void stopScan() {
         mBleScanner.stopScan(scanCallback);
     }
 
-    public boolean connect(String address){
-        if(mBluetoothAdapter == null || !BluetoothAdapter.checkBluetoothAddress(address)){
+    public boolean connect(String address) {
+        if (mBluetoothAdapter == null || !BluetoothAdapter.checkBluetoothAddress(address)) {
             Log.e(TAG, "connect: BleAdapter is null or incorrect address");
             return false;
         }
-        if((mBluetoothGatt != null) && (address.equals(mBluetoothDeviceAddress))){
+        if ((mBluetoothGatt != null) && (address.equals(mBluetoothDeviceAddress))) {
             Log.w(TAG, "trying to use existing Gatt for connection");
-            return mBluetoothGatt.connect();
+            disconnect();
+            return false;
         }
 
         final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-        if(device == null){
+        if (device == null) {
             Log.e(TAG, "Device not found");
             return false;
         }
 
         mBluetoothGatt = device.connectGatt(this, AUTO_CONNECT, mGattCallback);
+        if (mBluetoothGatt == null) Log.d(TAG, "connect: mGatt is null");
         mBluetoothDeviceAddress = address;
+        isConnected = true;
+        stopScan();
         return true;
     }
 
     public void disconnect() {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.e(TAG,"BluetoothAdapter not initialized");
+            Log.e(TAG, "BluetoothAdapter not initialized");
             return;
         }
         mBluetoothGatt.disconnect();
+        mBluetoothDeviceAddress = null;
+        isConnected = false;
     }
 
     public void close() {
@@ -196,46 +199,59 @@ public class BleService extends Service {
         }
     }
 
-    public BluetoothDevice getDeviceAtPosition(int position){
+    public BluetoothDevice getDeviceAtPosition(int position) {
         return deviceList.get(position);
     }
 
-    public String getDeviceNameAtPosition(int position){
+    public String getDeviceAddressAtPosition(int position){
+        return deviceList.get(position).getAddress();
+    }
+
+    public String getDeviceNameAtPosition(int position) {
         BluetoothDevice device = deviceList.get(position);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             return device.getAlias();
-        }
-        else return device.getName();
+        } else return device.getName();
     }
 
-    public int getDeviceListSize(){
+    public int getDeviceListSize() {
         return deviceList.size();
     }
 
-
-    private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
-        //TODO: maybe implementation of some functions
-    };
-
-    public Boolean wifiProvisionDevice(BluetoothDevice device, byte[] bytes){
-        ParcelUuid[] parcelUuid = device.getUuids();
-        List<UUID> uuids = new ArrayList<>();
-        Arrays.stream(parcelUuid).forEach(p -> {
-            uuids.add(p.getUuid());
-        });
-
-        BluetoothSocket socket;
-        try {
-            socket = device.createInsecureRfcommSocketToServiceRecord(uuids.get(0)); //maybe implement secure socket later
-        } catch (IOException e) {
-            e.printStackTrace();
+    public Boolean wifiProvisionDevice(BluetoothDevice device, byte[] bytes) {
+        Log.d(TAG, "wifiProvisionDevice: " + device.getAddress());
+        Log.d(TAG, "wifiProvisionDevice: " + new String(bytes));
+        if (device == null) {
+            Log.e(TAG, "wifiProvisionDevice: device is null");
             return false;
         }
-        ConnectedThread thread = new ConnectedThread(socket);
-        thread.write(bytes);
-        thread.cancel();
+//
+//        BluetoothSocket socket;
+//        try {
+//            socket = device.createInsecureRfcommSocketToServiceRecord(uuids.get(0)); //maybe implement secure socket later
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//        ConnectedThread thread = new ConnectedThread(socket);
+//        thread.write(bytes);
+//        thread.cancel();
 
         return true;
+    }
+
+
+    private interface MessageConstants {
+        public static final int MESSAGE_READ = 0;
+        public static final int MESSAGE_WRITE = 1;
+        public static final int MESSAGE_TOAST = 2;
+        //add more if wanted
+    }
+
+    public class LocalBinder extends Binder {
+        public BleService getService() {
+            return BleService.this;
+        }
     }
 
     private class ConnectedThread extends Thread {

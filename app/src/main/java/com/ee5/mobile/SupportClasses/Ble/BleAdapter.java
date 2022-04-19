@@ -2,30 +2,31 @@ package com.ee5.mobile.SupportClasses.Ble;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ee5.mobile.R;
 
-import java.util.ArrayList;
-
 public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHolder> {
     private final static String TAG = "BleAdapter";
     private BleService mBleService;
     private Context context;
+    private AlertDialog.Builder inputDialogueBuilder;
+    private BluetoothDevice clickedDevice;
 
-    public BleAdapter(Context context) {
+    public BleAdapter(Context context, AlertDialog.Builder builder) {
         this.context = context;
         this.mBleService = new BleService(context);
+        this.inputDialogueBuilder = builder;
     }
 
     public void stopRecycler(){
@@ -46,6 +47,12 @@ public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHold
     @Override
     public void onBindViewHolder(@NonNull BleAdapter.RecyclerViewHolder holder, int position) {
         TextView textView = holder.deviceName;
+        ImageView state = holder.connState;
+        String connectedAddress = mBleService.getConnectedAddress();
+        if(connectedAddress != null && connectedAddress == mBleService.getDeviceAddressAtPosition(position) && mBleService.isConnected()){
+            holder.connState.setVisibility(View.VISIBLE);
+        }
+
         String name = mBleService.getDeviceNameAtPosition(position);
         Log.d(TAG, "onBindViewHolder: " + name);
         textView.setText(name);
@@ -55,12 +62,25 @@ public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHold
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mBleService.connect(device.getAddress());
+                if(mBleService.isConnected() && connectedAddress == mBleService.getDeviceAddressAtPosition(position)){
+                    mBleService.disconnect();
+                    holder.connState.setVisibility(View.INVISIBLE);
+                }else{
+                    mBleService.connect(device.getAddress());
+                    holder.connState.setVisibility(View.VISIBLE);
+
+                    inputDialogueBuilder.show();
+                    //device.fetchUuidsWithSdp();
+                    clickedDevice = device;
+                }
                 stopRecycler();
                 Log.d(TAG, "onClick: row " + position);
-                //mBleService.wifiProvisionDevice(device, );
             }
         });
+    }
+
+    public void onWifiInputAccept(byte[] bytes){
+        mBleService.wifiProvisionDevice(clickedDevice, bytes);
     }
 
     @Override
@@ -73,11 +93,16 @@ public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHold
 
         public TextView deviceName;
         public ConstraintLayout layout;
+        public ImageView connState;
+        public ConstraintLayout input_layout;
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             deviceName = (TextView) itemView.findViewById(R.id.deviceName_tv);
             layout = (ConstraintLayout) itemView.findViewById(R.id.recycler_item_layout);
+            connState = (ImageView) itemView.findViewById(R.id.state_iv);
+            connState.setVisibility(View.INVISIBLE);
+            input_layout = itemView.findViewById(R.id.input_layout);
         }
     }
 }
