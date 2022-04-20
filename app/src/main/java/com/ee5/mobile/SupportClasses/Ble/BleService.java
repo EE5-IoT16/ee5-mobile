@@ -27,6 +27,8 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+import com.ee5.mobile.SupportClasses.IFrameBuilder;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -218,25 +220,39 @@ public class BleService extends Service {
         return deviceList.size();
     }
 
-    public Boolean wifiProvisionDevice(BluetoothDevice device, byte[] bytes) {
-        Log.d(TAG, "wifiProvisionDevice: " + device.getAddress());
-        Log.d(TAG, "wifiProvisionDevice: " + new String(bytes));
+    public Boolean wifiProvisionDevice(BluetoothDevice device, byte[] ssid, byte[] pass) {
+        Log.d(TAG, "wifiProvisionDevice: provision to " + device.getAddress());
+        Log.d(TAG, "wifiProvisionDevice: ssid provisioned - " + new String(ssid));
+
+        byte[] ssidFrame = IFrameBuilder.getSsidDataFrame(ssid);
+
+
+
+
         if (device == null) {
             Log.e(TAG, "wifiProvisionDevice: device is null");
             return false;
         }
-//
-//        BluetoothSocket socket;
-//        try {
-//            socket = device.createInsecureRfcommSocketToServiceRecord(uuids.get(0)); //maybe implement secure socket later
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//        ConnectedThread thread = new ConnectedThread(socket);
-//        thread.write(bytes);
-//        thread.cancel();
+        mBluetoothAdapter.cancelDiscovery();
 
+        BluetoothSocket socket;
+        UUID mUuid = UUID.randomUUID();
+        try {
+            socket = device.createInsecureRfcommSocketToServiceRecord(mUuid); //maybe implement secure socket later
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        try {
+            socket.connect();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (!socket.isConnected() || socket == null) Log.e(TAG, "wifiProvisionDevice: socket not connected");
+
+        ConnectedThread thread = new ConnectedThread(socket);
+        thread.write(ssidFrame);
+        thread.cancel();
         return true;
     }
 
@@ -261,7 +277,7 @@ public class BleService extends Service {
         private byte[] mmBuffer; // mmBuffer store for the stream
 
         public ConnectedThread(BluetoothSocket socket) {
-            mmSocket = socket;
+            this.mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
 

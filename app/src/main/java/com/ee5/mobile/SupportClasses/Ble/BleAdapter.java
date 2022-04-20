@@ -79,8 +79,8 @@ public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHold
         });
     }
 
-    public void onWifiInputAccept(byte[] bytes){
-        mBleService.wifiProvisionDevice(clickedDevice, bytes);
+    public void onWifiInputAccept(byte[] ssid, byte[] pass){
+        mBleService.wifiProvisionDevice(clickedDevice, ssid, pass);
     }
 
     @Override

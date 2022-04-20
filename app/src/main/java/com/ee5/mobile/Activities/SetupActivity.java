@@ -99,7 +99,7 @@ public class SetupActivity extends AppCompatActivity {
                 pass_text = password.getText().toString();
                 Log.d(TAG, "Dialogue onClick: " + ssid_text);
                 Log.d(TAG, "Dialogue onClick: " + pass_text);
-                bleAdapter.onWifiInputAccept(ssid_text.getBytes());
+                bleAdapter.onWifiInputAccept(ssid_text.getBytes(), pass_text.getBytes());
             }
         });
         inputDialogueBuilder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
