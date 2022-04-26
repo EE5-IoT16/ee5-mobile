@@ -3,6 +3,7 @@ package com.ee5.mobile.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
@@ -24,8 +26,6 @@ import java.util.ArrayList;
 public class LoginActivity extends AppCompatActivity {
 
     private String email, password;
-    private ArrayList<String> loginData = new ArrayList<String>();
-    private ArrayList<String> loginParameters = new ArrayList<String>();
 
     private EditText emailInput;
     private EditText passwordInput;
@@ -55,34 +55,50 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                ArrayList<String> loginData = new ArrayList<String>();
+
                 email = emailInput.getText().toString();
                 password = passwordInput.getText().toString();
                 loginData.add(email);
-                loginParameters.add("email");
-                login();
+
+                if (email.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter an email address", Toast.LENGTH_SHORT).show();
+                } else {
+                    login(loginData);
+                }
 
             }
         });
     }
 
-    public void login() {
+    public void login(ArrayList<String> loginData) {
 
         APIconnection.getInstance().GETRequest("profile", loginData, new ServerCallback() {
             @Override
             public void onSuccess() {
 
                 String responseString = "";
-
+                String responsePassword = "";
+                String responseSalt = "";
                 JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
 
                 try {
                     for( int i = 0; i < responseArray.length(); i++ ) {
                         JSONObject curObject = responseArray.getJSONObject(i);
                         responseString += curObject.getString("password") + " : " + curObject.getString("salt") + "\n";
+                        responsePassword += curObject.getString("password");
+                        responseSalt += curObject.getString("salt");
                         Log.i("API response", responseString);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                }
+
+                if (password.equals(responsePassword)){
+                    Intent intent = new Intent(getApplicationContext(), OverviewActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Incorrect email or password", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -27,7 +27,7 @@ public class APIconnection extends AppCompatActivity {
 
     public RequestQueue requestQueue;
 
-    private String prefixURL = "http://ee5-huzza.herokuapp.com/";
+    private final String prefixURL = "http://ee5-huzza.herokuapp.com/";
 
     private JSONArray APIResponse;
 
