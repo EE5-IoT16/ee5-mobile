@@ -7,9 +7,13 @@ import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +45,8 @@ public class SetupActivity extends AppCompatActivity {
     private String ssid_text = "";
     private String pass_text = "";
     private BleAdapter bleAdapter;
+    private final static String espAddress = "C4:DD:57:9E:88:0E";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +54,8 @@ public class SetupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setup);
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION);
+
+
 
         ImageButton back_btn = findViewById(R.id.back_btn);
         Button refresh_btn = findViewById(R.id.refresh_btn);
@@ -60,8 +68,7 @@ public class SetupActivity extends AppCompatActivity {
 
         back_btn.setOnClickListener(v -> {
             bleAdapter.stopRecycler();
-            Intent intent = new Intent(SetupActivity.this, OverviewActivity.class);
-            startActivity(intent);
+            exitIntent();
         });
 
         refresh_btn.setOnClickListener(v -> {
@@ -71,10 +78,13 @@ public class SetupActivity extends AppCompatActivity {
 
         //inputDialogueBuilder.show();
 
-        String espAddress = "C4:DD:57:9E:88:0E";
-
         //mBleService.connect(espAddress); //address needs to be dynamically set from UI
 
+    }
+
+    private void exitIntent(){
+        final Intent intent = new Intent(SetupActivity.this, OverviewActivity.class);
+        startActivity(intent);
     }
 
     @NotNull
@@ -110,9 +120,5 @@ public class SetupActivity extends AppCompatActivity {
         });
         return inputDialogueBuilder;
     }
-
-    private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
-        //TODO: maybe implementation of some functions
-    };
 
 }

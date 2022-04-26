@@ -30,6 +30,7 @@
         </activity>
         <activity android:name=".Activities.OverviewActivity"/>
         <activity android:name=".Activities.SetupActivity"/>
+        <activity android:name=".Activities.DeviceControlActivity" />
     </application>
 
 </manifest>

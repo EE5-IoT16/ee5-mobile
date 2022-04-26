@@ -2,6 +2,7 @@ package com.ee5.mobile.SupportClasses.Ble;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,19 +15,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ee5.mobile.Activities.DeviceControlActivity;
+import com.ee5.mobile.Activities.OverviewActivity;
+import com.ee5.mobile.Activities.SetupActivity;
 import com.ee5.mobile.R;
 
 public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHolder> {
     private final static String TAG = "BleAdapter";
     private BleService mBleService;
-    private Context context;
-    private AlertDialog.Builder inputDialogueBuilder;
+    private final Context context;
     private BluetoothDevice clickedDevice;
 
     public BleAdapter(Context context, AlertDialog.Builder builder) {
         this.context = context;
-        this.mBleService = new BleService(context);
-        this.inputDialogueBuilder = builder;
     }
 
     public void stopRecycler(){
@@ -54,27 +55,16 @@ public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHold
         }
 
         String name = mBleService.getDeviceNameAtPosition(position);
-        Log.d(TAG, "onBindViewHolder: " + name);
         textView.setText(name);
 
-        BluetoothDevice device = mBleService.getDeviceAtPosition(position);
+        String address = mBleService.getDeviceAddressAtPosition(position);
 
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mBleService.isConnected() && connectedAddress == mBleService.getDeviceAddressAtPosition(position)){
-                    mBleService.disconnect();
-                    holder.connState.setVisibility(View.INVISIBLE);
-                }else{
-                    mBleService.connect(device.getAddress());
-                    holder.connState.setVisibility(View.VISIBLE);
-
-                    inputDialogueBuilder.show();
-                    //device.fetchUuidsWithSdp();
-                    clickedDevice = device;
-                }
-                stopRecycler();
-                Log.d(TAG, "onClick: row " + position);
+                Intent intent = new Intent(context, DeviceControlActivity.class);
+                intent.putExtra("address", address);
+                context.startActivity(intent);
             }
         });
     }
@@ -89,7 +79,7 @@ public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHold
         return mBleService.getDeviceListSize();
     }
 
-    public class RecyclerViewHolder extends RecyclerView.ViewHolder{
+    public static class RecyclerViewHolder extends RecyclerView.ViewHolder{
 
         public TextView deviceName;
         public ConstraintLayout layout;
