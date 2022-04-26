@@ -1,11 +1,13 @@
 package com.ee5.mobile.SupportClasses;
 
 public interface IFrameBuilder {
-    int sequence = 0;
 
-    static byte[] getSsidDataFrame(byte[] ssid) {
+    static byte[] getSsidDataFrame(byte[] ssid, int sequence) {
         byte[] dataFrame = new byte[6 + ssid.length];
-        dataFrame[0] =
+        dataFrame[0] = (byte) 00_000100; //Type & Subtype
+        dataFrame[1] = (byte) 000_00000; //Frame control with 3MSB reserved
+        dataFrame[2] = (byte) sequence;
+        dataFrame[3] = (byte) ssid.length;
         return new byte[0];
     }
 
@@ -14,7 +16,7 @@ public interface IFrameBuilder {
     }
 
     static byte[] getConnectToAPControlFrame() {
-
+        return new byte[0];
     }
 }
 

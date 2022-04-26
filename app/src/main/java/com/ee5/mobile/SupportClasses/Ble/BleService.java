@@ -5,11 +5,11 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
@@ -20,20 +20,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.os.Parcel;
-import android.os.ParcelUuid;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import com.ee5.mobile.SupportClasses.IFrameBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,13 +39,15 @@ public class BleService extends Service {
     private final static String TAG = "BleService";
     private static final boolean AUTO_CONNECT = false;
     private final IBinder mBinder = new LocalBinder();
+    private int dataSequence = 0;
+    private BluetoothSocket mSocket;
 
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         //TODO: maybe implementation of some functions
     };
 
     private Context context;
-    private Handler handler;
+    private Handler handler = new Handler();
     private Boolean isConnected;
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
@@ -220,37 +219,35 @@ public class BleService extends Service {
         return deviceList.size();
     }
 
-    public Boolean wifiProvisionDevice(BluetoothDevice device, byte[] ssid, byte[] pass) {
-        Log.d(TAG, "wifiProvisionDevice: provision to " + device.getAddress());
-        Log.d(TAG, "wifiProvisionDevice: ssid provisioned - " + new String(ssid));
+    private void connectSocket(BluetoothDevice device) {
+        if (device == null) Log.e(TAG, "wifiProvisionDevice: device is null");
+        device.createBond();
+        Log.d(TAG, "connectSocket: " + device.getBondState());
 
-        byte[] ssidFrame = IFrameBuilder.getSsidDataFrame(ssid);
-
-
-
-
-        if (device == null) {
-            Log.e(TAG, "wifiProvisionDevice: device is null");
-            return false;
-        }
         mBluetoothAdapter.cancelDiscovery();
 
-        BluetoothSocket socket;
-        UUID mUuid = UUID.randomUUID();
-        try {
-            socket = device.createInsecureRfcommSocketToServiceRecord(mUuid); //maybe implement secure socket later
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-        try {
-            socket.connect();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (!socket.isConnected() || socket == null) Log.e(TAG, "wifiProvisionDevice: socket not connected");
+        UUID mUuid = UUID.fromString("0000ff01-0000-1000-8000-00805f9b34fb");
 
-        ConnectedThread thread = new ConnectedThread(socket);
+
+        try {
+            mSocket = (BluetoothSocket) device.getClass().getMethod("createInsecureRfcommSocketToServiceRecord", UUID.class)
+                                                            .invoke(device,mUuid);
+            assert mSocket != null;
+            mSocket.connect();
+        } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException | IOException illegalAccessException) {
+            illegalAccessException.printStackTrace();
+        }
+        Log.d(TAG, "Socket state connected: " + mSocket.isConnected());
+    }
+
+    public Boolean wifiProvisionDevice(BluetoothDevice device, byte[] ssid, byte[] pass) {
+        Log.d(TAG, "wifiProvisionDevice: provision to " + device.getAddress());
+
+        dataSequence +=1;
+        byte[] ssidFrame = IFrameBuilder.getSsidDataFrame(ssid, dataSequence);
+        connectSocket(device);
+
+        ConnectedThread thread = new ConnectedThread(mSocket);
         thread.write(ssidFrame);
         thread.cancel();
         return true;
@@ -275,6 +272,8 @@ public class BleService extends Service {
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
         private byte[] mmBuffer; // mmBuffer store for the stream
+        //mmOutStream.write(bytes);
+        private BluetoothGattCharacteristic mWriteChar = new BluetoothGattCharacteristic(UUID.fromString("0000ff01-0000-1000-8000-00805f9b34fb"),BluetoothGattCharacteristic.FORMAT_FLOAT ,BluetoothGattCharacteristic.PERMISSION_WRITE);
 
         public ConnectedThread(BluetoothSocket socket) {
             this.mmSocket = socket;
@@ -321,25 +320,8 @@ public class BleService extends Service {
 
         // Call this from the main activity to send data to the remote device.
         public void write(byte[] bytes) {
-            try {
-                mmOutStream.write(bytes);
-
-                // Share the sent message with the UI activity.
-                Message writtenMsg = handler.obtainMessage(
-                        MessageConstants.MESSAGE_WRITE, -1, -1, mmBuffer);
-                writtenMsg.sendToTarget();
-            } catch (IOException e) {
-                Log.e(TAG, "Error occurred when sending data", e);
-
-                // Send a failure message back to the activity.
-                Message writeErrorMsg =
-                        handler.obtainMessage(MessageConstants.MESSAGE_TOAST);
-                Bundle bundle = new Bundle();
-                bundle.putString("toast",
-                        "Couldn't send data to the other device");
-                writeErrorMsg.setData(bundle);
-                handler.sendMessage(writeErrorMsg);
-            }
+            mWriteChar.setValue(bytes);
+            mBluetoothGatt.writeCharacteristic(mWriteChar);
         }
 
         // Call this method from the main activity to shut down the connection.
