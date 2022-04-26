@@ -49,7 +49,7 @@ public class BleService extends Service {
     private Context context;
     private Handler handler = new Handler();
     private Boolean isConnected;
-    private BluetoothManager mBluetoothManager;
+
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBleScanner;
     private String mBluetoothDeviceAddress;
@@ -117,14 +117,8 @@ public class BleService extends Service {
     }
 
     private boolean init() {
-        if (mBluetoothManager == null) {
-            mBluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
-            if (mBluetoothManager == null) {
-                Log.d(TAG, "init: BluetoothManager not initialised");
-                return false;
-            }
-        }
-        mBluetoothAdapter = mBluetoothManager.getAdapter();
+
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
             Log.e(TAG, "init: BluetoothAdapter not obtained");
             return false;
@@ -134,7 +128,7 @@ public class BleService extends Service {
 
     private void getScanner() {
         if (mBleScanner == null) {
-            BluetoothAdapter bluetoothAdapter = mBluetoothManager.getAdapter();
+            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             if (bluetoothAdapter != null) {
                 mBleScanner = bluetoothAdapter.getBluetoothLeScanner();
             }
