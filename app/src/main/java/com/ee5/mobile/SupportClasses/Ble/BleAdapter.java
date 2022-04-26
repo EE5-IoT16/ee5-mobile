@@ -25,17 +25,10 @@ public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHold
     private BleService mBleService;
     private final Context context;
     private BluetoothDevice clickedDevice;
+    private BleScanner mBleScanner;
 
     public BleAdapter(Context context, AlertDialog.Builder builder) {
         this.context = context;
-    }
-
-    public void stopRecycler(){
-        mBleService.stopScan();
-    }
-
-    public void restartRecycler() {
-        mBleService.startScan();
     }
 
     @NonNull
@@ -50,14 +43,14 @@ public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHold
         TextView textView = holder.deviceName;
         ImageView state = holder.connState;
         String connectedAddress = mBleService.getConnectedAddress();
-        if(connectedAddress != null && connectedAddress == mBleService.getDeviceAddressAtPosition(position) && mBleService.isConnected()){
+        if(connectedAddress != null && connectedAddress == mBleScanner.getDeviceAddressAtPosition(position) && mBleService.isConnected()){
             holder.connState.setVisibility(View.VISIBLE);
         }
 
-        String name = mBleService.getDeviceNameAtPosition(position);
+        String name = mBleScanner.getDeviceNameAtPosition(position);
         textView.setText(name);
 
-        String address = mBleService.getDeviceAddressAtPosition(position);
+        String address = mBleScanner.getDeviceAddressAtPosition(position);
 
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override

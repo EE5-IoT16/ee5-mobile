@@ -76,10 +76,6 @@ public class SetupActivity extends AppCompatActivity {
             bleAdapter.notifyDataSetChanged();
         });
 
-        //inputDialogueBuilder.show();
-
-        //mBleService.connect(espAddress); //address needs to be dynamically set from UI
-
     }
 
     private void exitIntent(){
