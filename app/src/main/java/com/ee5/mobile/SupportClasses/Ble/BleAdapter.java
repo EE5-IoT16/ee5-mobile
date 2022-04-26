@@ -68,8 +68,8 @@ public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHold
 
     @Override
     public int getItemCount() {
-        Log.d(TAG, "getItemCount: " + mBleService.getDeviceListSize());
-        return mBleService.getDeviceListSize();
+        Log.d(TAG, "getItemCount: " + mBleScanner.getDeviceListSize());
+        return mBleScanner.getDeviceListSize();
     }
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder{

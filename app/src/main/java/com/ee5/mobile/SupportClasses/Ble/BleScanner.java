@@ -58,6 +58,10 @@ public class BleScanner {
         return deviceList.get(position);
     }
 
+    public int getDeviceListSize(){
+        return deviceList.size();
+    }
+
     ScanCallback scanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {

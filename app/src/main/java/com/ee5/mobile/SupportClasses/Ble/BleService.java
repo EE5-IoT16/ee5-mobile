@@ -110,6 +110,12 @@ public class BleService extends Service {
         return mBluetoothDeviceAddress;
     }
 
+    public class LocalBinder extends Binder {
+        public BleService getService() {
+            return BleService.this;
+        }
+    }
+
     @Override
     public boolean onUnbind(Intent intent) {
         close();
@@ -170,13 +176,4 @@ public class BleService extends Service {
 
         return true;
     }
-
-
-    public class LocalBinder extends Binder {
-        public BleService getService() {
-            return BleService.this;
-        }
-    }
-
-
 }
