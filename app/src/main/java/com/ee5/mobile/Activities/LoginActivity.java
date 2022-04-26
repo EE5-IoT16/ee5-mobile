@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.APIconnection;
 
@@ -66,20 +67,33 @@ public class LoginActivity extends AppCompatActivity {
 
     public void login() {
 
-        String responseString = "";
+        APIconnection.getInstance().GETRequest("profile", loginData, new ServerCallback() {
+            @Override
+            public void onSuccess() {
 
-        APIconnection.getInstance().GETRequest("user", loginData);
-        /*
-        try {
-            responseString += loginResponse.getString("password") + " : " + loginResponse.getString("salt") + "\n";
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Log.i("API response", responseString);
+                String responseString = "";
+
+                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+
+                try {
+                    for( int i = 0; i < responseArray.length(); i++ ) {
+                        JSONObject curObject = responseArray.getJSONObject(i);
+                        responseString += curObject.getString("password") + " : " + curObject.getString("salt") + "\n";
+                        Log.i("API response", responseString);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
+
 
         //responseString = loginRequest.GETRequest(loginData);
 
-         */
+
         //Log.i("response:", String.valueOf(loginResponse));
 
     }
