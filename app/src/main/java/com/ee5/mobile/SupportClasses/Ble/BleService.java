@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothSocket;
 import android.bluetooth.le.BluetoothLeScanner;
@@ -28,6 +29,7 @@ import com.ee5.mobile.SupportClasses.IFrameBuilder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,18 +40,24 @@ public class BleService extends Service {
     private static final boolean AUTO_CONNECT = false;
     private final IBinder mBinder = new LocalBinder();
     private int dataSequence = 0;
-    private BluetoothSocket mSocket;
 
     public final static String ACTION_GATT_CONNECTED =
             "com.example.bluetooth.le.ACTION_GATT_CONNECTED";
     public final static String ACTION_GATT_DISCONNECTED =
             "com.example.bluetooth.le.ACTION_GATT_DISCONNECTED";
+    public final static String ACTION_GATT_SERVICES_DISCOVERED =
+            "com.example.bluetooth.le.ACTION_GATT_SERVICES_DISCOVERED";
 
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTED = 2;
 
     private int connectionState;
+    private Handler handler = new Handler();
+    private Boolean isConnected;
 
+    private BluetoothAdapter mBluetoothAdapter;
+    private String mBluetoothDeviceAddress;
+    private BluetoothGatt mBluetoothGatt;
 
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
@@ -58,24 +66,41 @@ public class BleService extends Service {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 connectionState = STATE_CONNECTED;
                 broadcastUpdate(ACTION_GATT_CONNECTED);
+                mBluetoothGatt.discoverServices();
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 connectionState = STATE_DISCONNECTED;
                 broadcastUpdate(ACTION_GATT_DISCONNECTED);
             }
         }
+
+        @Override
+        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
+                List<BluetoothGattCharacteristic> ch_list = new ArrayList<>();
+                gatt.getServices().forEach((BluetoothGattService gs) ->{
+                    ch_list.addAll(gs.getCharacteristics());
+                });
+                ch_list.forEach((BluetoothGattCharacteristic ch) -> {
+                    ch.setValue(IFrameBuilder.getCustomDataFrame("a", dataSequence));
+                    gatt.writeCharacteristic(ch);
+                });
+                Log.d(TAG, "onServicesDiscovered: " + ch_list.toString());
+            } else {
+                Log.w(TAG, "onServicesDiscovered received: " + status);
+            }
+        }
     };
+
+    public List<BluetoothGattService> getSupportedGattServices() {
+        if (mBluetoothGatt == null) return null;
+        return mBluetoothGatt.getServices();
+    }
 
     private void broadcastUpdate(final String action) {
         final Intent intent = new Intent(action);
         sendBroadcast(intent);
     }
-
-    private Handler handler = new Handler();
-    private Boolean isConnected;
-
-    private BluetoothAdapter mBluetoothAdapter;
-    private String mBluetoothDeviceAddress;
-    private BluetoothGatt mBluetoothGatt;
 
     public boolean init() {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -87,6 +112,7 @@ public class BleService extends Service {
     }
 
     public boolean connect(final String address) {
+        Log.d(TAG, "connect: " + address);
 
         if (mBluetoothAdapter == null || !BluetoothAdapter.checkBluetoothAddress(address)) {
             Log.e(TAG, "connect: BleAdapter not initialized or incorrect address");
@@ -99,6 +125,7 @@ public class BleService extends Service {
         } catch (IllegalArgumentException e){
             Log.w(TAG, "connect: Device not found with provided address");
         }
+        mBluetoothDeviceAddress = address;
         return true;
     }
 
@@ -146,33 +173,11 @@ public class BleService extends Service {
         mBluetoothGatt = null;
     }
 
-    private void connectSocket(BluetoothDevice device) {
-        if (device == null) Log.e(TAG, "wifiProvisionDevice: device is null");
-        device.createBond();
-        Log.d(TAG, "connectSocket: " + device.getBondState());
-
-        mBluetoothAdapter.cancelDiscovery();
-
-        UUID mUuid = UUID.fromString("0000ff01-0000-1000-8000-00805f9b34fb");
-
-
-        try {
-            mSocket = (BluetoothSocket) device.getClass().getMethod("createInsecureRfcommSocketToServiceRecord", UUID.class)
-                                                            .invoke(device,mUuid);
-            assert mSocket != null;
-            mSocket.connect();
-        } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException | IOException illegalAccessException) {
-            illegalAccessException.printStackTrace();
-        }
-        Log.d(TAG, "Socket state connected: " + mSocket.isConnected());
-    }
-
     public Boolean wifiProvisionDevice(BluetoothDevice device, byte[] ssid, byte[] pass) {
         Log.d(TAG, "wifiProvisionDevice: provision to " + device.getAddress());
 
         dataSequence +=1;
         byte[] ssidFrame = IFrameBuilder.getSsidDataFrame(ssid, dataSequence);
-        connectSocket(device);
 
         return true;
     }

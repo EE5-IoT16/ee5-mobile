@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.Ble.BleAdapter;
+import com.ee5.mobile.SupportClasses.Ble.BleScanner;
 import com.ee5.mobile.SupportClasses.Ble.BleService;
 
 import org.jetbrains.annotations.NotNull;
@@ -67,12 +68,10 @@ public class SetupActivity extends AppCompatActivity {
         bleDeviceRecycler.setLayoutManager(new LinearLayoutManager(this));
 
         back_btn.setOnClickListener(v -> {
-            bleAdapter.stopRecycler();
             exitIntent();
         });
 
         refresh_btn.setOnClickListener(v -> {
-            bleAdapter.restartRecycler();
             bleAdapter.notifyDataSetChanged();
         });
 

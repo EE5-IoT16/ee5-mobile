@@ -17,7 +17,7 @@ public class BleScanner {
     private List<BluetoothDevice> deviceList = new ArrayList<>();
     private BluetoothLeScanner mBleScanner;
 
-    private void getScanner() {
+    public void getScanner() {
         if (mBleScanner == null) {
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             if (bluetoothAdapter != null) {
@@ -84,7 +84,6 @@ public class BleScanner {
                 }
                 //deviceList.add(sr.getDevice());
             }
-
             Log.d(TAG, "deviceList: " + deviceList.toString());
         }
 

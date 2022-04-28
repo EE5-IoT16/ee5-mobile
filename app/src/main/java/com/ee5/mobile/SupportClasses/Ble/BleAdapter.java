@@ -29,6 +29,9 @@ public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHold
 
     public BleAdapter(Context context, AlertDialog.Builder builder) {
         this.context = context;
+        this.mBleScanner = new BleScanner();
+        mBleScanner.getScanner();
+        mBleScanner.startScan();
     }
 
     @NonNull
@@ -42,10 +45,9 @@ public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHold
     public void onBindViewHolder(@NonNull BleAdapter.RecyclerViewHolder holder, int position) {
         TextView textView = holder.deviceName;
         ImageView state = holder.connState;
-        String connectedAddress = mBleService.getConnectedAddress();
-        if(connectedAddress != null && connectedAddress == mBleScanner.getDeviceAddressAtPosition(position) && mBleService.isConnected()){
-            holder.connState.setVisibility(View.VISIBLE);
-        }
+//        if(connectedAddress != null && connectedAddress == mBleScanner.getDeviceAddressAtPosition(position) && mBleService.isConnected()){
+//            holder.connState.setVisibility(View.VISIBLE);
+//        }
 
         String name = mBleScanner.getDeviceNameAtPosition(position);
         textView.setText(name);
@@ -55,6 +57,7 @@ public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHold
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mBleScanner.stopScan();
                 Intent intent = new Intent(context, DeviceControlActivity.class);
                 intent.putExtra("address", address);
                 context.startActivity(intent);

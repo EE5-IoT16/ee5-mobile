@@ -28,6 +28,7 @@ public class DeviceControlActivity extends AppCompatActivity {
         setContentView(R.layout.activity_device_control);
 
         address = getIntent().getStringExtra("address");
+        Log.d(TAG, "onCreate: " + address);
 
         Intent gattServiceIntent = new Intent(this, BleService.class);
         bindService(gattServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
@@ -42,7 +43,6 @@ public class DeviceControlActivity extends AppCompatActivity {
                     Log.e(TAG, "onServiceConnected: Unable to initialize Bluetooth");
                     exitIntent();
                 }
-                //perform device connection
                 bleService.connect(address);
             }
         }
@@ -61,6 +61,9 @@ public class DeviceControlActivity extends AppCompatActivity {
                 connected = true;
             } else if (BleService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 connected = false;
+            } else if (BleService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
+            // Show all the supported services and characteristics on the user interface.
+                bleService.getSupportedGattServices();
             }
         }
     };
