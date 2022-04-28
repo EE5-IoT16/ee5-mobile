@@ -22,8 +22,9 @@ public interface IFrameBuilder {
 
     static byte[] getCustomDataFrame(String ssid, int sequence) {
         byte[] dataFrame = new byte[6 + ssid.length()];
-        dataFrame[0] = (byte) 01_010011; //Type & Subtype
-        dataFrame[1] = (byte) 000_00000; //Frame control with 3MSB reserved
+        dataFrame[0] = (byte) 0x01; //Type & Subtype
+        dataFrame[0] = (byte) ((0x13<<2) | dataFrame[0]);
+        dataFrame[1] = (byte) 0x00; //Frame control with 3MSB reserved
         dataFrame[2] = (byte) sequence;
         dataFrame[3] = (byte) ssid.length();
         dataFrame[4] = (byte) 'a';
