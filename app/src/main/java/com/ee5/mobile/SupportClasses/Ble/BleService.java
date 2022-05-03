@@ -81,9 +81,14 @@ public class BleService extends Service {
                 gatt.getServices().forEach((BluetoothGattService gs) ->{
                     ch_list.addAll(gs.getCharacteristics());
                 });
+//                ch_list.forEach((BluetoothGattCharacteristic ch) -> {
+//                    ch.setValue(IFrameBuilder.getCustomDataFrame("a", dataSequence));
+//                    gatt.writeCharacteristic(ch);
+//                });
                 ch_list.forEach((BluetoothGattCharacteristic ch) -> {
-                    ch.setValue(IFrameBuilder.getCustomDataFrame("a", dataSequence));
-                    gatt.writeCharacteristic(ch);
+                    //ch.setValue(IFrameBuilder.getCustomDataFrame("a", dataSequence));
+                    gatt.readCharacteristic(ch);
+                    Log.d(TAG, "onServicesDiscovered: " + ch.getValue().toString() );
                 });
                 Log.d(TAG, "onServicesDiscovered: " + ch_list.toString());
             } else {
