@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rectem_layout_hr"
+    android:layout_width="match_parent"
+    android:layout_height="128dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginTop="2dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginBottom="2dp"
+    android:background="@drawable/ic_recyclercard"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:layout_width="65dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/rv_title_name_hr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/sfproregular"
+            android:text="title name"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/rv_time_indicator_hr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:alpha="0.7"
+            android:fontFamily="@font/sfproregular"
+            android:text="time indicator"
+            android:textColor="#FFFFFF"
+            android:textSize="7sp" />
+
+        <TextView
+            android:id="@+id/rv_activity_data_hr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sfprobold"
+            android:text="4,383"
+            android:layout_marginTop="25dp"
+            android:textColor="@color/HeartRed"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/rv_activity_text_hr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:fontFamily="@font/sfproregular"
+            android:text="activity text"
+            android:textColor="#FFFFFF"
+            android:textSize="7sp" />
+    </LinearLayout>
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/LineChart"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"/>
+</LinearLayout>

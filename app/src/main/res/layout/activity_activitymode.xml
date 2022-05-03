@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Grey"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/am_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Activity mode"
+        android:layout_marginTop="40dp"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:gravity="center"/>
+
+    <Button
+        android:id="@+id/newActivity_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:backgroundTint="#C4C4C4"
+        android:fontFamily="@font/sfproregular"
+        android:includeFontPadding="false"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:stateListAnimator="@null"
+        android:text="Start new activity"
+        android:textAllCaps="false"
+        android:textAppearance="@style/InputText"
+        android:textColor="@color/Dark"
+        android:textSize="14sp"
+        app:cornerRadius="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Swipe left to delete"
+        android:textStyle="italic"
+        android:textSize="11sp"
+        android:layout_gravity="end"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        android:textColor="@color/Beige"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/am_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

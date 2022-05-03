@@ -1,103 +1,131 @@
 package com.ee5.mobile.SupportClasses;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
+        import android.content.Context;
+        import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
+        import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+        import com.android.volley.Request;
+        import com.android.volley.RequestQueue;
+        import com.android.volley.Response;
+        import com.android.volley.VolleyError;
+        import com.android.volley.toolbox.JsonArrayRequest;
+        import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+        import org.json.JSONArray;
+        import org.json.JSONException;
+        import org.json.JSONObject;
 
-import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.text.CollationElementIterator;
-import java.util.ArrayList;
+        import java.util.ArrayList;
 
 public class APIconnection extends AppCompatActivity {
 
-    private RequestQueue requestQueue;
-    private String requestURL = "https://ee5-huzza.herokuapp.com/";
+    private static APIconnection instance = null;
 
-    private String responseString = "";
-    private JSONObject JSONResponse;
+    public RequestQueue requestQueue;
+    private String prefixURL = "http://ee5-huzza.herokuapp.com/";
 
-
-
-    public APIconnection (String requestType, String node, ArrayList<String> parameters){
-
-        requestURL = requestURL + node + "/";
-
-        for (int i = 0; i < parameters.size(); i++) {
-
-            requestURL = requestURL + parameters.get(i) + "/";
-
-        }
-
-        if (requestType == "GET") {
-            GETRequest();
-        }
-
+    private APIconnection(Context context) {
+        requestQueue = Volley.newRequestQueue(context);
     }
 
-    public JSONObject getJSONResponse() {
-        return JSONResponse;
+    // method to initialize the APIconnection at the creation of the app session
+    public static synchronized APIconnection getInstance(Context context) {
+        if (null == instance)
+            instance = new APIconnection(context);
+        return instance;
+    }
+
+    // method to get the instance that was initialized at the creation of the session
+    public static synchronized APIconnection getInstance() {
+        // exception in case fetching the instance is attempted before it got initialized
+        if (null == instance) {
+            throw new IllegalStateException(APIconnection.class.getSimpleName() +
+                    " is not initialized, call getInstance(...) first");
+        }
+        return instance;
     }
 
     /**
      * Retrieve information from DB with Volley JSONRequest
      */
-    public void GETRequest()
-    {
-        requestQueue = Volley.newRequestQueue( this );
+    public void GETRequest(String node, ArrayList<String> values) {
+        // construct requestURL from given API node and list of parameters
+        String requestURL = prefixURL + node + "/";
 
+        for (int i = 0; i < values.size(); i++) {
 
+            if (values.get(i).equals("")){
+                Log.i("userInputFailure:", "user tried to login without entering an email");
+                return;
+            }
+
+            if (i == values.size() - 1) {
+                requestURL = requestURL + values.get(i);
+            } else {
+                requestURL = requestURL + values.get(i) + "/";
+            }
+        }
+
+        Log.i("requestURL:", requestURL);
+
+        //construct JSONArray request with requestURL
         JsonArrayRequest submitRequest = new JsonArrayRequest(Request.Method.GET, requestURL, null,
 
-                new Response.Listener<JSONArray>()
-                {
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONArray response)
-                    {
+                    public void onResponse(JSONArray response) {
+                        Log.i("onResponse:", response.toString());
+                        /*
                         try {
                             for( int i = 0; i < response.length(); i++ ) {
                                 JSONObject curObject = response.getJSONObject(i);
-                                //responseString += curObject.getString("name") + " : " + curObject.getString("email") + "\n";
+                                responseString += curObject.getString("password") + " : " + curObject.getString("salt") + "\n";
+                                Log.i("onResponse:", responseString);
                             }
                         }
                         catch( JSONException e )
                         {
                             Log.e( "Database", e.getMessage(), e );
                         }
+                        */
+
+
                     }
                 },
 
-                new Response.ErrorListener()
-                {
+                new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error)
-                    {
-                        responseString = error.getLocalizedMessage();
+                    public void onErrorResponse(VolleyError error) {
+                        String responseString = error.getLocalizedMessage();
+                        Log.i("onErrorResponse:", responseString);
                     }
                 }
         );
 
         requestQueue.add(submitRequest);
     }
+
+
+    public String POSTRequest(ArrayList<String> parameters, ArrayList<String> values) {
+
+        String requestURL = prefixURL + "?";
+
+        for (int i = 0; i < parameters.size(); i++) {
+
+            if (i == parameters.size() - 1) {
+                requestURL = requestURL + parameters.get(i) + "=" + values.get(i);
+            } else {
+                requestURL = requestURL + parameters.get(i) + "=" + values.get(i) + "&";
+            }
+        }
+
+        Log.i("requestURL:", requestURL);
+
+        return "test";
+
+    }
 }
+
 
 
