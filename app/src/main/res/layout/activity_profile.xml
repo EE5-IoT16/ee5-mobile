@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/profile_layout"
+    android:layout_height="match_parent"
+    android:background="@color/Beige"
+    android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/logout_Btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="305dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/ic_logout" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="3dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/sfproregular"
+                android:gravity="center"
+                android:text="Profile Name"
+                android:textColor="#000000"
+                android:textSize="24sp" />
+
+            <ImageButton
+                android:id="@+id/changeProfileBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/ic_changeprofilebtm" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="380dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/ic_infobar"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <TextView
+                    android:id="@+id/age_data"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sfproregular"
+                    android:gravity="center"
+                    android:text="79"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/sex_data"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sfproregular"
+                    android:gravity="center"
+                    android:text="Male"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/rmr_data"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sfproregular"
+                    android:gravity="center"
+                    android:text="1,602"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/bmi_data"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sfproregular"
+                    android:gravity="center"
+                    android:text="20.1"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/height_data"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sfproregular"
+                    android:gravity="center"
+                    android:text="180"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginRight="5dp"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <TextView
+                    android:id="@+id/age_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sfproregular"
+                    android:gravity="center"
+                    android:text="age"
+                    android:textColor="@color/StepBlue"
+                    android:textSize="7sp" />
+
+                <TextView
+                    android:id="@+id/sex_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sfproregular"
+                    android:gravity="center"
+                    android:text="sex"
+                    android:textColor="@color/StepBlue"
+                    android:textSize="7sp" />
+
+                <TextView
+                    android:id="@+id/rmr_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sfproregular"
+                    android:gravity="center"
+                    android:text="rest metabolic rate"
+                    android:textColor="@color/StepBlue"
+                    android:textSize="7sp" />
+
+                <TextView
+                    android:id="@+id/bmi_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sfproregular"
+                    android:gravity="center"
+                    android:text="BMI"
+                    android:textColor="@color/StepBlue"
+                    android:textSize="7sp" />
+
+                <TextView
+                    android:id="@+id/height_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sfproregular"
+                    android:gravity="center"
+                    android:text="height"
+                    android:textColor="@color/StepBlue"
+                    android:textSize="7sp" />
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="5dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/profile_weightGoal_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sfproregular"
+                    android:text="Right now, I weigh"
+                    android:textColor="@color/Grey"
+                    android:textSize="7sp" />
+
+                <EditText
+                    android:id="@+id/profile_weightGoal"
+                    android:layout_width="55dp"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="text"
+                    android:text="64.1"
+                    android:hint="64.1"
+                    android:textColor="@color/StepBlue"
+                    android:textSize="24sp"/>
+
+                <TextView
+                    android:id="@+id/profile_weightGoal_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sfproregular"
+                    android:text="kg"
+                    android:textColor="@color/Grey"
+                    android:textSize="7sp" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/profile_stepGoals_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sfproregular"
+                    android:text="My goal is to make"
+                    android:textColor="@color/Grey"
+                    android:textSize="7sp" />
+
+                <EditText
+                    android:id="@+id/profile_stepGoals"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="numberSigned"
+                    android:text="5200"
+                    android:hint="5200"
+                    android:textColor="@color/StepBlue"
+                    android:textSize="24sp"
+                    android:textStyle="" />
+
+                <TextView
+                    android:id="@+id/profile_stepGoals_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sfproregular"
+                    android:text="steps"
+                    android:textColor="@color/Grey"
+                    android:textSize="7sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/profile_records_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/ic_recordsbackground"
+            android:fontFamily="@font/sfproregular"
+            android:gravity="center"
+            android:text="records"
+            android:textAllCaps="true"
+            android:textColor="@color/Grey"
+            android:textSize="32sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/profile_longestStreak_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/sfproregular"
+                android:gravity="center"
+                android:text="9"
+                android:textColor="@color/Grey"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/profile_longestStreak_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/sfproregular"
+                android:gravity="center"
+                android:text="Longest streak"
+                android:textColor="@color/Grey"
+                android:textSize="7sp" />
+
+            <ImageView
+                android:id="@+id/profile_trophy1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_emojione_trophy" />
+
+            <TextView
+                android:id="@+id/profile_steps_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/sfproregular"
+                android:gravity="center"
+                android:text="12,345"
+                android:textColor="@color/Grey"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/profile_steps_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/sfproregular"
+                android:gravity="center"
+                android:text="Most steps in a day"
+                android:textColor="@color/Grey"
+                android:textSize="7sp" />
+
+            <ImageView
+                android:id="@+id/profile_trophy2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_emojione_trophy" />
+
+            <TextView
+                android:id="@+id/profile_heartpoints_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/sfproregular"
+                android:gravity="center"
+                android:text="44"
+                android:textColor="@color/Grey"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/profile_heartpoints_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/sfproregular"
+                android:gravity="center"
+                android:text="Most heartpoints in a day"
+                android:textColor="@color/Grey"
+                android:textSize="7sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+

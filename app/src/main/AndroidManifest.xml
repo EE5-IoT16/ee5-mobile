@@ -20,6 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.OverviewActivity" />
+        <activity android:name=".Activities.DataCardDetail" />
+        <activity android:name=".Activities.ProfileActivity" />
     </application>
 
 </manifest>
