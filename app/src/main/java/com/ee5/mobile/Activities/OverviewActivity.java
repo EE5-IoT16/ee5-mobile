@@ -14,17 +14,28 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.ee5.mobile.Interfaces.GraphCallback;
+import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
+import com.ee5.mobile.SupportClasses.APIconnection;
 import com.ee5.mobile.SupportClasses.DataCard;
 import com.ee5.mobile.SupportClasses.JsonArrayRequest;
 import com.ee5.mobile.SupportClasses.RecyclerViewAdapter;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.LocalDateTime;
@@ -32,11 +43,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class OverviewActivity extends AppCompatActivity implements RecyclerViewAdapter.OnItemClickListener{
+import blufi.espressif.params.BlufiParameter;
+
+public class OverviewActivity extends AppCompatActivity implements RecyclerViewAdapter.OnItemClickListener {
 
     RecyclerViewAdapter myRecyclerViewAdapter;
     RecyclerView myRecyclerView;
     ArrayList<DataCard> dataCards = new ArrayList<>();
+    ArrayList<String> tempData = new ArrayList<>();
     ArrayList barEntriesSteps;
     ArrayList barEntriesHeartPoints;
     ArrayList barEntriesHeartRate;
@@ -58,6 +72,8 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
 
     public int value = 0;
 
+    public static int update = 0;
+
     BarData barDataSteps;
     BarDataSet barDataSetSteps;
     BarData barDataHeartPoints;
@@ -73,11 +89,15 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     LocalDateTime today;
     int todayDayOfTheYear;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
+
         jsonArrayRequest = new JsonArrayRequest(this);
+
+        APIconnection.getInstance(this);
 
         ConstraintLayout constraintLayout = findViewById(R.id.overview_layout);
 
@@ -103,11 +123,11 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         myRecyclerViewAdapter.setOnItemClickListener(this);
         myRecyclerView.setAdapter(myRecyclerViewAdapter);
 
+
         today = LocalDateTime.now();
         todayDayOfTheYear = today.getDayOfYear();
         currentDailyStepsData = 0;
 
-        parseJson();
 
         profileButton = (Button) findViewById(R.id.viewProfile_Btn);
         profileButton.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +137,16 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                 startActivity(intent);
             }
         });
+
+        parseJson();
+
+
     }
+
+    public static int getUpdate() {
+        return update;
+    }
+
 
     public Spanned getColoredText(String text, String color) {
         String[] words = text.split(" ");
@@ -138,7 +167,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         getUserId();
         getDailySteps(today.getDayOfYear(), false);      //add timer to fetch data every minute? But who would stay for 1 minute at this screen, better to just refresh?
         getSteps();
-        getTemperature();
+        getTEMP();
         getHeartRate();
         getHeartRatePoints();
         getLastHeartRate();
@@ -161,18 +190,23 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         userId = Integer.toString(1);
     }
 
-
-    public void getTemperature() {
-        jsonArrayRequest.getJSONArray(response -> {
-            try {
-                Log.i("onResponse:", response.toString());
-                JSONObject user = response.getJSONObject(0);
-                String temperature = user.getString("temperature");
-                currTemp.setText(temperature);
-            } catch (Exception e) {
-                e.printStackTrace();
+    public void getTEMP() {
+        tempData.add(userId);
+        APIconnection.getInstance().GETRequest("temperature", tempData, new ServerCallback() {
+            @Override
+            public void onSuccess() {
+                String responseTemp = "";
+                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                try {
+                    JSONObject curObject = responseArray.getJSONObject(responseArray.length() - 1);
+                    responseTemp = curObject.getString("temperature");
+                    currTemp.setText(responseTemp);
+                    Log.i("API response", responseTemp);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-        }, prefixURL + "temperature/" + userId);
+        });
     }
 
     public void getHeartRate() {
@@ -216,18 +250,35 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     public void getSteps() {
         //get step goal + current steps + record steps this week + add daily steps to arrayList:
         stepsData.clear();
-
+        try {
+            DataCard dataCard = getIntent().getExtras().getParcelable("dataCard2");
+            if (dataCard != null) {
+                stepsData.add(dataCard.getDataCardData().get(0));
+                stepsData.add(dataCard.getDataCardData().get(1));
+                stepsData.add(dataCard.getDataCardData().get(2));
+                stepsData.add(dataCard.getDataCardData().get(3));
+                stepsData.add(dataCard.getDataCardData().get(4));
+                stepsData.add(dataCard.getDataCardData().get(5));
+                stepsData.add(dataCard.getDataCardData().get(6));
+            }
+        } catch (NullPointerException e) {
+            stepsData.add(0);
+            stepsData.add(0);
+            stepsData.add(0);
+            stepsData.add(0);
+            stepsData.add(0);
+            stepsData.add(0);
+            stepsData.add(10);
+            getDailyStepsData(todayDayOfTheYear, true);
+        }
         //getDailyStepsData(todayDayOfTheYear, true);
+        /*stepsData.add(0);
         stepsData.add(0);
         stepsData.add(0);
         stepsData.add(0);
         stepsData.add(0);
         stepsData.add(0);
-        stepsData.add(0);
-        stepsData.add(0);
-
-        getDailyStepsData(todayDayOfTheYear, true);
-
+        stepsData.add(0);*/
 
     }
 
@@ -244,14 +295,45 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                         currentDailyStepsData++;
                     }*/
                     currentDailyStepsData = 10;
-                    //callbackApi.onApiSucces();
                     stepsData.set(i, currentDailyStepsData);
                     Log.d("CallbackAPI", String.valueOf(stepsData.get(i)));
+                    //intent();
+                    //update = 1;
+                    //myRecyclerViewAdapter.notifyItemChanged(i);
                 }
+                update = 1;
+                myRecyclerViewAdapter.notifyDataSetChanged();
+                try {
+                    Object dataCard = getIntent().getExtras().getParcelable("dataCard2");
+                    Log.d("OBJECT", String.valueOf(dataCard));
+                   /* if (dataCard != null) {
+                        stepsData.add(1);
+                        stepsData.add(1);
+                        stepsData.add(5);
+                        stepsData.add(1);
+                        stepsData.add(5);
+                        stepsData.add(5);
+                        stepsData.add(5);
+                    }*/
+                } catch (NullPointerException e) {
+                    Intent detailIntent = new Intent(this, OverviewActivity.class);
+                    DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record", barDataSteps, null, stepsData);
+                    detailIntent.putExtra("dataCard2", dataCard1);
+                    startActivity(detailIntent);
+                }
+                //graphCallback.onUpdate();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }, prefixURL + "steps/" + userId);
+    }
+
+    public void intent() {
+        Intent detailIntent = new Intent(this, OverviewActivity.class);
+        DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record", barDataSteps, null, stepsData);
+
+        detailIntent.putExtra("dataCard", dataCard1);
+        startActivity(detailIntent);
     }
 
     public void getHeartRatePoints() {
@@ -321,6 +403,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
 
         barDataSetSteps = new BarDataSet(barEntriesSteps, "");
         barDataSteps = new BarData(barDataSetSteps);
+        barDataSteps.notifyDataChanged();
 
         barDataSetHeartPoints = new BarDataSet(barEntriesHeartPoints, "");
         barDataHeartPoints = new BarData(barDataSetHeartPoints);

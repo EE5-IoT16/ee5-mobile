@@ -1,5 +1,7 @@
 package com.ee5.mobile.SupportClasses;
 
+import static com.ee5.mobile.Activities.OverviewActivity.update;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Layout;
@@ -7,12 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import com.ee5.mobile.Activities.OverviewActivity;
+import com.ee5.mobile.Interfaces.GraphCallback;
 import com.ee5.mobile.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -20,6 +25,7 @@ import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter {
 
@@ -54,16 +60,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
 
         } else {
             //bind viewHolderOne
-            ViewHolderOne viewHolderOne = (ViewHolderOne) holder;
-            DataCard currentItem = dataCardList.get(position);
+            if (OverviewActivity.getUpdate() == 1) {
+                ViewHolderOne viewHolderOne = (ViewHolderOne) holder;
+                DataCard currentItem = dataCardList.get(position);
 
-            viewHolderOne.rv_dataCard_Title.setText(currentItem.getDataCardTitle());
-            viewHolderOne.rv_dataCard_timeIndicator.setText(currentItem.getDataCardTimeIndicator());
-            viewHolderOne.rv_dataCard_record.setText(currentItem.getDataCardRecord());
-            viewHolderOne.rv_dataCard_recordText.setText(currentItem.getDataCardRecordText());
-            viewHolderOne.rv_barChart.setData(currentItem.getBarData());
+
+                viewHolderOne.rv_dataCard_Title.setText(currentItem.getDataCardTitle());
+                viewHolderOne.rv_dataCard_timeIndicator.setText(currentItem.getDataCardTimeIndicator());
+                viewHolderOne.rv_dataCard_record.setText(currentItem.getDataCardRecord());
+                viewHolderOne.rv_dataCard_recordText.setText(currentItem.getDataCardRecordText());
+                viewHolderOne.rv_barChart.setData(currentItem.getBarData());
+
+                viewHolderOne.rv_barChart.notifyDataSetChanged();
+                viewHolderOne.rv_barChart.invalidate();
+            }
         }
     }
+
 
     //return int which defines the type of layout you want at that position
     @Override
@@ -92,7 +105,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
         this.dataCardList = dataCardList;
     }
 
-    class ViewHolderOne extends RecyclerView.ViewHolder {
+    public class ViewHolderOne extends RecyclerView.ViewHolder {
         public TextView rv_dataCard_Title;
         public TextView rv_dataCard_timeIndicator;
         public TextView rv_dataCard_record;
@@ -128,6 +141,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             yLeft.setAxisMaximum(10f); // the axis maximum is 100
 
 
+            rv_barChart.notifyDataSetChanged();
+            rv_barChart.invalidate();
+
+
             itemView.setOnClickListener(v -> {
                 if (myListener != null) {
                     int position = getAdapterPosition();
@@ -137,7 +154,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
                 }
             });
         }
+
+        public void updateGraph() {
+            rv_barChart.notifyDataSetChanged();
+            rv_barChart.invalidate();
+        }
     }
+
 
     class ViewHolderTwo extends RecyclerView.ViewHolder {
         public TextView rv_dataCard_Title_hr;
@@ -171,7 +194,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             x.setValueFormatter(new IndexAxisValueFormatter(labels));
             Description description = rv_lineChart.getDescription();
             description.setEnabled(false);
-
 
             itemView.setOnClickListener(v -> {
                 if (myListener != null) {

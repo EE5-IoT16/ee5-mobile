@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.APIconnection;
+import com.ee5.mobile.SupportClasses.DataCard;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -102,22 +103,5 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
-
-
-        //responseString = loginRequest.GETRequest(loginData);
-
-
-        //Log.i("response:", String.valueOf(loginResponse));
-
     }
-    //Setup connection to database
-
-    // GET request
-    // SELECT password FROM User WHERE email = "email"
-
-    //if query result returns none > wrong email
-    //else if passwords do not match > wrong password
 }

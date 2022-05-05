@@ -62,11 +62,10 @@ public class DataCardDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       position = getIntent().getExtras().getInt("dataCardPosition");
-        if(position == 2) {
+        position = getIntent().getExtras().getInt("dataCardPosition");
+        if (position == 2) {
             setContentView(R.layout.activity_recyclerview_detail_hr);
-        }
-        else {
+        } else {
             setContentView(R.layout.activity_recyclerview_detail);
         }
         jsonArrayRequest = new JsonArrayRequest(this);
@@ -76,8 +75,8 @@ public class DataCardDetailActivity extends AppCompatActivity {
 
         getUserId();
         getDailySteps(todayDayOfTheYear, false);
-        getPeriodSteps(todayDayOfTheYear-7, todayDayOfTheYear, true);
-        getPeriodSteps(todayDayOfTheYear-30, todayDayOfTheYear, false);     //taken 1 month = 30 days
+        getPeriodSteps(todayDayOfTheYear - 7, todayDayOfTheYear, true);
+        getPeriodSteps(todayDayOfTheYear - 30, todayDayOfTheYear, false);     //taken 1 month = 30 days
 
 
         title = findViewById(R.id.rv_detail_cardTitle);
@@ -90,21 +89,19 @@ public class DataCardDetailActivity extends AppCompatActivity {
         monthSteps = findViewById(R.id.rv_detail_month_dataSteps);
         monthDistance = findViewById(R.id.rv_detail_month_dataKm);
 
-
         dataCard = getIntent().getExtras().getParcelable("dataCard");
         dataCardDataList = dataCard.getDataCardData();
 
         title.setText(dataCard.getDataCardTitle());
 
-        if(position == 2) {
+        if (position == 2) {
             createLineChart();
-        }
-        else{
+        } else {
             createBarChart();
         }
     }
 
-    public static Double calculateDistance(int height, int steps){
+    public static Double calculateDistance(int height, int steps) {
         Double distance = 0.0;
         Double strideLength = height * 0.43;        //https://www.inchcalculator.com/steps-to-distance-calculator/
         distance = strideLength * steps;
@@ -147,13 +144,12 @@ public class DataCardDetailActivity extends AppCompatActivity {
 
                     }
                 }
-                if(week){
+                if (week) {
                     weekSteps.setText(Integer.toString(steps));
                     weekDistance.setText(Double.toString(calculateDistance(heightUser, dailySteps)));
-                }
-                else
+                } else
                     monthSteps.setText(Integer.toString(steps));
-                    monthDistance.setText(Double.toString(calculateDistance(heightUser, dailySteps)));
+                monthDistance.setText(Double.toString(calculateDistance(heightUser, dailySteps)));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -165,7 +161,7 @@ public class DataCardDetailActivity extends AppCompatActivity {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
         LocalDateTime dateTime = LocalDateTime.parse(ts, formatter);
         int day = dateTime.getDayOfYear();
-        if(day >= startDayOfTheYear && day <= endDayOfTheYear){
+        if (day >= startDayOfTheYear && day <= endDayOfTheYear) {
             return true;
         }
         return false;
@@ -204,9 +200,9 @@ public class DataCardDetailActivity extends AppCompatActivity {
         yLeft.setEnabled(false);
         yRight.setEnabled(false);
         x.setPosition(XAxis.XAxisPosition.BOTTOM);
-        x.setTextColor(Color.argb(180,255,255,255));
+        x.setTextColor(Color.argb(180, 255, 255, 255));
         x.setDrawGridLines(false);
-        String[] labels = {"M","T","W","T","F","S","S"};
+        String[] labels = {"M", "T", "W", "T", "F", "S", "S"};
         x.setValueFormatter(new IndexAxisValueFormatter(labels));
         Description description = barChart.getDescription();
         description.setEnabled(false);
