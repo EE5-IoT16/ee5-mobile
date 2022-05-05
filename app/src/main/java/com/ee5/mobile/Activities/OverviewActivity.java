@@ -25,6 +25,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public class OverviewActivity extends AppCompatActivity implements RecyclerViewAdapter.OnItemClickListener {
 
@@ -43,6 +44,18 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         Button viewProfile_btn = findViewById(R.id.viewProfile_Btn);
         TextView stepsLeft_num = findViewById(R.id.stepsLeft_num);
         TextView quote = findViewById(R.id.quote_tv);
+        Button setup_btn = findViewById(R.id.setupBtn);
+
+        viewProfile_btn.setOnClickListener(v -> {
+            Intent intent = new Intent(OverviewActivity.this, ProfileActivity.class);
+            startActivity(intent);
+        });
+
+        setup_btn.setOnClickListener(view -> {
+            Intent intent = new Intent(OverviewActivity.this, SetupActivity.class);
+            startActivity(intent);
+        });
+
 
         //TODO: get number from User object
         stepsLeft_num.setText("100");

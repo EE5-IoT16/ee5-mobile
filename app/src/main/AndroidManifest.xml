@@ -2,7 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ee5.mobile">
 
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <!-- initiate device discovery and manipulate bluetooth settings -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <!-- allow scan BLE -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- AWS Mobile SDK -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -12,6 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Ee5mobile">
+        <service android:name=".SupportClasses.Ble.BleService" />
         <activity android:name=".Activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,6 +30,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activities.OverviewActivity"/>
+        <activity android:name=".Activities.SetupActivity"/>
+        <activity android:name=".Activities.DeviceControlActivity" />
         <activity android:name=".Activities.OverviewActivity" />
         <activity android:name=".Activities.DataCardDetail" />
         <activity android:name=".Activities.ProfileActivity" />
