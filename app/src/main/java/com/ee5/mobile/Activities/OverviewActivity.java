@@ -106,6 +106,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         TextView stepsLeft_num = findViewById(R.id.stepsLeft_num);
         TextView quote = findViewById(R.id.quote_tv);
         Button setup_btn = findViewById(R.id.setupBtn);
+        Button viewProfile_btn = findViewById(R.id.viewProfile_Btn);
 
         viewProfile_btn.setOnClickListener(v -> {
             Intent intent = new Intent(OverviewActivity.this, ProfileActivity.class);
