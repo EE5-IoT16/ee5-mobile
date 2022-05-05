@@ -48,11 +48,11 @@ public interface IFrameBuilder {
         return dataFrame;
     }
 
-    static byte[] getPassDataFrame(byte[] pass) {
+    static byte[] getPassDataFrame(String pass, int dataSequence) {
         return new byte[0];
     }
 
-    static byte[] getConnectToAPControlFrame() {
+    static byte[] getConnectToAPControlFrame(int dataSequence) {
         return new byte[0];
     }
 }

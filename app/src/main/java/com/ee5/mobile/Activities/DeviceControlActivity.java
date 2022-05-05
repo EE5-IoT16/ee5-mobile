@@ -42,6 +42,9 @@ public class DeviceControlActivity extends AppCompatActivity {
 
         Intent gattServiceIntent = new Intent(this, BleService.class);
         bindService(gattServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+
+        AlertDialog.Builder dialog = getDialogueBuilder();
+        dialog.show();
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -72,7 +75,7 @@ public class DeviceControlActivity extends AppCompatActivity {
             } else if (BleService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 connected = false;
             } else if (BleService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                bleService.getSupportedGattServices();
+                Log.d(TAG, "onReceive: ACTION GATT SERVICES DISCOVERED");
             }
         }
     };
@@ -110,7 +113,7 @@ public class DeviceControlActivity extends AppCompatActivity {
     @NotNull
     private AlertDialog.Builder getDialogueBuilder() {
         AlertDialog.Builder inputDialogueBuilder = new AlertDialog.Builder(this);
-        inputDialogueBuilder.setTitle("Title");
+        inputDialogueBuilder.setTitle("Wifi credentials");
         // I'm using fragment here so I'm using getView() to provide ViewGroup
         // but you can provide here any other instance of ViewGroup from your Fragment / Activity
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.wifi_input_dialogue, (ViewGroup) findViewById(R.id.input_layout), false);
