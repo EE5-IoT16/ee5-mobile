@@ -13,12 +13,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="50dp"
-        android:text="cardTitle"
+        android:text="cardTitleHR"
         android:textColor="@color/white"
         android:textSize="32sp" />
 
-    <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/BarChart_datacard_detail"
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/LineChart_datacard_detail"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_marginTop="50dp"/>
@@ -58,22 +58,22 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/rv_detail_today_dataSteps"
+                        android:id="@+id/rv_detail_today_hr"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:text="4,383"
-                        android:textColor="@color/StepBlue"
+                        android:textColor="@color/HeartRed"
                         android:textSize="25sp" />
 
                     <TextView
-                        android:id="@+id/rv_detail_today_textSteps"
+                        android:id="@+id/rv_detail_today_texthr"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_marginStart="10dp"
                         android:gravity="center_vertical"
-                        android:text="steps"
+                        android:text="bpm"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
@@ -87,12 +87,12 @@
                     android:layout_gravity="center">
 
                     <TextView
-                        android:id="@+id/rv_detail_today_dataKm"
+                        android:id="@+id/rv_detail_today_data_hrMax"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:text="1,92"
-                        android:textColor="@color/StepBlue"
+                        android:textColor="@color/HeartRed"
                         android:textSize="25sp" />
 
 
@@ -103,7 +103,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="10dp"
                         android:gravity="center_vertical"
-                        android:text="Km"
+                        android:text="bpm MAX"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
@@ -111,51 +111,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_weight="1">
 
-                <TextView
-                    android:id="@+id/rv_detail_gc_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Goal completion"
-                    android:textColor="@color/white"
-                    android:textSize="20sp" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center">
-
-                    <TextView
-                        android:id="@+id/rv_detail_gc_data"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="72"
-                        android:textColor="@color/StepBlue"
-                        android:textSize="25sp" />
-
-
-                    <TextView
-                        android:id="@+id/rv_detail_gc_text"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="10dp"
-                        android:gravity="center_vertical"
-                        android:text="%"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"  />
-
-
-                </LinearLayout>
-            </LinearLayout>
 
 
         </LinearLayout>
@@ -190,12 +146,12 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/rv_detail_week_dataSteps"
+                        android:id="@+id/rv_detail_week_data_hr"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:text="11,005"
-                        android:textColor="@color/StepBlue"
+                        android:textColor="@color/HeartRed"
                         android:textSize="25sp" />
 
                     <TextView
@@ -205,7 +161,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="10dp"
                         android:gravity="center_vertical"
-                        android:text="steps"
+                        android:text="bpm"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
@@ -219,12 +175,12 @@
                     android:layout_gravity="center">
 
                     <TextView
-                        android:id="@+id/rv_detail_week_dataKm"
+                        android:id="@+id/rv_detail_week_data_hrMax"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:text="1,92"
-                        android:textColor="@color/StepBlue"
+                        android:textColor="@color/HeartRed"
                         android:textSize="25sp" />
 
 
@@ -235,7 +191,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="10dp"
                         android:gravity="center_vertical"
-                        android:text="Km"
+                        android:text="bpm MAX"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
@@ -267,12 +223,12 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/rv_detail_month_dataSteps"
+                        android:id="@+id/rv_detail_moth_data_hr"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:text="35,100"
-                        android:textColor="@color/StepBlue"
+                        android:textColor="@color/HeartRed"
                         android:textSize="25sp" />
 
                     <TextView
@@ -282,7 +238,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="10dp"
                         android:gravity="center_vertical"
-                        android:text="steps"
+                        android:text="bpm"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
@@ -296,12 +252,12 @@
                     android:layout_gravity="center">
 
                     <TextView
-                        android:id="@+id/rv_detail_month_dataKm"
+                        android:id="@+id/rv_detail_month_data_hrMax"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:text="21,56"
-                        android:textColor="@color/StepBlue"
+                        android:textColor="@color/HeartRed"
                         android:textSize="25sp" />
 
 
@@ -312,7 +268,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="10dp"
                         android:gravity="center_vertical"
-                        android:text="Km"
+                        android:text="bpm MAX"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 

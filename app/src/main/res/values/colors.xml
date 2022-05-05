@@ -8,4 +8,6 @@
     <color name="Dark">#272316</color>
     <color name="Grey">#5D5D5D</color>
     <color name="Beige">#E7E2D3</color>
+    <color name="Red">#FF0000</color>
+    <color name="Green">#00FF00</color>
 </resources>

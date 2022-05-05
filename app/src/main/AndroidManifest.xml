@@ -24,6 +24,7 @@
         android:theme="@style/Theme.Ee5mobile">
         <service android:name=".SupportClasses.Ble.BleService" />
         <activity android:name=".Activities.LoginActivity">
+        <activity android:name=".Activities.OverviewActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,7 +36,13 @@
         <activity android:name=".Activities.DeviceControlActivity" />
         <activity android:name=".Activities.OverviewActivity" />
         <activity android:name=".Activities.DataCardDetail" />
+        <activity android:name=".Activities.LoginActivity" />
+        <activity android:name=".Activities.DataCardDetailActivity" />
         <activity android:name=".Activities.ProfileActivity" />
+        <activity android:name=".Activities.FallActivity" />
+        <activity android:name=".Activities.NewActivityActivity" />
+        <activity android:name=".Activities.ActivityModeActivity" />
+
     </application>
 
 </manifest>
