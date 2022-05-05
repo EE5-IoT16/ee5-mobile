@@ -178,9 +178,7 @@ public class BleService extends Service {
         mBluetoothGatt = null;
     }
 
-    public Boolean wifiProvisionDevice(BluetoothDevice device, byte[] ssid, byte[] pass) {
-        Log.d(TAG, "wifiProvisionDevice: provision to " + device.getAddress());
-
+    public Boolean wifiProvisionDevice(String ssid, String pass) {
         dataSequence +=1;
         byte[] ssidFrame = IFrameBuilder.getSsidDataFrame(ssid, dataSequence);
 

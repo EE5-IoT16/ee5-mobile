@@ -27,7 +27,7 @@ public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHold
     private BluetoothDevice clickedDevice;
     private BleScanner mBleScanner;
 
-    public BleAdapter(Context context, AlertDialog.Builder builder) {
+    public BleAdapter(Context context) {
         this.context = context;
         this.mBleScanner = new BleScanner();
         mBleScanner.getScanner();
@@ -63,10 +63,6 @@ public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHold
                 context.startActivity(intent);
             }
         });
-    }
-
-    public void onWifiInputAccept(byte[] ssid, byte[] pass){
-        mBleService.wifiProvisionDevice(clickedDevice, ssid, pass);
     }
 
     @Override
