@@ -192,9 +192,9 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
 
 
         //add datacards to recyclerview
-        DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record", barDataSteps, null, stepsData);
-        DataCard dataCard2 = new DataCard("Heart points", "Last 7 days", String.valueOf(heartPointsRecord), "Record", barDataHeartPoints, null, heartPointsData);
-        DataCard dataCard3 = new DataCard("Heartrate", "Last 10 minutes", String.valueOf(hrRecord), "Peak", null, lineData, heartRateData);
+        DataCard dataCard1 = new DataCard("Steps", "Last 7 days", "563", "Record", barDataSteps, null, stepsData);
+        DataCard dataCard2 = new DataCard("Heart points", "Last 7 days", "8", "Record", barDataHeartPoints, null, heartPointsData);
+        DataCard dataCard3 = new DataCard("Heartrate", "Last 10 minutes", "88", "Peak", null, lineData, heartRateData);
 
         dataCards.add(dataCard1);
         dataCards.add(dataCard2);
@@ -265,7 +265,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     public void getSteps() {
         //get step goal + current steps + record steps this week + add daily steps to arrayList:
         stepsData.clear();
-        try {
+        /*try {
             DataCard dataCard = getIntent().getExtras().getParcelable("dataCard2");
             if (dataCard != null) {
                 stepsData.add(dataCard.getDataCardData().get(0));
@@ -285,15 +285,16 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
             stepsData.add(0);
             stepsData.add(10);
             getDailyStepsData(todayDayOfTheYear, true);
-        }
+        }*/
+
         //getDailyStepsData(todayDayOfTheYear, true);
-        /*stepsData.add(0);
-        stepsData.add(0);
-        stepsData.add(0);
-        stepsData.add(0);
-        stepsData.add(0);
-        stepsData.add(0);
-        stepsData.add(0);*/
+        stepsData.add(10);
+        stepsData.add(5);
+        stepsData.add(6);
+        stepsData.add(2);
+        stepsData.add(2);
+        stepsData.add(8);
+        stepsData.add(9);
 
     }
 
@@ -331,6 +332,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                         stepsData.add(5);
                     }*/
                 } catch (NullPointerException e) {
+                    Log.d("HALLO", "getDailyStepsData: ");
                     Intent detailIntent = new Intent(this, OverviewActivity.class);
                     DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record", barDataSteps, null, stepsData);
                     detailIntent.putExtra("dataCard2", dataCard1);
@@ -418,7 +420,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
 
         barDataSetSteps = new BarDataSet(barEntriesSteps, "");
         barDataSteps = new BarData(barDataSetSteps);
-        barDataSteps.notifyDataChanged();
+        //barDataSteps.notifyDataChanged();
 
         barDataSetHeartPoints = new BarDataSet(barEntriesHeartPoints, "");
         barDataHeartPoints = new BarData(barDataSetHeartPoints);

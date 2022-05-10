@@ -5,13 +5,14 @@
     android:id="@+id/rectem_layout"
     android:layout_width="match_parent"
     android:layout_height="128dp"
+    android:layout_marginHorizontal="20dp"
     android:layout_marginLeft="8dp"
     android:layout_marginTop="2dp"
     android:layout_marginRight="8dp"
     android:layout_marginBottom="2dp"
     android:background="@drawable/ic_recyclercard"
     android:orientation="horizontal"
-    android:padding="5dp">
+    android:padding="6dp">
 
     <LinearLayout
         android:layout_width="80dp"
@@ -19,50 +20,51 @@
         android:layout_marginStart="10dp"
         android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/rv_title_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/sfproregular"
-                android:text="title name"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+        <TextView
+            android:id="@+id/rv_title_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/sfproregular"
+            android:text="title name"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/rv_time_indicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:alpha="0.7"
-                android:fontFamily="@font/sfproregular"
-                android:text="time indicator"
-                android:textColor="#FFFFFF"
-                android:textSize="7sp" />
+        <TextView
+            android:id="@+id/rv_time_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:alpha="0.7"
+            android:fontFamily="@font/sfproregular"
+            android:text="time indicator"
+            android:textColor="#FFFFFF"
+            android:textSize="7sp" />
 
-            <TextView
-                android:id="@+id/rv_activity_data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/sfprobold"
-                android:text="4,383"
-                android:layout_marginTop="25dp"
-                android:textColor="@color/StepBlue"
-                android:textSize="14sp" />
+        <TextView
+            android:id="@+id/rv_activity_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:fontFamily="@font/sfprobold"
+            android:text="4,383"
+            android:textColor="@color/StepBlue"
+            android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/rv_activity_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:alpha="0.7"
-                android:fontFamily="@font/sfproregular"
-                android:text="activity text"
-                android:textColor="#FFFFFF"
-                android:textSize="7sp" />
+        <TextView
+            android:id="@+id/rv_activity_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:fontFamily="@font/sfproregular"
+            android:text="activity text"
+            android:textColor="#FFFFFF"
+            android:textSize="7sp" />
     </LinearLayout>
+
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/BarChart"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginEnd="10dp"/>
+        android:layout_marginEnd="10dp" />
 </LinearLayout>

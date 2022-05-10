@@ -5,6 +5,7 @@
     android:id="@+id/rectem_layout_hr"
     android:layout_width="match_parent"
     android:layout_height="128dp"
+    android:layout_marginHorizontal="20dp"
     android:layout_marginLeft="8dp"
     android:layout_marginTop="2dp"
     android:layout_marginRight="8dp"
@@ -44,9 +45,9 @@
             android:id="@+id/rv_activity_data_hr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
             android:fontFamily="@font/sfprobold"
             android:text="4,383"
-            android:layout_marginTop="25dp"
             android:textColor="@color/HeartRed"
             android:textSize="14sp" />
 
@@ -60,10 +61,11 @@
             android:textColor="#FFFFFF"
             android:textSize="7sp" />
     </LinearLayout>
+
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/LineChart"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="10dp"/>
+        android:layout_marginEnd="10dp" />
 </LinearLayout>

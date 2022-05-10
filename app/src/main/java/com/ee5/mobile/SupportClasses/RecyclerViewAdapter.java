@@ -60,7 +60,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
 
         } else {
             //bind viewHolderOne
-            if (OverviewActivity.getUpdate() == 1) {
                 ViewHolderOne viewHolderOne = (ViewHolderOne) holder;
                 DataCard currentItem = dataCardList.get(position);
 
@@ -71,9 +70,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
                 viewHolderOne.rv_dataCard_recordText.setText(currentItem.getDataCardRecordText());
                 viewHolderOne.rv_barChart.setData(currentItem.getBarData());
 
-                viewHolderOne.rv_barChart.notifyDataSetChanged();
-                viewHolderOne.rv_barChart.invalidate();
-            }
+                //viewHolderOne.rv_barChart.notifyDataSetChanged();
+                //viewHolderOne.rv_barChart.invalidate();
         }
     }
 
@@ -141,8 +139,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             yLeft.setAxisMaximum(10f); // the axis maximum is 100
 
 
-            rv_barChart.notifyDataSetChanged();
-            rv_barChart.invalidate();
+            //rv_barChart.notifyDataSetChanged();
+            //rv_barChart.invalidate();
 
 
             itemView.setOnClickListener(v -> {
