@@ -82,12 +82,6 @@ public class DataCardDetailActivity extends AppCompatActivity {
         title = findViewById(R.id.rv_detail_cardTitle);
         barChart = findViewById(R.id.BarChart_datacard_detail);
         lineChart = findViewById(R.id.LineChart_datacard_detail);
-        todaySteps = findViewById(R.id.rv_detail_today_dataSteps);
-        todayDistance = findViewById(R.id.rv_detail_today_dataKm);
-        weekSteps = findViewById(R.id.rv_detail_week_dataSteps);
-        weekDistance = findViewById(R.id.rv_detail_week_dataKm);
-        monthSteps = findViewById(R.id.rv_detail_month_dataSteps);
-        monthDistance = findViewById(R.id.rv_detail_month_dataKm);
 
         dataCard = getIntent().getExtras().getParcelable("dataCard");
         dataCardDataList = dataCard.getDataCardData();

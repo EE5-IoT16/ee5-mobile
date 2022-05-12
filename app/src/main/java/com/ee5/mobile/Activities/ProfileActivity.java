@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -14,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.APIconnection;
 import com.ee5.mobile.SupportClasses.JsonArrayRequest;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONObject;
@@ -62,7 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
         profileWeight = findViewById(R.id.weight_layout);
         //non editable from About you section
         profileRmr = findViewById(R.id.rmr_layout);
-        profileBmi = findViewById(R.id.bmi_layout);
+        profileBmi = findViewById(R.id.steps_amount);
 
         getUserId();
         getUser();

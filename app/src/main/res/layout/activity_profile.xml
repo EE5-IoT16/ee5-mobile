@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="18dp"
         android:layout_weight="1"
         android:backgroundTint="#C4C4C4"
         android:fontFamily="@font/sfproregular"
@@ -83,8 +83,10 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/heartpointgoal_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="18dp"
             android:hint="Heart Points"
             android:minWidth="180dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -104,8 +106,10 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/stepgoal_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="8dp"
             android:hint="Steps"
             android:minWidth="180dp"
             app:layout_constraintEnd_toStartOf="@+id/heartpointgoal_layout"
@@ -139,7 +143,7 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="18dp"
         android:layout_weight="1"
         android:backgroundTint="#C4C4C4"
         android:fontFamily="@font/sfproregular"
@@ -170,7 +174,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/aboutyou_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider2">
@@ -179,14 +183,16 @@
             android:id="@+id/rmr_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
 
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="18dp"
             android:hint="Rest Metabolic Rate"
             android:minWidth="180dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/weight_layout"
-            app:layout_constraintTop_toTopOf="@+id/bmi_layout">
+            app:layout_constraintStart_toEndOf="@+id/bmi_layout"
+            app:layout_constraintTop_toBottomOf="@+id/weight_layout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/rmr_edit"
@@ -203,13 +209,14 @@
             android:id="@+id/bmi_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
 
             android:layout_marginStart="18dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:hint="Bmi"
             android:minWidth="180dp"
-            app:layout_constraintEnd_toEndOf="@+id/height_layout"
+            app:layout_constraintEnd_toStartOf="@+id/rmr_layout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/height_layout">
 
@@ -227,11 +234,13 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/gender_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="Gender"
+            android:layout_marginStart="8dp"
 
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="18dp"
+            android:hint="Gender"
             android:minWidth="180dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/age_layout"
@@ -250,11 +259,13 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/age_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="Age"
+            android:layout_marginStart="18dp"
 
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:hint="Age"
             android:minWidth="180dp"
             app:layout_constraintEnd_toStartOf="@+id/gender_layout"
             app:layout_constraintStart_toStartOf="parent"
@@ -273,14 +284,16 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/weight_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
 
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="18dp"
             android:hint="Weight"
             android:minWidth="180dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/age_layout"
+            app:layout_constraintStart_toEndOf="@+id/height_layout"
             app:layout_constraintTop_toBottomOf="@+id/gender_layout"
             app:suffixText="Kg">
 
@@ -297,13 +310,15 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/height_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
 
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:hint="Height"
             android:minWidth="180dp"
-            app:layout_constraintEnd_toStartOf="@+id/gender_layout"
+            app:layout_constraintEnd_toStartOf="@+id/weight_layout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/age_layout"
             app:suffixText="cm">
