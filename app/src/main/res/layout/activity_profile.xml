@@ -1,457 +1,399 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/profile_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Beige"
-    android:orientation="vertical">
+    android:background="@color/Beige">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="12dp"
-        android:layout_marginTop="12dp">
+    <Button
+        android:id="@+id/activities_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="16dp"
+        android:layout_weight="1"
+        android:backgroundTint="#C4C4C4"
+        android:fontFamily="@font/sfproregular"
+        android:includeFontPadding="false"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:stateListAnimator="@null"
+        android:text="Activities"
+        android:textAllCaps="false"
+        android:textAppearance="@style/InputText"
+        android:textColor="@color/Dark"
+        android:textSize="14sp"
+        app:cornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
 
-
-        <ImageButton
-            android:id="@+id/imageButton"
-            style="@style/BackBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/Dark"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/logout_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#C4C4C4"
-            android:fontFamily="@font/sfproregular"
-            android:includeFontPadding="false"
-            android:minHeight="0dp"
-            android:singleLine="true"
-            android:stateListAnimator="@null"
-            android:text="Log out"
-            android:textAllCaps="false"
-            android:textAppearance="@style/InputText"
-            android:textColor="@color/Dark"
-            android:textSize="14sp"
-            app:cornerRadius="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/name_tv"
+        style="@style/InputText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="3dp"
-        android:orientation="horizontal">
+        android:layout_marginEnd="18dp"
+        android:text="Name Surname"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_back_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/profile_back_btn" />
 
-        <TextView
-            android:id="@+id/profile_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:fontFamily="@font/sfproregular"
-            android:gravity="center"
-            android:text="Profile Name"
-            android:textColor="#000000"
-            android:textSize="24sp" />
-
-        <ImageButton
-            android:id="@+id/changeProfileBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/ic_changeprofilebtm" />
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="380dp"
+    <ImageButton
+        android:id="@+id/profile_back_btn"
+        style="@style/BackBtn"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/Dark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        style="@style/InputText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="36dp"
+        android:text="Activity goals"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_back_btn" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="409dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        tools:layout_editor_absoluteX="1dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/activitygoals_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/heartpointgoal_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Heart Points"
+            android:minWidth="180dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/stepgoal_layout"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/heartpointgoal_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="124dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/stepgoal_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Steps"
+            android:minWidth="180dp"
+            app:layout_constraintEnd_toStartOf="@+id/heartpointgoal_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/stepgoal_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="124dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/aboutyou_title"
+        style="@style/InputText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="16dp"
+        android:text="About you"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activitygoals_layout" />
+
+    <Button
+        android:id="@+id/fall_data_btn"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/ic_infobar"
-        android:orientation="vertical">
+        android:layout_marginEnd="16dp"
+        android:layout_weight="1"
+        android:backgroundTint="#C4C4C4"
+        android:fontFamily="@font/sfproregular"
+        android:includeFontPadding="false"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:stateListAnimator="@null"
+        android:text="Fall data"
+        android:textAllCaps="false"
+        android:textAppearance="@style/InputText"
+        android:textColor="@color/Dark"
+        android:textSize="14sp"
+        app:cornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/aboutyou_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/activities_btn"
+        app:layout_constraintTop_toTopOf="@+id/aboutyou_title" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:orientation="horizontal"
-            android:weightSum="5">
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="409dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="@+id/aboutyou_title"
+        tools:layout_editor_absoluteX="1dp" />
 
-            <TextView
-                android:id="@+id/age_data"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/sfproregular"
-                android:gravity="center"
-                android:text="79"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/gender_data"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/sfproregular"
-                android:gravity="center"
-                android:text="Male"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/rmr_data"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/sfproregular"
-                android:gravity="center"
-                android:text="1,602"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/bmi_data"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/sfproregular"
-                android:gravity="center"
-                android:text="20.1"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/height_data"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/sfproregular"
-                android:gravity="center"
-                android:text="180"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="28dp"
-            android:layout_marginRight="5dp"
-            android:orientation="horizontal"
-            android:weightSum="5">
-
-            <TextView
-                android:id="@+id/age_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/sfproregular"
-                android:gravity="center"
-                android:text="age"
-                android:textColor="@color/StepBlue"
-                android:textSize="7sp" />
-
-            <TextView
-                android:id="@+id/gender_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/sfproregular"
-                android:gravity="center"
-                android:text="gender"
-                android:textColor="@color/StepBlue"
-                android:textSize="7sp" />
-
-            <TextView
-                android:id="@+id/rmr_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/sfproregular"
-                android:gravity="center"
-                android:text="rest metabolic rate"
-                android:textColor="@color/StepBlue"
-                android:textSize="7sp" />
-
-            <TextView
-                android:id="@+id/bmi_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/sfproregular"
-                android:gravity="center"
-                android:text="BMI"
-                android:textColor="@color/StepBlue"
-                android:textSize="7sp" />
-
-            <TextView
-                android:id="@+id/height_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/sfproregular"
-                android:gravity="center"
-                android:text="height"
-                android:textColor="@color/StepBlue"
-                android:textSize="7sp" />
-        </LinearLayout>
-
-
-    </RelativeLayout>
-
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/aboutyou_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:orientation="horizontal"
-        android:weightSum="2">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider2">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/rmr_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
 
-            <LinearLayout
+            android:layout_marginEnd="18dp"
+            android:hint="Rest Metabolic Rate"
+            android:minWidth="180dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/weight_layout"
+            app:layout_constraintTop_toTopOf="@+id/bmi_layout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/rmr_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
+                android:editable="false"
+                android:text="1608"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="124dp" />
 
-                <TextView
-                    android:id="@+id/profile_weightGoal_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/sfproregular"
-                    android:text="Right now, I weigh"
-                    android:textColor="@color/Grey"
-                    android:textSize="14dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/profile_weightGoal"
-                    android:layout_width="55dp"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:ems="10"
-                    android:gravity="center"
-                    android:hint="64.1"
-                    android:inputType="text"
-                    android:text="64.1"
-                    android:textColor="@color/StepBlue"
-                    android:textSize="24sp" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/bmi_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
 
-                <TextView
-                    android:id="@+id/profile_weightGoal_unit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/sfproregular"
-                    android:text="kg"
-                    android:textColor="@color/Grey"
-                    android:textSize="12dp" />
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="8dp"
+            android:hint="Bmi"
+            android:minWidth="180dp"
+            app:layout_constraintEnd_toEndOf="@+id/height_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/height_layout">
 
-            </LinearLayout>
-
-
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/bmi_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
+                android:editable="false"
+                android:text="21"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="124dp" />
 
-                <TextView
-                    android:id="@+id/profile_stepGoals_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/sfproregular"
-                    android:text="My goal is to make"
-                    android:textColor="@color/Grey"
-                    android:textSize="14dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/profile_stepGoals"
-                    android:layout_width="65dp"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:ems="10"
-                    android:gravity="center"
-                    android:hint="5200"
-                    android:inputType="numberSigned"
-                    android:text="5200"
-                    android:textColor="@color/StepBlue"
-                    android:textSize="24sp"
-                    android:textStyle="" />
-
-                <TextView
-                    android:id="@+id/profile_stepGoals_unit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/sfproregular"
-                    android:text="steps"
-                    android:textColor="@color/Grey"
-                    android:textSize="12dp" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/gender_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:hint="Gender"
+            android:minWidth="180dp"
 
-            <Button
-                android:id="@+id/fallData_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/age_layout"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <AutoCompleteTextView
+                android:id="@+id/gender_edit"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:backgroundTint="#C4C4C4"
-                android:fontFamily="@font/sfproregular"
-                android:includeFontPadding="false"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:stateListAnimator="@null"
-                android:text="Fall data"
-                android:textAllCaps="false"
-                android:textAppearance="@style/InputText"
-                android:textColor="@color/Dark"
-                android:textSize="14sp"
-                app:cornerRadius="8dp" />
+                android:layout_height="wrap_content"
+                app:simpleItems="@array/genders"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="124dp" />
 
-            <Button
-                android:id="@+id/activities_btn"
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/age_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Age"
+            android:minWidth="180dp"
+
+            app:layout_constraintEnd_toStartOf="@+id/gender_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/age_edit"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:backgroundTint="#C4C4C4"
-                android:fontFamily="@font/sfproregular"
-                android:includeFontPadding="false"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:stateListAnimator="@null"
-                android:text="Activities"
-                android:textAllCaps="false"
-                android:textAppearance="@style/InputText"
-                android:textColor="@color/Dark"
-                android:textSize="14sp"
-                app:cornerRadius="8dp" />
-        </LinearLayout>
-    </LinearLayout>
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="124dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/weight_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="8dp"
+            android:hint="Weight"
+            android:minWidth="180dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/age_layout"
+            app:layout_constraintTop_toBottomOf="@+id/gender_layout"
+            app:suffixText="Kg">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/weight_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="124dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/height_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+
+            android:hint="Height"
+            android:minWidth="180dp"
+            app:layout_constraintEnd_toStartOf="@+id/gender_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/age_layout"
+            app:suffixText="cm">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/height_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="124dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/activities_btn3"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="12dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/HeartRed"
+        android:fontFamily="@font/sfproregular"
+        android:includeFontPadding="false"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:stateListAnimator="@null"
+        android:text="Log out"
+        android:textAllCaps="false"
+        android:textAppearance="@style/InputText"
+        android:textColor="@color/Dark"
+        android:textSize="18dp"
+        app:cornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        style="@style/InputText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical">
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="16dp"
+        android:text="Personal records"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/aboutyou_layout" />
 
-        <TextView
-            android:id="@+id/profile_longestStreak_record"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/sfproregular"
-            android:gravity="center"
-            android:text="9"
-            android:textColor="@color/Grey"
-            android:textSize="20sp" />
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="409dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        tools:layout_editor_absoluteX="1dp" />
 
-        <TextView
-            android:id="@+id/profile_longestStreak_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/sfproregular"
-            android:gravity="center"
-            android:text="Longest streak"
-            android:textColor="@color/Grey"
-            android:textSize="7sp" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/steps_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/sfproregular"
+        android:text="15000 Steps"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
-        <ImageView
-            android:id="@+id/profile_trophy1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/ic_emojione_trophy" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/streak_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/sfproregular"
+        android:text="8 Consecutive Days"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hp_record" />
 
-        <TextView
-            android:id="@+id/profile_steps_record"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/sfproregular"
-            android:gravity="center"
-            android:text="12,345"
-            android:textColor="@color/Grey"
-            android:textSize="20sp" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/hp_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/sfproregular"
+        android:text="48 Heart Points"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/steps_record" />
 
-        <TextView
-            android:id="@+id/profile_steps_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/sfproregular"
-            android:gravity="center"
-            android:text="Most steps in a day"
-            android:textColor="@color/Grey"
-            android:textSize="7sp" />
-
-        <ImageView
-            android:id="@+id/profile_trophy2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/ic_emojione_trophy" />
-
-        <TextView
-            android:id="@+id/profile_heartpoints_record"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/sfproregular"
-            android:gravity="center"
-            android:text="44"
-            android:textColor="@color/Grey"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/profile_heartpoints_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/sfproregular"
-            android:gravity="center"
-            android:text="Most heartpoints in a day"
-            android:textColor="@color/Grey"
-            android:textSize="7sp" />
-
-    </LinearLayout>
-</LinearLayout>
-
-
+</androidx.constraintlayout.widget.ConstraintLayout>

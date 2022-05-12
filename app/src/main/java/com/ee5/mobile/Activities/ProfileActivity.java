@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,9 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.APIconnection;
 import com.ee5.mobile.SupportClasses.JsonArrayRequest;
-import com.ee5.mobile.SupportClasses.JsonObjectRequest;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -26,16 +28,17 @@ public class ProfileActivity extends AppCompatActivity {
     public static int heightUser;
 
     TextView profileName;
-    TextView profileAge;
-    TextView profileGender;
-    TextView profileRmr;
-    TextView profileBmi;
-    TextView profileHeight;
-    TextView profileWeight;
+    TextInputLayout profileAge;
+    TextInputLayout profileGender;
+    TextInputLayout profileRmr;
+    TextInputLayout profileBmi;
+    TextInputLayout profileHeight;
+    TextInputLayout profileWeight;
 
     Button logoutBtn;
     Button fallButton;
     Button activityBtn;
+    ImageButton back_btn;
     private APIconnection apiConnection;
     ArrayList<String> parameters;
 
@@ -45,22 +48,34 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_new);
-        /*jsonArrayRequest = new JsonArrayRequest(this);
+        setContentView(R.layout.activity_profile);
+        jsonArrayRequest = new JsonArrayRequest(this);
 
-        profileName = findViewById(R.id.profile_name);
-        profileAge = findViewById(R.id.age_data);
-        profileGender = findViewById(R.id.gender_data);
-        profileRmr = findViewById(R.id.rmr_data);
-        profileBmi = findViewById(R.id.bmi_data);
-        profileHeight = findViewById(R.id.height_data);
-        profileWeight = findViewById(R.id.profile_weightGoal);
+        //top section
+        profileName = findViewById(R.id.name_tv);
+
+        //About you section
+        profileAge = findViewById(R.id.age_layout);
+        profileGender = findViewById(R.id.gender_layout);
+        profileHeight = findViewById(R.id.height_layout);
+        profileWeight = findViewById(R.id.weight_layout);
+        //non editable from About you section
+        profileRmr = findViewById(R.id.rmr_layout);
+        profileBmi = findViewById(R.id.bmi_layout);
 
         getUserId();
         getUser();
         getPhysicalData();
 
-        fallButton = (Button) findViewById(R.id.fallData_btn);
+        back_btn = findViewById(R.id.profile_back_btn);
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                exitIntent();
+            }
+        });
+
+        fallButton = (Button) findViewById(R.id.fall_data_btn);
         fallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,7 +91,7 @@ public class ProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent(ProfileActivity.this, ActivityModeActivity.class);
                 startActivity(intent);
             }
-        });*/
+        });
 
 
     }
@@ -113,15 +128,20 @@ public class ProfileActivity extends AppCompatActivity {
                 String gender = user.getString("gender");
                 String bmi = user.getString("bmi");
                 String rmr = user.getString("rmr");
-                profileWeight.setText(weight);
-                profileAge.setText(age);
-                profileHeight.setText(height);
-                profileBmi.setText(bmi);
-                profileRmr.setText(rmr);
-                profileGender.setText(gender);
+                profileWeight.setPlaceholderText(weight);
+                profileAge.setPlaceholderText(age);
+                profileHeight.setPlaceholderText(height);
+                profileBmi.setPlaceholderText(bmi);
+                profileRmr.setPlaceholderText(rmr);
+                profileGender.setPlaceholderText(gender);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }, prefixURL + "physicalData/" + userId);
+    }
+
+    private void exitIntent(){
+        final Intent intent = new Intent(ProfileActivity.this, OverviewActivity.class);
+        startActivity(intent);
     }
 }
