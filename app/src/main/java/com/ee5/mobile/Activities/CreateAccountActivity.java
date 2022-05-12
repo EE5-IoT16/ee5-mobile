@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.ee5.mobile.R;
 
-public class CreateAccount extends AppCompatActivity {
+public class CreateAccountActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

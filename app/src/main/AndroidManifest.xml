@@ -19,7 +19,7 @@
         android:theme="@style/Theme.Ee5mobile"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".Activities.CreateAccount"
+            android:name=".Activities.CreateAccountActivity"
             android:exported="false" />
 
         <service android:name=".SupportClasses.Ble.BleService" />
