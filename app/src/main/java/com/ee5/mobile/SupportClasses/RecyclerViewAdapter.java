@@ -60,20 +60,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
 
         } else {
             //bind viewHolderOne
-            if (OverviewActivity.getUpdate() == 1) {
-                ViewHolderOne viewHolderOne = (ViewHolderOne) holder;
-                DataCard currentItem = dataCardList.get(position);
+            ViewHolderOne viewHolderOne = (ViewHolderOne) holder;
+            DataCard currentItem = dataCardList.get(position);
 
 
-                viewHolderOne.rv_dataCard_Title.setText(currentItem.getDataCardTitle());
-                viewHolderOne.rv_dataCard_timeIndicator.setText(currentItem.getDataCardTimeIndicator());
-                viewHolderOne.rv_dataCard_record.setText(currentItem.getDataCardRecord());
-                viewHolderOne.rv_dataCard_recordText.setText(currentItem.getDataCardRecordText());
-                viewHolderOne.rv_barChart.setData(currentItem.getBarData());
+            viewHolderOne.rv_dataCard_Title.setText(currentItem.getDataCardTitle());
+            viewHolderOne.rv_dataCard_timeIndicator.setText(currentItem.getDataCardTimeIndicator());
+            viewHolderOne.rv_dataCard_record.setText(currentItem.getDataCardRecord());
+            viewHolderOne.rv_dataCard_recordText.setText(currentItem.getDataCardRecordText());
+            viewHolderOne.rv_barChart.setData(currentItem.getBarData());
 
-                viewHolderOne.rv_barChart.notifyDataSetChanged();
-                viewHolderOne.rv_barChart.invalidate();
-            }
+            viewHolderOne.rv_barChart.notifyDataSetChanged();
+            viewHolderOne.rv_barChart.invalidate();
+
         }
     }
 
