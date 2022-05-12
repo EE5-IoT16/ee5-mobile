@@ -266,7 +266,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         //get step goal + current steps + record steps this week + add daily steps to arrayList:
         stepsData.clear();
         try {
-            DataCard dataCard = getIntent().getExtras().getParcelable("dataCard2");
+            DataCard dataCard = getIntent().getExtras().getParcelable("dataCard");
             if (dataCard != null) {
                 stepsData.add(dataCard.getDataCardData().get(0));
                 stepsData.add(dataCard.getDataCardData().get(1));
@@ -319,7 +319,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                 update = 1;
                 myRecyclerViewAdapter.notifyDataSetChanged();
                 try {
-                    Object dataCard = getIntent().getExtras().getParcelable("dataCard2");
+                    Object dataCard = getIntent().getExtras().getParcelable("dataCard");
                     Log.d("OBJECT", String.valueOf(dataCard));
                    /* if (dataCard != null) {
                         stepsData.add(1);
@@ -333,7 +333,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                 } catch (NullPointerException e) {
                     Intent detailIntent = new Intent(this, OverviewActivity.class);
                     DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record", barDataSteps, null, stepsData);
-                    detailIntent.putExtra("dataCard2", dataCard1);
+                    detailIntent.putExtra("dataCard", dataCard1);
                     startActivity(detailIntent);
                 }
                 //graphCallback.onUpdate();
