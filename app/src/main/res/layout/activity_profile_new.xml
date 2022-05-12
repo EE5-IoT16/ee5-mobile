@@ -262,7 +262,6 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginStart="18dp"
         android:layout_marginBottom="12dp"
         android:layout_weight="1"
         android:backgroundTint="@color/HeartRed"
@@ -278,6 +277,7 @@
         android:textSize="18dp"
         app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -299,5 +299,41 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         tools:layout_editor_absoluteX="1dp" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/steps_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/sfproregular"
+        android:text="15000 Steps"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider3" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/streak_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/sfproregular"
+        android:text="8 days"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hp_record" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/hp_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/sfproregular"
+        android:text="48 Heart Points"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/steps_record" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
