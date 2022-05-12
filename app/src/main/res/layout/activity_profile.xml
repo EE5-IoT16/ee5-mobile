@@ -229,9 +229,10 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:hint="Gender"
-            android:minWidth="180dp"
 
+            android:minWidth="180dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/age_layout"
             app:layout_constraintTop_toTopOf="parent">
@@ -251,9 +252,10 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:hint="Age"
-            android:minWidth="180dp"
 
+            android:minWidth="180dp"
             app:layout_constraintEnd_toStartOf="@+id/gender_layout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
