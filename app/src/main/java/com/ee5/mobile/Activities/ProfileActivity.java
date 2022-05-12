@@ -45,8 +45,8 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-        jsonArrayRequest = new JsonArrayRequest(this);
+        setContentView(R.layout.activity_profile_new);
+        /*jsonArrayRequest = new JsonArrayRequest(this);
 
         profileName = findViewById(R.id.profile_name);
         profileAge = findViewById(R.id.age_data);
@@ -76,7 +76,7 @@ public class ProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent(ProfileActivity.this, ActivityModeActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
 
     }

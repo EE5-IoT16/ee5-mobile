@@ -6,5 +6,18 @@
     <style name="InputText">
         <item name="android:textSize">18dp</item>
         <item name="android:fontFamily">@font/sfproregular</item>
+        <item name="minWidth">0dp</item>
+        <item name="minHeight">0dp</item>
+        <item name="textAllCaps">false</item>
+        <item name="cornerRadius">8dp</item>
+
+    </style>
+
+    <style name="BackBtn">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/ic_backbtn</item>
+        <item name="android:paddingHorizontal">12dp</item>
+        <item name="android:paddingVertical">12dp</item>
     </style>
 </resources>
