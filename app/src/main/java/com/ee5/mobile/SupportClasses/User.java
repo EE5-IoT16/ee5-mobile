@@ -1,6 +1,9 @@
 package com.ee5.mobile.SupportClasses;
 
-public class User{
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class User implements Parcelable {
 
     /*************************************************************
      * DATA FIELDS
@@ -79,6 +82,10 @@ public class User{
 
     public int getUserId() {
         return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getUserFirstName() {
@@ -175,4 +182,62 @@ public class User{
     public void setDailyHeartpointGoal(int dailyHeartpointGoal) {
         this.dailyHeartpointGoal = dailyHeartpointGoal;
     }
+
+    /*************************************************************
+     * Parcelable interface method overrides
+     *************************************************************/
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(this.profileId);
+        out.writeString(this.profileFirstName);
+        out.writeString(this.profileSurname);
+        out.writeString(this.profileEmail);
+        out.writeInt(this.userId);
+        out.writeString(this.userFirstName);
+        out.writeString(this.userSurname);
+        out.writeString(this.userEmail);
+        out.writeInt(this.weight);
+        out.writeInt(this.height);
+        out.writeInt(this.age);
+        out.writeString(this.gender);
+        out.writeInt(this.dailyStepGoal);
+        out.writeInt(this.dailyHeartpointGoal);
+
+    }
+
+    protected User(Parcel in) {
+        this.profileId = in.readInt();
+        this.profileFirstName = in.readString();
+        this.profileSurname = in.readString();
+        this.profileEmail = in.readString();
+        this.userId = in.readInt();
+        this.userFirstName = in.readString();
+        this.userSurname = in.readString();
+        this.userEmail = in.readString();
+        this.weight = in.readInt();
+        this.height = in.readInt();
+        this.age = in.readInt();
+        this.gender = in.readString();
+        this.dailyStepGoal = in.readInt();
+        this.dailyHeartpointGoal = in.readInt();
+
+    }
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }
