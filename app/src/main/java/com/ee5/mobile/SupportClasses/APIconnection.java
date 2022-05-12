@@ -125,7 +125,7 @@ public class APIconnection extends AppCompatActivity {
     }
 
 
-    public String POSTRequest(ArrayList<String> parameters, ArrayList<String> values) {
+    public void POSTRequest(String node, ArrayList<String> values, ArrayList<String> parameters, final ServerCallback callBack) {
 
         String requestURL = prefixURL + "?";
 
@@ -140,7 +140,31 @@ public class APIconnection extends AppCompatActivity {
 
         Log.i("requestURL:", requestURL);
 
-        return "test";
+        JsonArrayRequest submitRequest = new JsonArrayRequest(Request.Method.GET, requestURL, null,
+
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.i("onResponse:", response.toString());
+
+                        APIResponse = response;
+
+                        callBack.onSuccess();
+
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String responseString = error.getLocalizedMessage();
+                        //Log.i("onErrorResponse:", responseString);
+                    }
+                }
+        );
+
+        requestQueue.add(submitRequest);
+
 
     }
 }
