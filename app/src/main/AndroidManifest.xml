@@ -18,14 +18,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ee5mobile"
         android:usesCleartextTraffic="true">
+        <!--
         <activity
             android:name=".Activities.CreateAccountActivity"
             android:exported="false" />
+        -->
 
         <service android:name=".SupportClasses.Ble.BleService" />
 
         <activity android:name=".Activities.LoginActivity" />
-        <activity android:name=".Activities.OverviewActivity">
+        <activity android:name=".Activities.CreateAccountActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,6 +41,7 @@
         <activity android:name=".Activities.FallActivity" />
         <activity android:name=".Activities.NewActivityActivity" />
         <activity android:name=".Activities.ActivityModeActivity" />
+        <activity android:name=".Activities.OverviewActivity" />
     </application>
 
 </manifest>

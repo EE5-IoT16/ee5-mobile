@@ -116,7 +116,7 @@ public class APIconnection extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         String responseString = error.getLocalizedMessage();
-                        //Log.i("onErrorResponse:", responseString);
+                        Log.i("onErrorResponse:", responseString);
                     }
                 }
         );
@@ -127,7 +127,7 @@ public class APIconnection extends AppCompatActivity {
 
     public void POSTRequest(String node, ArrayList<String> values, ArrayList<String> parameters, final ServerCallback callBack) {
 
-        String requestURL = prefixURL + "?";
+        String requestURL = prefixURL + node + "?";
 
         for (int i = 0; i < parameters.size(); i++) {
 
@@ -140,7 +140,7 @@ public class APIconnection extends AppCompatActivity {
 
         Log.i("requestURL:", requestURL);
 
-        JsonArrayRequest submitRequest = new JsonArrayRequest(Request.Method.GET, requestURL, null,
+        JsonArrayRequest submitRequest = new JsonArrayRequest(Request.Method.POST, requestURL, null,
 
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -158,7 +158,7 @@ public class APIconnection extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         String responseString = error.getLocalizedMessage();
-                        //Log.i("onErrorResponse:", responseString);
+                        Log.i("onErrorResponse:", responseString);
                     }
                 }
         );
