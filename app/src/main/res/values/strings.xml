@@ -2,4 +2,9 @@
     <string name="app_name">ee5-mobile</string>
     <string name="hint_password">password</string>
     <string name="hint_ssid">Network name</string>
+    <string-array name="genders">
+        <item>Female</item>
+        <item>Male</item>
+        <item>X</item>
+    </string-array>
 </resources>
