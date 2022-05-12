@@ -26,6 +26,7 @@ public class ProfileActivity extends AppCompatActivity {
     private String name;
     private String userId;
     public static int heightUser;
+    private static final String TAG = "ProfileActivity";
 
     TextView profileName;
     TextInputLayout profileAge;
@@ -93,6 +94,14 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        logoutBtn = findViewById(R.id.logout_btn);
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: Log user out of app
+            }
+        });
+
 
     }
 
@@ -123,7 +132,8 @@ public class ProfileActivity extends AppCompatActivity {
                 JSONObject user = response.getJSONObject(0);
                 String weight = user.getString("weight");
                 String height = user.getString("height");
-                heightUser = Integer.valueOf(height);
+                heightUser = Integer.parseInt(height);
+                Log.d(TAG, "getPhysicalData: ");
                 String age = user.getString("age");
                 String gender = user.getString("gender");
                 String bmi = user.getString("bmi");
