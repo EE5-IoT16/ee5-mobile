@@ -182,6 +182,8 @@ public class DataCardDetailActivity extends AppCompatActivity {
         barDataSet.setColor(Color.rgb(79, 164, 255));
         barDataSet.setValueTextSize(0);
         barDataSet.setFormSize(0);
+        barDataSet.setBarBorderWidth(1);
+        barDataSet.setBarBorderColor(Color.rgb(231,226,211));
 
         XAxis x = barChart.getXAxis();
         YAxis yLeft = barChart.getAxisLeft();

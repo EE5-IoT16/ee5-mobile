@@ -24,15 +24,19 @@
             android:layout_marginTop="8dp"
             android:hint="Goal Completion"
             android:minWidth="180dp"
+            app:boxStrokeColor="@color/Dark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/distance_amount">
+            app:layout_constraintTop_toBottomOf="@+id/distance_amount"
+            app:suffixText="%"
+            app:suffixTextColor="@color/Grey">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/completion_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:editable="false"
+                android:fontFamily="@font/sfproregular"
                 android:text="72"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
@@ -42,21 +46,26 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/distance_amount"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
 
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="18dp"
             android:hint="Distance"
             android:minWidth="180dp"
+            app:boxStrokeColor="@color/Dark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/steps_amount"
             app:layout_constraintTop_toTopOf="@+id/steps_amount"
-            app:suffixText="Km">
+            app:suffixText="Km"
+            app:suffixTextColor="@color/Grey">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/distance_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:editable="false"
+                android:fontFamily="@font/sfproregular"
                 android:text="2994"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
@@ -66,11 +75,14 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/steps_amount"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
 
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="8dp"
             android:hint="Steps"
             android:minWidth="180dp"
+            app:boxStrokeColor="@color/Dark"
             app:layout_constraintEnd_toStartOf="@+id/distance_amount"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -80,6 +92,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:editable="false"
+                android:fontFamily="@font/sfproregular"
                 android:text="2994"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
@@ -170,7 +183,7 @@
             android:textColor="@color/Grey"
             android:textColorHighlight="@color/Grey"
             android:textColorLink="@color/Grey"
-            app:rippleColor="@color/StepBlue"
+            app:rippleColor="@color/Dark"
             app:strokeColor="@color/Grey" />
 
         <Button
@@ -184,7 +197,7 @@
             android:textColor="@color/Grey"
             android:textColorHighlight="@color/Grey"
             android:textColorLink="@color/Grey"
-            app:rippleColor="@color/StepBlue"
+            app:rippleColor="@color/Dark"
             app:strokeColor="@color/Grey" />
 
         <Button
@@ -198,7 +211,7 @@
             android:textColor="@color/Grey"
             android:textColorHighlight="@color/Grey"
             android:textColorLink="@color/Grey"
-            app:rippleColor="@color/StepBlue"
+            app:rippleColor="@color/Dark"
             app:strokeColor="@color/Grey" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
