@@ -1,4 +1,4 @@
-package com.ee5.mobile.SupportClasses;
+package com.ee5.mobile.Interfaces;
 
 import android.util.Log;
 

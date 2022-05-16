@@ -8,33 +8,19 @@ import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
-import android.bluetooth.BluetoothSocket;
-import android.bluetooth.le.BluetoothLeScanner;
-import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanResult;
-import android.bluetooth.le.ScanSettings;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.ee5.mobile.SupportClasses.IFrameBuilder;
+import com.ee5.mobile.Interfaces.IFrameBuilder;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BleService extends Service {
@@ -68,7 +54,6 @@ public class BleService extends Service {
     private byte[] connectFrame;
 
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
-        int iterate = 0;
         List<BluetoothGattCharacteristic> ch_list = new ArrayList<>();
         List<byte[]> frameList = Arrays.asList(securityModeFrame, opModeFrame, ssidFrame, passFrame, connectFrame);
 
@@ -94,9 +79,12 @@ public class BleService extends Service {
 
                 gatt.getServices().forEach((BluetoothGattService gs) ->{
                     ch_list.addAll(gs.getCharacteristics());
+                    Log.d(TAG, "GATT CHARACTERISTICS: " + gs.getUuid().toString());
                 });
+                //TODO: write only to writable ch and make reliable write
 
-                gatt.beginReliableWrite();
+                /*gatt.beginReliableWrite();
+                int iterate = 0;
                 while (iterate<frameList.size()){
                     ch_list.forEach((BluetoothGattCharacteristic ch) -> {
                         ch.setValue(frameList.get(iterate));
@@ -104,6 +92,7 @@ public class BleService extends Service {
                     });
                     iterate++;
                 }
+                gatt.executeReliableWrite();*/
 
                 Log.d(TAG, "onServicesDiscovered: " + ch_list.toString());
             } else {
@@ -117,10 +106,6 @@ public class BleService extends Service {
             if(status != BluetoothGatt.GATT_SUCCESS){
                 Log.e(TAG, "onCharacteristicWrite: " + status);
                 gatt.abortReliableWrite();
-            }
-            if (iterate == frameList.size()){
-                Log.d(TAG, "onCharacteristicWrite: executing reliable write");
-                gatt.executeReliableWrite();
             }
         }
 
