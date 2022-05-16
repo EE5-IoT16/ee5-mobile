@@ -28,7 +28,6 @@ public class NewActivityActivity extends AppCompatActivity {
     TextView timerText;
     Button stopStartButton;
     TextView calories;
-    TextView maxHeartRate;
     TextView avgHeartRate;
     TextView steps;
     TextView distance;
@@ -49,11 +48,10 @@ public class NewActivityActivity extends AppCompatActivity {
 
         timerText = findViewById(R.id.timerText);
         stopStartButton = findViewById(R.id.startStopButton);
-        calories = findViewById(R.id.ac_caloriesData);
-        maxHeartRate = findViewById(R.id.ac_maximumHrData);
-        avgHeartRate = findViewById(R.id.ac_avgHrData);
-        steps = findViewById(R.id.ac_stepsData);
-        distance = findViewById(R.id.ac_distanceData);
+        calories = findViewById(R.id.calories_edit);
+        avgHeartRate = findViewById(R.id.bpm_edit);
+        steps = findViewById(R.id.steps_edit);
+        distance = findViewById(R.id.distance_edit);
 
         timer = new Timer();
     }
@@ -62,7 +60,7 @@ public class NewActivityActivity extends AppCompatActivity {
     public void startStopPressed(View view) {
         if (timerStarted == false) {
             timerStarted = true;
-            setButtonUI("STOP", R.color.Red);
+            setButtonUI("Stop", R.color.HeartRed);
             startDateTime = LocalDateTime.now();
             startTimer();
         } else {
@@ -71,9 +69,9 @@ public class NewActivityActivity extends AppCompatActivity {
         }
     }
 
-    private void setButtonUI(String start, int color) {
-        stopStartButton.setText(start);
-        stopStartButton.setTextColor(ContextCompat.getColor(this, color));
+    private void setButtonUI(String indicator, int color) {
+        stopStartButton.setText(indicator);
+        stopStartButton.setBackgroundColor(ContextCompat.getColor(this, color));
     }
 
     private void startTimer() {
@@ -95,7 +93,7 @@ public class NewActivityActivity extends AppCompatActivity {
 
     private void resetTimer() {
         timerTask.cancel();
-        setButtonUI("START", R.color.Green);
+        setButtonUI("Start", R.color.StepBlue);
         time = 0.0;
         timerStarted = false;
         timerText.setText(formatTime(0, 0, 0));

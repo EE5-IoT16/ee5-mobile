@@ -90,6 +90,7 @@
             android:hint="Heart Points"
             android:minWidth="180dp"
             app:boxStrokeColor="@color/Dark"
+            app:hintTextColor="@color/HeartRed"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/stepgoal_layout"
             app:layout_constraintTop_toTopOf="parent">
@@ -98,7 +99,9 @@
                 android:id="@+id/heartpointgoal_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:cursorVisible="false"
                 android:fontFamily="@font/sfproregular"
+                android:inputType="number"
                 android:singleLine="true"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
@@ -115,6 +118,7 @@
             android:hint="Steps"
             android:minWidth="180dp"
             app:boxStrokeColor="@color/Dark"
+            app:hintTextColor="@color/StepBlue"
             app:layout_constraintEnd_toStartOf="@+id/heartpointgoal_layout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -123,7 +127,9 @@
                 android:id="@+id/stepgoal_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:cursorVisible="false"
                 android:fontFamily="@font/sfproregular"
+                android:inputType="number"
                 android:singleLine="true"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
@@ -195,6 +201,7 @@
             android:hint="Rest Metabolic Rate"
             android:minWidth="180dp"
             app:boxStrokeColor="@color/Dark"
+            app:hintTextColor="@color/Dark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/bmi_layout"
             app:layout_constraintTop_toBottomOf="@+id/weight_layout">
@@ -203,8 +210,10 @@
                 android:id="@+id/rmr_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:cursorVisible="false"
                 android:editable="false"
                 android:fontFamily="@font/sfproregular"
+                android:inputType="number"
                 android:text="1608"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
@@ -223,6 +232,7 @@
             android:hint="Bmi"
             android:minWidth="180dp"
             app:boxStrokeColor="@color/Dark"
+            app:hintTextColor="@color/Dark"
             app:layout_constraintEnd_toStartOf="@+id/rmr_layout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/height_layout">
@@ -231,8 +241,10 @@
                 android:id="@+id/bmi_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:cursorVisible="false"
                 android:editable="false"
                 android:fontFamily="@font/sfproregular"
+                android:inputType="number"
                 android:text="21"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
@@ -251,6 +263,7 @@
             android:hint="Gender"
             android:minWidth="180dp"
             app:boxStrokeColor="@color/Dark"
+            app:hintTextColor="@color/Dark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/age_layout"
             app:layout_constraintTop_toTopOf="parent">
@@ -259,10 +272,11 @@
                 android:id="@+id/gender_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:cursorVisible="false"
+                android:fontFamily="@font/sfproregular"
                 app:simpleItems="@array/genders"
                 tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="124dp"
-                android:fontFamily="@font/sfproregular" />
+                tools:layout_editor_absoluteY="124dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -278,6 +292,7 @@
             android:hint="Age"
             android:minWidth="180dp"
             app:boxStrokeColor="@color/Dark"
+            app:hintTextColor="@color/Dark"
             app:layout_constraintEnd_toStartOf="@+id/gender_layout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -286,7 +301,9 @@
                 android:id="@+id/age_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:cursorVisible="false"
                 android:fontFamily="@font/sfproregular"
+                android:inputType="number"
                 android:singleLine="true"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
@@ -305,6 +322,7 @@
             android:hint="Weight"
             android:minWidth="180dp"
             app:boxStrokeColor="@color/Dark"
+            app:hintTextColor="@color/Dark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/height_layout"
             app:layout_constraintTop_toBottomOf="@+id/gender_layout"
@@ -315,7 +333,9 @@
                 android:id="@+id/weight_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:cursorVisible="false"
                 android:fontFamily="@font/sfproregular"
+                android:inputType="number"
                 android:singleLine="true"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
@@ -334,6 +354,7 @@
             android:hint="Height"
             android:minWidth="180dp"
             app:boxStrokeColor="@color/Dark"
+            app:hintTextColor="@color/Dark"
             app:layout_constraintEnd_toStartOf="@+id/weight_layout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/age_layout"
@@ -344,7 +365,9 @@
                 android:id="@+id/height_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:cursorVisible="false"
                 android:fontFamily="@font/sfproregular"
+                android:inputType="number"
                 android:singleLine="true"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />

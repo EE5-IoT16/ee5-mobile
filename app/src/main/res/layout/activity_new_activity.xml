@@ -1,164 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout8"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/Beige">
+    android:background="@color/Beige"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/timerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="12dp"
+        android:includeFontPadding="false"
         android:text="00 : 00 : 00"
         android:textColor="@color/black"
-        android:textSize="60sp" />
+        android:textSize="60sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/divider7"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timerText" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/calories_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:hint="Calories"
+        android:minWidth="180dp"
+        app:boxStrokeColor="@color/Dark"
+        app:layout_constraintEnd_toStartOf="@+id/distance_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/steps_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/calories_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:fontFamily="@font/sfproregular"
+            android:text="1773" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/bpm_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="18dp"
+        android:hint="Bpm"
+        android:minWidth="180dp"
+        app:boxStrokeColor="@color/Dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/steps_layout"
+        app:layout_constraintTop_toBottomOf="@+id/divider7">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/bpm_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:fontFamily="@font/sfproregular"
+            android:text="78" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/steps_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:hint="Steps"
+        android:minWidth="180dp"
+        app:boxStrokeColor="@color/Dark"
+        app:layout_constraintEnd_toStartOf="@+id/bpm_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider7">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/steps_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:fontFamily="@font/sfproregular"
+            android:text="78" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/distance_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="18dp"
+        android:hint="Distance"
+        android:minWidth="180dp"
+        app:boxStrokeColor="@color/Dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/calories_layout"
+        app:layout_constraintTop_toBottomOf="@+id/bpm_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/distance_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:fontFamily="@font/sfproregular"
+            android:text="78" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/startStopButton"
-        android:layout_width="match_parent"
+        style="@style/InputText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:background="@null"
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="@color/StepBlue"
         android:onClick="startStopPressed"
-        android:text="START"
-        android:textSize="30sp"
-        android:textColor="@color/Green"
-        android:textAllCaps="false"
-        android:textAppearance="@style/InputText"
-        android:fontFamily="@font/sfproregular"
-        android:includeFontPadding="false"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:backgroundTint="@color/Grey"/>
+        android:text="Start"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/ac_caloriesData"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="150"
-            android:textColor="@color/black"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/ac_caloriesText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="8dp"
-            android:text="calories"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/ac_maximumHrData"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="113"
-            android:textColor="@color/black"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/ac_maximumHrText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="8dp"
-            android:text="bpm"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/ac_avgHrData"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="78"
-            android:textColor="@color/black"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/ac_avgHrText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="8dp"
-            android:text="bpm"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/ac_stepsData"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="879"
-            android:textColor="@color/black"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/ac_stepsText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="8dp"
-            android:text="steps"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/ac_distanceData"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="1,34"
-            android:textColor="@color/black"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/ac_distanceText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="8dp"
-            android:text="km"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
