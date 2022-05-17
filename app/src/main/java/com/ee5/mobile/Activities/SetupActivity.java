@@ -76,6 +76,7 @@ public class SetupActivity extends AppCompatActivity {
     }
 
     private void exitIntent(){
+        bleAdapter.stopAdapterRefresh();
         final Intent intent = new Intent(SetupActivity.this, OverviewActivity.class);
         startActivity(intent);
     }

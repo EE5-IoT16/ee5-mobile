@@ -71,6 +71,10 @@ public class BleAdapter extends RecyclerView.Adapter<BleAdapter.RecyclerViewHold
         return mBleScanner.getDeviceListSize();
     }
 
+    public final void stopAdapterRefresh(){
+        mBleScanner.stopScan();
+    }
+
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder{
 
         public TextView deviceName;
