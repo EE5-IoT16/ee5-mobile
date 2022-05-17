@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.APIconnection;
+import com.ee5.mobile.SupportClasses.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -83,12 +84,16 @@ public class LoginActivity extends AppCompatActivity {
     public void login(ArrayList<String> loginData) {
 
         APIconnection.getInstance().GETRequest("profile", loginData, new ServerCallback() {
+            int responseProfileId;
             @Override
             public void onSuccess() {
 
                 String responseString = "";
                 String responsePassword = "";
                 String responseSalt = "";
+                String responseFirstName = "";
+                String responseSurname = "";
+                String responseEmail = "";
                 JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
 
                 try {
@@ -97,15 +102,22 @@ public class LoginActivity extends AppCompatActivity {
                         responseString += curObject.getString("password") + " : " + curObject.getString("salt") + "\n";
                         responsePassword += curObject.getString("password");
                         responseSalt += curObject.getString("salt");
-                        Log.i("API response", responseString);
+                        responseFirstName += curObject.getString("name");
+                        responseSurname += curObject.getString("surname");
+                        responseEmail += curObject.getString("email");
+                        responseProfileId = curObject.getInt("profileId");
+                        Log.i("API response", responsePassword);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
                 if (password.equals(responsePassword)){
-                    Intent intent = new Intent(getApplicationContext(), OverviewActivity.class);
-                    startActivity(intent);
+                    User user = new User(responseProfileId, responseFirstName, responseSurname, responseEmail);
+
+                    Intent overviewIntent = new Intent(getApplicationContext(), OverviewActivity.class);
+                    overviewIntent.putExtra("user", user);
+                    startActivity(overviewIntent);
                 } else {
                     Toast.makeText(getApplicationContext(), "Incorrect email or password", Toast.LENGTH_SHORT).show();
                 }

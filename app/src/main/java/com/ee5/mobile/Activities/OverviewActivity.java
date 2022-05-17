@@ -98,10 +98,14 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
 
-        User user = getIntent().getParcelableExtra("user");
-        Log.i("userParcel", user.getProfileEmail());
-        Log.i("userParcel", user.getUserEmail());
-
+        try{
+            User user = getIntent().getParcelableExtra("user");
+            Log.i("userParcel", user.getProfileEmail());
+            Log.i("userParcel", user.getUserEmail());
+        }
+        catch(Exception e){
+            Log.e("userParcelException", e.toString());
+        }
 
         jsonArrayRequest = new JsonArrayRequest(this);
 
