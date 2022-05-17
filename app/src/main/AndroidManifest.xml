@@ -23,7 +23,6 @@
             android:name=".Activities.CreateAccountActivity"
             android:exported="false" />
         -->
-
         <service android:name=".SupportClasses.Ble.BleService" />
 
         <activity android:name=".Activities.CreateAccountActivity" />

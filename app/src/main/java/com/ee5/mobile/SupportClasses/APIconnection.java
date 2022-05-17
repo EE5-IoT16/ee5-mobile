@@ -90,25 +90,6 @@ public class APIconnection extends AppCompatActivity {
 
                         callBack.onSuccess();
 
-                        /*
-                        try {
-
-
-                            for( int i = 0; i < response.length(); i++ ) {
-                                JSONObject curObject = response.getJSONObject(i);
-                                responseString += curObject.getString("password") + " : " + curObject.getString("salt") + "\n";
-                                Log.i("onResponse:", responseString);
-                            }
-
-
-                        }
-                        catch( JSONException e )
-                        {
-                            Log.e( "Database", e.getMessage(), e );
-                        }
-                        */
-
-
                     }
                 },
 
@@ -207,7 +188,6 @@ public class APIconnection extends AppCompatActivity {
         );
 
         requestQueue.add(submitRequest);
-
 
     }
 }

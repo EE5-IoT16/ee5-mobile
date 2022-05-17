@@ -21,6 +21,11 @@ import com.ee5.mobile.SupportClasses.APIconnection;
 import com.ee5.mobile.SupportClasses.DataCard;
 import com.ee5.mobile.SupportClasses.JsonArrayRequest;
 import com.ee5.mobile.SupportClasses.RecyclerViewAdapter;
+import com.ee5.mobile.SupportClasses.User;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -94,6 +99,11 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
+
+        User user = getIntent().getParcelableExtra("user");
+        Log.i("userParcel", user.getProfileEmail());
+        Log.i("userParcel", user.getUserEmail());
+
 
         jsonArrayRequest = new JsonArrayRequest(this);
 
