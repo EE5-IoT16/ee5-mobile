@@ -1,27 +1,32 @@
 package com.ee5.mobile.SupportClasses;
 
-import static com.ee5.mobile.Activities.OverviewActivity.update;
+import static com.ee5.mobile.Activities.OverviewActivity.maxHp;
+import static com.ee5.mobile.Activities.OverviewActivity.maxHr;
+import static com.ee5.mobile.Activities.OverviewActivity.maxSteps;
+import static com.ee5.mobile.Activities.OverviewActivity.minHr;
+import static com.ee5.mobile.Activities.OverviewActivity.setGraphAxis;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.text.Layout;
+import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
-import com.ee5.mobile.Activities.OverviewActivity;
-import com.ee5.mobile.Interfaces.GraphCallback;
 import com.ee5.mobile.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
@@ -32,6 +37,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
     private Context myContext;
     private ArrayList<DataCard> dataCardList;
     private OnItemClickListener myListener;
+    String graphAxis[] = new String[]{"M", "T", "W", "T", "F", "S", "S"};
 
     @NonNull
     @Override
@@ -56,7 +62,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             viewHolderTwo.rv_dataCard_timeIndicator_hr.setText(currentItem.getDataCardTimeIndicator());
             viewHolderTwo.rv_dataCard_record_hr.setText(currentItem.getDataCardRecord());
             viewHolderTwo.rv_dataCard_recordText_hr.setText(currentItem.getDataCardRecordText());
-            viewHolderTwo.rv_lineChart.setData(currentItem.getlineData());
+            viewHolderTwo.rv_lineChart.setData(currentItem.getlineDataHr());
+            viewHolderTwo.rv_lineChart.getAxisLeft().setAxisMaximum(maxHr);
+            viewHolderTwo.rv_lineChart.getAxisLeft().setAxisMinimum(minHr);
+
 
         } else {
             //bind viewHolderOne
@@ -68,11 +77,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             viewHolderOne.rv_dataCard_timeIndicator.setText(currentItem.getDataCardTimeIndicator());
             viewHolderOne.rv_dataCard_record.setText(currentItem.getDataCardRecord());
             viewHolderOne.rv_dataCard_recordText.setText(currentItem.getDataCardRecordText());
-            viewHolderOne.rv_barChart.setData(currentItem.getBarData());
-
-            viewHolderOne.rv_barChart.notifyDataSetChanged();
-            viewHolderOne.rv_barChart.invalidate();
-
+            if (dataCardList.get(position).getDataCardTitle() == "Steps") {
+                viewHolderOne.rv_barChart.setData(currentItem.getBarDataSteps());
+                viewHolderOne.rv_barChart.getAxisLeft().setAxisMaximum(15);
+            } else if (dataCardList.get(position).getDataCardTitle() == "Heart points") {
+                viewHolderOne.rv_barChart.setData(currentItem.getBarDataHp());
+                viewHolderOne.rv_barChart.getAxisLeft().setAxisMaximum(maxHp); //todo change to maxHp when api impl works
+            }
         }
     }
 
@@ -111,7 +122,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
         public TextView rv_dataCard_recordText;
         public BarChart rv_barChart;
 
-        public ViewHolderOne(@NonNull View itemView) {
+        public ViewHolderOne(@NonNull View itemView) {      //for steps and heartPoints
             super(itemView);
             rv_dataCard_Title = itemView.findViewById(R.id.rv_title_name);
             rv_dataCard_timeIndicator = itemView.findViewById(R.id.rv_time_indicator);
@@ -132,16 +143,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             x.setPosition(XAxis.XAxisPosition.BOTTOM);
             x.setTextColor(Color.argb(180, 255, 255, 255));
             x.setDrawGridLines(false);
-            String[] labels = {"M", "T", "W", "T", "F", "S", "S"};
-            x.setValueFormatter(new IndexAxisValueFormatter(labels));
+            if (setGraphAxis == 1) {
+                String[] labels = setStepsGraphAxis();
+                x.setValueFormatter(new IndexAxisValueFormatter(labels));
+            }
             Description description = rv_barChart.getDescription();
             description.setEnabled(false);
-            yLeft.setAxisMinimum(0f); // start at zero
-            yLeft.setAxisMaximum(10f); // the axis maximum is 100
-
-
-            rv_barChart.notifyDataSetChanged();
-            rv_barChart.invalidate();
+            yLeft.setAxisMinimum(0f);
 
 
             itemView.setOnClickListener(v -> {
@@ -154,14 +162,33 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             });
         }
 
-        public void updateGraph() {
-            rv_barChart.notifyDataSetChanged();
-            rv_barChart.invalidate();
+        public String[] setStepsGraphAxis() {
+            LocalDate today = LocalDate.now();
+            DayOfWeek dayOfWeek = DayOfWeek.from(today);
+            int value = dayOfWeek.getValue();
+            rotateLeft(graphAxis, value, 7);
+            return graphAxis;
+        }
+
+        public void rotateLeft(String array[], int steps, int size)        //rotate array of x size by x steps
+        {
+            for (int i = 0; i < steps; i++)
+                rotateLeftOnce(array, size);
+
+        }
+
+        public void rotateLeftOnce(String array[], int size) {
+            int i;
+            String temp;
+            temp = array[0];
+            for (i = 0; i < size - 1; i++)
+                array[i] = array[i + 1];
+            array[i] = temp;
         }
     }
 
 
-    class ViewHolderTwo extends RecyclerView.ViewHolder {
+    class ViewHolderTwo extends RecyclerView.ViewHolder {       //for heartRate
         public TextView rv_dataCard_Title_hr;
         public TextView rv_dataCard_timeIndicator_hr;
         public TextView rv_dataCard_record_hr;

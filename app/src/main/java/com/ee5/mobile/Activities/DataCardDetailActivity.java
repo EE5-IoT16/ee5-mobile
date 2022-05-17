@@ -5,8 +5,8 @@ import static com.ee5.mobile.Activities.ProfileActivity.heightUser;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,8 +26,9 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class DataCardDetailActivity extends AppCompatActivity {
 
     ArrayList graphEntries;
     DataCard dataCard;
+    String graphAxis[] = new String[]{"M", "T", "W", "T", "F", "S", "S"};
 
     String userId;
 
@@ -57,7 +59,9 @@ public class DataCardDetailActivity extends AppCompatActivity {
     LocalDateTime today;
     int todayDayOfTheYear;
 
-    ArrayList<Integer> dataCardDataList = new ArrayList<>();
+    ArrayList<Integer> dataCardStepDataList = new ArrayList<>();
+    ArrayList<Integer> dataCardHpDataList = new ArrayList<>();
+    ArrayList<Integer> dataCardHrDataList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +69,10 @@ public class DataCardDetailActivity extends AppCompatActivity {
         position = getIntent().getExtras().getInt("dataCardPosition");
         if (position == 2) {
             setContentView(R.layout.activity_recyclerview_detail_hr);
-        } else {
+        } else if(position == 1) {
+            setContentView(R.layout.activity_recyclerview_detail);
+        }
+        else{
             setContentView(R.layout.activity_recyclerview_detail);
         }
         jsonArrayRequest = new JsonArrayRequest(this);
@@ -90,14 +97,20 @@ public class DataCardDetailActivity extends AppCompatActivity {
         monthDistance = findViewById(R.id.rv_detail_month_dataKm);
 
         dataCard = getIntent().getExtras().getParcelable("dataCard");
-        dataCardDataList = dataCard.getDataCardData();
+        dataCardStepDataList = dataCard.getDataCardStepData();
+        dataCardHpDataList = dataCard.getDataCardHpData();
+        dataCardHrDataList = dataCard.getDataCardHrData();
+        //Log.d("FF", dataCard.getDataCardStepData().toString());       //todo: why is it arraylist of 8 elements instead of 7?
 
         title.setText(dataCard.getDataCardTitle());
 
         if (position == 2) {
             createLineChart();
-        } else {
-            createBarChart();
+        } else if(position == 1) {
+            createHpBarChart();
+        }
+        else{
+            createStepsBarChart();
         }
     }
 
@@ -171,15 +184,15 @@ public class DataCardDetailActivity extends AppCompatActivity {
         userId = Integer.toString(1);
     }
 
-    public void createBarChart() {
+    public void createStepsBarChart() {
         graphEntries = new ArrayList<>();
-        graphEntries.add(new BarEntry(0f, dataCardDataList.get(0)));
-        graphEntries.add(new BarEntry(1f, dataCardDataList.get(1)));
-        graphEntries.add(new BarEntry(2f, dataCardDataList.get(2)));
-        graphEntries.add(new BarEntry(3f, dataCardDataList.get(3)));
-        graphEntries.add(new BarEntry(4f, dataCardDataList.get(4)));
-        graphEntries.add(new BarEntry(5f, dataCardDataList.get(5)));
-        graphEntries.add(new BarEntry(6f, dataCardDataList.get(6)));
+        graphEntries.add(new BarEntry(0f, dataCardStepDataList.get(0)));
+        graphEntries.add(new BarEntry(1f, dataCardStepDataList.get(1)));
+        graphEntries.add(new BarEntry(2f, dataCardStepDataList.get(2)));
+        graphEntries.add(new BarEntry(3f, dataCardStepDataList.get(3)));
+        graphEntries.add(new BarEntry(4f, dataCardStepDataList.get(4)));
+        graphEntries.add(new BarEntry(5f, dataCardStepDataList.get(5)));
+        graphEntries.add(new BarEntry(6f, dataCardStepDataList.get(6)));
 
         BarDataSet barDataSet = new BarDataSet(graphEntries, "");
         BarData barData = new BarData(barDataSet);
@@ -202,24 +215,84 @@ public class DataCardDetailActivity extends AppCompatActivity {
         x.setPosition(XAxis.XAxisPosition.BOTTOM);
         x.setTextColor(Color.argb(180, 255, 255, 255));
         x.setDrawGridLines(false);
-        String[] labels = {"M", "T", "W", "T", "F", "S", "S"};
+        String[] labels = setStepsGraphAxis();
         x.setValueFormatter(new IndexAxisValueFormatter(labels));
         Description description = barChart.getDescription();
         description.setEnabled(false);
     }
 
+    public void createHpBarChart() {
+        graphEntries = new ArrayList<>();
+        graphEntries.add(new BarEntry(0f, dataCardHpDataList.get(0)));
+        graphEntries.add(new BarEntry(1f, dataCardHpDataList.get(1)));
+        graphEntries.add(new BarEntry(2f, dataCardHpDataList.get(2)));
+        graphEntries.add(new BarEntry(3f, dataCardHpDataList.get(3)));
+        graphEntries.add(new BarEntry(4f, dataCardHpDataList.get(4)));
+        graphEntries.add(new BarEntry(5f, dataCardHpDataList.get(5)));
+        graphEntries.add(new BarEntry(6f, dataCardHpDataList.get(6)));
+
+        BarDataSet barDataSet = new BarDataSet(graphEntries, "");
+        BarData barData = new BarData(barDataSet);
+        barChart.setData(barData);
+
+        barDataSet.setColor(Color.rgb(79, 164, 255));
+        barDataSet.setValueTextSize(0);
+        barDataSet.setFormSize(0);
+
+        XAxis x = barChart.getXAxis();
+        YAxis yLeft = barChart.getAxisLeft();
+        YAxis yRight = barChart.getAxisRight();
+        x.setDrawAxisLine(false);
+        x.setDrawGridLines(false);
+        x.setDrawGridLinesBehindData(false);
+        yLeft.setDrawAxisLine(false);
+        yRight.setDrawAxisLine(false);
+        yLeft.setEnabled(false);
+        yRight.setEnabled(false);
+        x.setPosition(XAxis.XAxisPosition.BOTTOM);
+        x.setTextColor(Color.argb(180, 255, 255, 255));
+        x.setDrawGridLines(false);
+        String[] labels = setStepsGraphAxis();
+        x.setValueFormatter(new IndexAxisValueFormatter(labels));
+        Description description = barChart.getDescription();
+        description.setEnabled(false);
+    }
+
+    public String[] setStepsGraphAxis() {
+        LocalDate today = LocalDate.now();
+        DayOfWeek dayOfWeek = DayOfWeek.from(today);
+        int value = dayOfWeek.getValue();
+        rotateLeft(graphAxis, value, 7);
+        return graphAxis;
+    }
+
+    public void rotateLeft(String array[], int steps, int size)        //rotate array of x size by x steps
+    {
+        for (int i = 0; i < steps; i++)
+            rotateLeftOnce(array, size);
+    }
+
+    public void rotateLeftOnce(String array[], int size) {
+        int i;
+        String temp;
+        temp = array[0];
+        for (i = 0; i < size - 1; i++)
+            array[i] = array[i + 1];
+        array[i] = temp;
+    }
+
     public void createLineChart() {
         graphEntries = new ArrayList<>();
-        graphEntries.add(new BarEntry(0f, dataCardDataList.get(0)));
-        graphEntries.add(new BarEntry(1f, dataCardDataList.get(1)));
-        graphEntries.add(new BarEntry(2f, dataCardDataList.get(2)));
-        graphEntries.add(new BarEntry(3f, dataCardDataList.get(3)));
-        graphEntries.add(new BarEntry(4f, dataCardDataList.get(4)));
-        graphEntries.add(new BarEntry(5f, dataCardDataList.get(5)));
-        graphEntries.add(new BarEntry(6f, dataCardDataList.get(6)));
-        graphEntries.add(new BarEntry(7f, dataCardDataList.get(7)));
-        graphEntries.add(new BarEntry(8f, dataCardDataList.get(8)));
-        graphEntries.add(new BarEntry(9f, dataCardDataList.get(9)));
+        graphEntries.add(new BarEntry(0f, dataCardHrDataList.get(0)));
+        graphEntries.add(new BarEntry(1f, dataCardHrDataList.get(1)));
+        graphEntries.add(new BarEntry(2f, dataCardHrDataList.get(2)));
+        graphEntries.add(new BarEntry(3f, dataCardHrDataList.get(3)));
+        graphEntries.add(new BarEntry(4f, dataCardHrDataList.get(4)));
+        graphEntries.add(new BarEntry(5f, dataCardHrDataList.get(5)));
+        graphEntries.add(new BarEntry(6f, dataCardHrDataList.get(6)));
+        graphEntries.add(new BarEntry(7f, dataCardHrDataList.get(7)));
+        graphEntries.add(new BarEntry(8f, dataCardHrDataList.get(8)));
+        graphEntries.add(new BarEntry(9f, dataCardHrDataList.get(9)));
 
         LineDataSet lineDataSet = new LineDataSet(graphEntries, "");
         LineData lineData = new LineData(lineDataSet);

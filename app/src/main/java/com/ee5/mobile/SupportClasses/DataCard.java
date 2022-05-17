@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.LineData;
 
 import java.util.ArrayList;
@@ -14,18 +13,24 @@ public class DataCard implements Parcelable {
     public String timeIndicator;
     public String cardRecord;
     public String recordText;
-    BarData barData;
-    LineData lineData;
-    ArrayList<Integer> dataCardData;
+    BarData barDataSteps;
+    BarData barDataHp;
+    LineData lineDataHr;
+    ArrayList<Integer> dataCardStepData;
+    ArrayList<Integer> dataCardHpData;
+    ArrayList<Integer> dataCardHrData;
 
-    public DataCard(String cardTitle, String timeIndicator,String cardRecord, String recordText, BarData barData, LineData lineData, ArrayList<Integer> dataCardData){
+    public DataCard(String cardTitle, String timeIndicator, String cardRecord, String recordText, BarData barDataSteps, BarData barDataHp, LineData lineDataHr, ArrayList<Integer> dataCardStepData, ArrayList<Integer> dataCardHpData, ArrayList<Integer> dataCardHrData){
         this.cardTitle = cardTitle;
         this.timeIndicator = timeIndicator;
         this.cardRecord = cardRecord;
         this.recordText = recordText;
-        this.barData = barData;
-        this.lineData = lineData;
-        this.dataCardData = dataCardData;
+        this.barDataSteps = barDataSteps;
+        this.barDataHp = barDataHp;
+        this.lineDataHr = lineDataHr;
+        this.dataCardStepData = dataCardStepData;
+        this.dataCardHpData = dataCardHpData;
+        this.dataCardHrData = dataCardHrData;
     }
 
     public String getDataCardTitle(){return cardTitle;}
@@ -36,12 +41,30 @@ public class DataCard implements Parcelable {
 
     public String getDataCardRecordText(){return recordText;}
 
-    public BarData getBarData(){return barData;}
+    public BarData getBarDataSteps(){return barDataSteps;}
 
-    public LineData getlineData(){return lineData;}
+    public BarData getBarDataHp(){return barDataHp;}
 
-    public ArrayList<Integer> getDataCardData(){return dataCardData;}
+    public LineData getlineDataHr(){return lineDataHr;}
 
+    public ArrayList<Integer> getDataCardStepData(){
+        return dataCardStepData;}
+
+    public ArrayList<Integer> getDataCardHpData() {
+        return dataCardHpData;
+    }
+
+    public void setDataCardHpData(ArrayList<Integer> dataCardHpData) {
+        this.dataCardHpData = dataCardHpData;
+    }
+
+    public ArrayList<Integer> getDataCardHrData() {
+        return dataCardHrData;
+    }
+
+    public void setDataCardHrData(ArrayList<Integer> dataCardHrData) {
+        this.dataCardHrData = dataCardHrData;
+    }
 
     @Override
     public int describeContents() {
@@ -52,13 +75,17 @@ public class DataCard implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.cardTitle);
         dest.writeString(this.cardRecord);
-        dest.writeList(this.dataCardData);
+        dest.writeList(this.dataCardStepData);
+        dest.writeList(this.dataCardHpData);
+        dest.writeList(this.dataCardHrData);
     }
 
     protected DataCard(Parcel in) {
         this.cardTitle = in.readString();
         this.cardRecord = in.readString();
-        this.dataCardData = in.readArrayList(null);
+        this.dataCardStepData = in.readArrayList(null);
+        this.dataCardHpData = in.readArrayList(null);
+        this.dataCardHrData = in.readArrayList(null);
     }
 
     public static final Parcelable.Creator<DataCard> CREATOR = new Parcelable.Creator<DataCard>() {
