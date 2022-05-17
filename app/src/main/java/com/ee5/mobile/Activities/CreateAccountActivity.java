@@ -2,6 +2,7 @@ package com.ee5.mobile.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.APIconnection;
+import com.ee5.mobile.SupportClasses.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -92,6 +94,12 @@ public class CreateAccountActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 Toast.makeText(getApplicationContext(), "Great succes!", Toast.LENGTH_SHORT).show();
+
+                User user = new User(21, firstName, surname, email);
+
+                Intent overviewIntent = new Intent(getApplicationContext(), OverviewActivity.class);
+                overviewIntent.putExtra("user", user);
+                startActivity(overviewIntent);
             }
         });
     }
