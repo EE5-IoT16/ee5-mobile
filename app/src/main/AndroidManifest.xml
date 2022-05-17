@@ -26,8 +26,8 @@
 
         <service android:name=".SupportClasses.Ble.BleService" />
 
-        <activity android:name=".Activities.LoginActivity" />
-        <activity android:name=".Activities.CreateAccountActivity">
+        <activity android:name=".Activities.CreateAccountActivity" />
+        <activity android:name=".Activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

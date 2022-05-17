@@ -30,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordInput;
 
     private Button continueButton;
+    private Button createAccountButton;
 
     private APIconnection loginRequest;
 
@@ -66,6 +67,15 @@ public class LoginActivity extends AppCompatActivity {
                     login(loginData);
                 }
 
+            }
+        });
+
+        createAccountButton = (Button) findViewById(R.id.btnCreateAccount);
+        createAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), CreateAccountActivity.class);
+                startActivity(intent);
             }
         });
     }
