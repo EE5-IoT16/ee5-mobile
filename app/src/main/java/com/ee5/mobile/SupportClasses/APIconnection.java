@@ -167,6 +167,49 @@ public class APIconnection extends AppCompatActivity {
 
 
     }
+
+    public void PUTRequest(String node, ArrayList<String> values, ArrayList<String> parameters, final ServerCallback callBack) {
+
+        String requestURL = prefixURL + node + "?";
+
+        for (int i = 0; i < parameters.size(); i++) {
+
+            if (i == parameters.size() - 1) {
+                requestURL = requestURL + parameters.get(i) + "=" + values.get(i);
+            } else {
+                requestURL = requestURL + parameters.get(i) + "=" + values.get(i) + "&";
+            }
+        }
+
+        Log.i("requestURL:", requestURL);
+
+        JsonArrayRequest submitRequest = new JsonArrayRequest(Request.Method.PUT, requestURL, null,
+
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.i("onResponse:", response.toString());
+
+                        APIResponse = response;
+
+                        callBack.onSuccess();
+
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String responseString = error.getLocalizedMessage();
+                        Log.i("onErrorResponse:", responseString);
+                    }
+                }
+        );
+
+        requestQueue.add(submitRequest);
+
+
+    }
 }
 
 
