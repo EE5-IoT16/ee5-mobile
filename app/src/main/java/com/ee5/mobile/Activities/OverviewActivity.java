@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
@@ -35,6 +36,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Timer;
 
 public class OverviewActivity extends AppCompatActivity implements RecyclerViewAdapter.OnItemClickListener {
 
@@ -152,6 +154,18 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
             }
         });
         parseJson();
+        final Handler handler = new Handler();
+        final int delay = 1000;        //every 1 sec
+
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                getTemperature();
+                getHeartRate();
+                getStepsToday();
+                getDailyGoal();
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
     }
 
 
@@ -422,7 +436,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                     }
                     Intent detailIntent = new Intent(getApplicationContext(), OverviewActivity.class);
                     DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record",
-                                                        barDataSteps, barDataHeartPoints, null, stepsData, heartPointsData, heartRateData);
+                            barDataSteps, barDataHeartPoints, null, stepsData, heartPointsData, heartRateData);
                     detailIntent.putExtra("dataCard2", dataCard1);
                     startActivity(detailIntent);
                 } catch (JSONException e) {
@@ -433,7 +447,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         });
     }
 
-    public void getGraphEntries(){
+    public void getGraphEntries() {
         barEntriesSteps = new ArrayList<>();
         barEntriesHeartPoints = new ArrayList<>();
         entriesHeartRate = new ArrayList<>();
