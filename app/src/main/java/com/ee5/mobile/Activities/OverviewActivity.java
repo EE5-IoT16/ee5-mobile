@@ -227,8 +227,6 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         }
     }
 
-    }
-
     public void getUserId() {
         userId = Integer.toString(1);
     }
