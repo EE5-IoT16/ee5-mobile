@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
@@ -184,7 +183,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
 
                 //graphs
                 setGraphAxis = 1;
-                createBarchart();
+                createCharts();
 
                 //daily goal
                 getDailyGoal();
@@ -346,7 +345,6 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     }
 
     public void getStepsGraphData() {
-        userId = String.valueOf(50);        //not enough records in user 1 table //todo: what if not enough data
         apiData.clear();
         apiData.add(userId);
 
@@ -364,12 +362,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                         if (Integer.valueOf(responseString) > maxSteps)
                             maxSteps = Integer.valueOf(responseString);
                     }
-                    try {
-                        Object dataCard = getIntent().getExtras().getParcelable("dataCard2");
-                    } catch (Exception e) {
-                        getHPGraphData();
-                    }
-
+                    getHPGraphData();
                 } catch (JSONException e) {
                     e.printStackTrace();
 
@@ -398,12 +391,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                         if (Integer.valueOf(responseString) > maxHp)
                             maxHp = Integer.valueOf(responseString);
                     }
-                    try {
-                        Object dataCard = getIntent().getExtras().getParcelable("dataCard2");
-                    } catch (Exception e) {
-                        getHrGraphData();
-                    }
-
+                    getHrGraphData();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d("ERROR", String.valueOf(e));
@@ -423,7 +411,6 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                 String responseString = "";
                 JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
                 try {
-
                     for (int i = 0; i < 10; i++) {
                         JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (i + 1));
                         responseString = curObject.getString("bpm");
@@ -433,15 +420,11 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                         if (Integer.valueOf(responseString) < minHr)
                             minHr = Integer.valueOf(responseString);
                     }
-                    try {
-                        Object dataCard = getIntent().getExtras().getParcelable("dataCard2");
-                    } catch (Exception e) {
-                        Intent detailIntent = new Intent(getApplicationContext(), OverviewActivity.class);
-                        DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record", barDataSteps, barDataHeartPoints, null, stepsData, heartPointsData, heartRateData);
-                        detailIntent.putExtra("dataCard2", dataCard1);
-                        startActivity(detailIntent);
-                    }
-
+                    Intent detailIntent = new Intent(getApplicationContext(), OverviewActivity.class);
+                    DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record",
+                                                        barDataSteps, barDataHeartPoints, null, stepsData, heartPointsData, heartRateData);
+                    detailIntent.putExtra("dataCard2", dataCard1);
+                    startActivity(detailIntent);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d("ERROR", String.valueOf(e));
@@ -463,16 +446,14 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         }
     }
 
-    public void createBarchart() {
+    public void createCharts() {
         getGraphEntries();
 
         barDataSetSteps = new BarDataSet(barEntriesSteps, "");
         barDataSteps = new BarData(barDataSetSteps);
-        barDataSteps.notifyDataChanged();
 
         barDataSetHeartPoints = new BarDataSet(barEntriesHeartPoints, "");
         barDataHeartPoints = new BarData(barDataSetHeartPoints);
-        barDataHeartPoints.notifyDataChanged();
 
         lineDataSet = new LineDataSet(entriesHeartRate, "");
         lineData = new LineData(lineDataSet);

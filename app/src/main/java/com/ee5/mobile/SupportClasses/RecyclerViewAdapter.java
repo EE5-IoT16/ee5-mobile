@@ -8,8 +8,6 @@ import static com.ee5.mobile.Activities.OverviewActivity.setGraphAxis;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +24,6 @@ import com.ee5.mobile.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
@@ -79,7 +76,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             viewHolderOne.rv_dataCard_recordText.setText(currentItem.getDataCardRecordText());
             if (dataCardList.get(position).getDataCardTitle() == "Steps") {
                 viewHolderOne.rv_barChart.setData(currentItem.getBarDataSteps());
-                viewHolderOne.rv_barChart.getAxisLeft().setAxisMaximum(15);
+                viewHolderOne.rv_barChart.getAxisLeft().setAxisMaximum(maxSteps);
             } else if (dataCardList.get(position).getDataCardTitle() == "Heart points") {
                 viewHolderOne.rv_barChart.setData(currentItem.getBarDataHp());
                 viewHolderOne.rv_barChart.getAxisLeft().setAxisMaximum(maxHp); //todo change to maxHp when api impl works
@@ -144,7 +141,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             x.setTextColor(Color.argb(180, 255, 255, 255));
             x.setDrawGridLines(false);
             if (setGraphAxis == 1) {
-                String[] labels = setStepsGraphAxis();
+                String[] labels = setGraphAxis();
                 x.setValueFormatter(new IndexAxisValueFormatter(labels));
             }
             Description description = rv_barChart.getDescription();
@@ -162,7 +159,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             });
         }
 
-        public String[] setStepsGraphAxis() {
+        public String[] setGraphAxis() {
             LocalDate today = LocalDate.now();
             DayOfWeek dayOfWeek = DayOfWeek.from(today);
             int value = dayOfWeek.getValue();
@@ -172,19 +169,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
 
         public void rotateLeft(String array[], int steps, int size)        //rotate array of x size by x steps
         {
-            for (int i = 0; i < steps; i++)
-                rotateLeftOnce(array, size);
-
+            for (int i = 0; i < steps; i++) {
+                int j;
+                String temp;
+                temp = array[0];
+                for (j = 0; j < size - 1; j++)
+                    array[j] = array[j + 1];
+                array[6] = temp;
+            }
         }
 
-        public void rotateLeftOnce(String array[], int size) {
-            int i;
+       /* public void rotateLeftOnce(String array[], int size) {
+            int j;
             String temp;
             temp = array[0];
-            for (i = 0; i < size - 1; i++)
-                array[i] = array[i + 1];
-            array[i] = temp;
-        }
+            for (j = 0; j < size - 1; j++)
+                array[j] = array[j + 1];
+            array[j] = temp;
+        }*/
     }
 
 
