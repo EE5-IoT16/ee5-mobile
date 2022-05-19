@@ -18,6 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ee5mobile"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".Activities.UserSelectActivity"
+            android:exported="false" />
         <!--
         <activity
             android:name=".Activities.CreateAccountActivity"
