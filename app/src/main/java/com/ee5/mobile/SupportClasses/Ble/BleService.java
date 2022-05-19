@@ -21,6 +21,7 @@ import com.ee5.mobile.Interfaces.IFrameBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BleService extends Service {
@@ -39,6 +40,10 @@ public class BleService extends Service {
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTED = 2;
 
+    private static final UUID writeCharUUID = UUID.fromString("0000ff01-0000-1000-8000-00805f9b34fb");
+    private static final UUID writeServiceUUID = UUID.fromString("0000ffff-0000-1000-8000-00805f9b34fb");
+
+
     private int connectionState;
     private Handler handler = new Handler();
     private Boolean isConnected;
@@ -47,6 +52,7 @@ public class BleService extends Service {
     private String mBluetoothDeviceAddress;
     private BluetoothGatt mBluetoothGatt;
 
+    private byte[] infoFrame;
     private byte[] securityModeFrame;
     private byte[] opModeFrame;
     private byte[] ssidFrame;
@@ -54,8 +60,8 @@ public class BleService extends Service {
     private byte[] connectFrame;
 
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
-        List<BluetoothGattCharacteristic> ch_list = new ArrayList<>();
-        List<byte[]> frameList = Arrays.asList(securityModeFrame, opModeFrame, ssidFrame, passFrame, connectFrame);
+        private int iterate = 0;
+        private List<byte[]> frameList;
 
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -71,30 +77,14 @@ public class BleService extends Service {
 
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            frameList = Arrays.asList(securityModeFrame, opModeFrame, ssidFrame, passFrame, connectFrame);
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
-                if(opModeFrame == null || ssidFrame == null || passFrame == null || connectFrame == null)
-                    Log.e(TAG, "onServicesDiscovered: frames are not yet made");
+                if(opModeFrame == null || ssidFrame == null || passFrame == null || connectFrame == null) Log.e(TAG, "onServicesDiscovered: frames are not yet made");
 
-
-                gatt.getServices().forEach((BluetoothGattService gs) ->{
-                    ch_list.addAll(gs.getCharacteristics());
-                    Log.d(TAG, "GATT CHARACTERISTICS: " + gs.getUuid().toString());
-                });
-                //TODO: write only to writable ch and make reliable write
-
-                /*gatt.beginReliableWrite();
-                int iterate = 0;
-                while (iterate<frameList.size()){
-                    ch_list.forEach((BluetoothGattCharacteristic ch) -> {
-                        ch.setValue(frameList.get(iterate));
-                        gatt.writeCharacteristic(ch);
-                    });
-                    iterate++;
-                }
-                gatt.executeReliableWrite();*/
-
-                Log.d(TAG, "onServicesDiscovered: " + ch_list.toString());
+                BluetoothGattCharacteristic writeChar = gatt.getService(writeServiceUUID).getCharacteristic(writeCharUUID);
+                writeChar.setValue(infoFrame); //TODO: dataframe not received by esp
+                gatt.writeCharacteristic(writeChar);
             } else {
                 Log.w(TAG, "onServicesDiscovered received: " + status);
             }
@@ -105,17 +95,21 @@ public class BleService extends Service {
             super.onCharacteristicWrite(gatt, characteristic, status);
             if(status != BluetoothGatt.GATT_SUCCESS){
                 Log.e(TAG, "onCharacteristicWrite: " + status);
-                gatt.abortReliableWrite();
+            } else {
+                if (iterate<frameList.size()){
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    BluetoothGattCharacteristic writeChar = gatt.getService(writeServiceUUID).getCharacteristic(writeCharUUID);
+                    writeChar.setValue(frameList.get(iterate));
+                    gatt.writeCharacteristic(writeChar);
+                    iterate++;
+                    Log.d(TAG, "iterate framelist: " + iterate);
+                }
             }
-        }
-
-        @Override
-        public void onReliableWriteCompleted(BluetoothGatt gatt, int status) {
-            super.onReliableWriteCompleted(gatt, status);
-            if(status != BluetoothGatt.GATT_SUCCESS){
-                Log.e(TAG, "onReliableWriteCompleted: " + status);
-
-            }
+            Log.d(TAG, "onCharacteristicWrite: Succesfull write");
         }
     };
 
@@ -197,11 +191,12 @@ public class BleService extends Service {
 
     public Boolean wifiProvisionDevice(String ssid, String pass) {
 
+        infoFrame = IFrameBuilder.getCustomDataFrame("WIFI PROVISION",dataSequence.getAndIncrement());
         securityModeFrame = IFrameBuilder.getSecurityModeControlFrame(dataSequence.getAndIncrement());
         opModeFrame = IFrameBuilder.getOpmodeControlFrame(dataSequence.getAndIncrement());
         ssidFrame = IFrameBuilder.getSsidDataFrame(ssid, dataSequence.getAndIncrement());
-        connectFrame = IFrameBuilder.getConnectToAPControlFrame(dataSequence.getAndIncrement());
         passFrame = IFrameBuilder.getPassDataFrame(pass, dataSequence.getAndIncrement());
+        connectFrame = IFrameBuilder.getConnectToAPControlFrame(dataSequence.getAndIncrement());
         mBluetoothGatt.discoverServices();
         return true;
     }
