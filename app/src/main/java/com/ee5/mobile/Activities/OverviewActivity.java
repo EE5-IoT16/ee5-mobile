@@ -152,7 +152,6 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         myRecyclerViewAdapter.setOnItemClickListener(this);
         myRecyclerView.setAdapter(myRecyclerViewAdapter);
 
-
         today = LocalDateTime.now();
         todayDayOfTheYear = today.getDayOfYear();
         currentDailyStepsData = 0;
@@ -226,6 +225,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
             dataCards.add(dataCard2);
             dataCards.add(dataCard3);
         }
+    }
 
     }
 
