@@ -137,6 +137,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         myRecyclerViewAdapter = new RecyclerViewAdapter(this, dataCards);
         myRecyclerViewAdapter.setOnItemClickListener(this);
         myRecyclerView.setAdapter(myRecyclerViewAdapter);
+        
 
 
         today = LocalDateTime.now();
