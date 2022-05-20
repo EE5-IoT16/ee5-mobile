@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -76,6 +77,12 @@ public class DeviceControlActivity extends AppCompatActivity {
                 connected = false;
             } else if (BleService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 Log.d(TAG, "onReceive: ACTION GATT SERVICES DISCOVERED");
+            } else if (BleService.ACTION_GATT_WIFI_PROVISIONED.equals(action)){
+                Toast.makeText(getApplicationContext(), "Wifi Connected", Toast.LENGTH_SHORT).show();
+                exitIntent();
+            } else if (BleService.ACTION_GATT_WIFI_FAILED.equals(action)){
+                Toast.makeText(getApplicationContext(), "Wifi setup Failed, returning to Overview", Toast.LENGTH_SHORT).show();
+                exitIntent();
             }
         }
     };
@@ -106,7 +113,7 @@ public class DeviceControlActivity extends AppCompatActivity {
     }
 
     private void exitIntent(){
-        final Intent intent = new Intent(DeviceControlActivity.this, SetupActivity.class);
+        final Intent intent = new Intent(DeviceControlActivity.this, OverviewActivity.class);
         startActivity(intent);
     }
 
@@ -133,6 +140,7 @@ public class DeviceControlActivity extends AppCompatActivity {
                 Log.d(TAG, "Dialogue onClick: " + ssid_text);
                 Log.d(TAG, "Dialogue onClick: " + pass_text);
                 bleService.wifiProvisionDevice(ssid_text, pass_text);
+                Toast.makeText(getApplicationContext(), "Setting up Wifi on Huzza", Toast.LENGTH_SHORT).show();
             }
         });
         inputDialogueBuilder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
