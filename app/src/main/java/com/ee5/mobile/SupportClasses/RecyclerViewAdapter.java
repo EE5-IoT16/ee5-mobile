@@ -157,6 +157,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
                     }
                 }
             });
+            rv_barChart.setOnClickListener(v -> {
+                if (myListener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        myListener.onItemClick(position);
+                    }
+                }
+            });
         }
 
         public String[] setGraphAxis() {
@@ -224,6 +232,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             description.setEnabled(false);
 
             itemView.setOnClickListener(v -> {
+                if (myListener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        myListener.onItemClick(position);
+                    }
+                }
+            });
+            rv_lineChart.setOnClickListener(v -> {
                 if (myListener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
