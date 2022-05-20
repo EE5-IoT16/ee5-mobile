@@ -41,10 +41,13 @@ public class User implements Parcelable {
         this.profileFirstName = profileFirstName;
         this.profileSurname = profileSurname;
         this.profileEmail = profileEmail;
+        /*
         this.userId = profileId;
         this.userFirstName = profileFirstName;
         this.userSurname = profileSurname;
         this.userEmail = profileEmail;
+        */
+
     }
 
     /*************************************************************

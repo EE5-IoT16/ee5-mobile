@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.APIconnection;
+import com.ee5.mobile.SupportClasses.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,12 +31,23 @@ public class UserSelectActivity extends AppCompatActivity {
 
     private JSONArray userInformation = new JSONArray();
 
-    private int profileId = 1;
+    private int profileId;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_select);
+
+        try{
+            user = getIntent().getParcelableExtra("user");
+            Log.i("userParcel", user.getProfileEmail());
+            Log.i("userParcel", user.getUserEmail());
+            profileId = user.getProfileId();
+        }
+        catch(Exception e){
+            Log.e("userParcelException", e.toString());
+        }
 
         APIconnection.getInstance(this);
 
@@ -60,7 +72,7 @@ public class UserSelectActivity extends AppCompatActivity {
                                             userInformation.put(Object);
 
                                             if (responseArray.length() == userInformation.length()) {
-                                                generateUIFromDB(userInformation);
+                                                generateUIFromDB();
                                             }
                                             else {
                                                 Log.i("UserInformation", userInformation.toString());
@@ -82,7 +94,7 @@ public class UserSelectActivity extends AppCompatActivity {
                 });
     }
 
-    private void generateUIFromDB(JSONArray results) {
+    private void generateUIFromDB() {
         ScrollView layout = new ScrollView(this);
         layout.setLayoutParams(new ScrollView.LayoutParams(ScrollView.LayoutParams.FILL_PARENT, ScrollView.LayoutParams.FILL_PARENT));
         TableLayout tableLayout = createTableLayout(this);
@@ -93,22 +105,20 @@ public class UserSelectActivity extends AppCompatActivity {
         TableRow tableRow = null;
         Button button;
 
-        for (int i = 0; i < results.length(); i++) {
+        for (int i = 0; i < userInformation.length(); i++) {
             if (rowCounter%3 == 0) {
                 tableRow = createTableRow(this);
                 tableLayout.addView(tableRow);
             }
 
             try {
-                currentObject = results.getJSONObject(i);
-                userID = Integer.parseInt(currentObject.getString("userId"));
+                currentObject = userInformation.getJSONObject(i);
                 userFirstName = currentObject.getString("name");
                 userSurname = currentObject.getString("surname");
                 userName = userFirstName + " " + userSurname;
-                userEmail = currentObject.getString("email");
 
 
-                button = createButton(this, userID, userName);
+                button = createButton(this, i, userName);
                 tableRow.addView(button);
 
                 rowCounter++;
@@ -136,7 +146,7 @@ public class UserSelectActivity extends AppCompatActivity {
     }
 
     private Button createButton(Context context, int id, String name) {
-        Button btnTag = new Button(this);
+        Button btnTag = new Button(context);
         btnTag.setWidth(300);
         btnTag.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
         //name = DatabaseUtils.reformatText(name);
@@ -160,10 +170,23 @@ public class UserSelectActivity extends AppCompatActivity {
 
     protected void onButtonClick(View caller) {
         Intent intent = new Intent(this, OverviewActivity.class);
-        String coffeeId = String.valueOf(caller.getId());
+        int ObjectNo = caller.getId();
+        try {
+            JSONObject Object = userInformation.getJSONObject(ObjectNo);
+            user.setUserId(Object.getInt("userId"));
+            user.setUserFirstName(Object.getString("name"));
+            user.setUserSurname(Object.getString("surname"));
+            user.setUserEmail(Object.getString("email"));
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        intent.putExtra("user", user);
+        startActivity(intent);
         //String coffeeName = DatabaseUtils.formatText((String) ((Button) caller).getText());
         //intent.putExtra("coffeeId", coffeeId);
         //intent.putExtra("coffeeName", coffeeName);
-        startActivity(intent);
+
     }
 }
