@@ -170,14 +170,13 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     }
 
     public void parseJson() {
-
         try {
             DataCard dataCard = getIntent().getExtras().getParcelable("dataCard2");
             if (dataCard != null) {
                 getUserId();
+                getStepsToday();
                 getHeartRate();
                 getTemperature();
-                getStepsToday();
 
                 initGraphs();
 
