@@ -1,16 +1,21 @@
 package com.ee5.mobile.Activities;
 
-import static com.ee5.mobile.Activities.OverviewActivity.checkDate;
 import static com.ee5.mobile.Activities.ProfileActivity.heightUser;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ee5.mobile.Interfaces.GraphCallback;
+import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
+import com.ee5.mobile.SupportClasses.APIconnection;
 import com.ee5.mobile.SupportClasses.DataCard;
 import com.ee5.mobile.SupportClasses.JsonArrayRequest;
 import com.github.mikephil.charting.charts.BarChart;
@@ -24,7 +29,11 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.DayOfWeek;
@@ -37,31 +46,42 @@ public class DataCardDetailActivity extends AppCompatActivity {
     private TextView title;
     private BarChart barChart;
     private LineChart lineChart;
-    private TextView todaySteps;
+    private TextInputLayout steps_layout;
+    private TextInputEditText steps_text;
+    private TextInputLayout distance_amount;
+    private TextInputEditText distance_text;
     private TextView todayDistance;
     private TextView weekSteps;
     private TextView weekDistance;
     private TextView monthSteps;
     private TextView monthDistance;
+    private Button day;
+    private Button week;
+    private Button month;
 
     private JsonArrayRequest jsonArrayRequest;
     private String prefixURL = "https://ee5-huzza.herokuapp.com/";
 
     ArrayList graphEntries;
+    ArrayList<String> apiData = new ArrayList<>();
     DataCard dataCard;
     String graphAxis[] = new String[]{"M", "T", "W", "T", "F", "S", "S"};
 
     String userId;
+    int userHeight;
+    int stepGoal;
 
     int position = 0;
     int dailySteps = 0;
-    int steps = 0;
+    int weeklySteps = 0;
+    int monthlySteps = 0;
     LocalDateTime today;
     int todayDayOfTheYear;
 
     ArrayList<Integer> dataCardStepDataList = new ArrayList<>();
     ArrayList<Integer> dataCardHpDataList = new ArrayList<>();
     ArrayList<Integer> dataCardHrDataList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,14 +101,21 @@ public class DataCardDetailActivity extends AppCompatActivity {
         todayDayOfTheYear = today.getDayOfYear();
 
         getUserId();
-        getDailySteps(todayDayOfTheYear, false);
-        getPeriodSteps(todayDayOfTheYear - 7, todayDayOfTheYear, true);
-        getPeriodSteps(todayDayOfTheYear - 30, todayDayOfTheYear, false);     //taken 1 month = 30 days
-
+        getUserHeight();
+        getUserDailyGoal();
+        getSteps(0);
 
         title = findViewById(R.id.rv_detail_cardTitle);
         barChart = findViewById(R.id.BarChart_datacard_detail);
         lineChart = findViewById(R.id.LineChart_datacard_detail);
+        day = findViewById(R.id.day);
+        week = findViewById(R.id.week);
+        month = findViewById(R.id.month);
+
+        steps_layout = findViewById(R.id.stepsDetail_layout);
+        steps_text = findViewById(R.id.stepsDetail_edit);
+        distance_amount = findViewById(R.id.distance_amount);
+        distance_text = findViewById(R.id.distance_edit);
 
         dataCard = getIntent().getExtras().getParcelable("dataCard");
         dataCardStepDataList = dataCard.getDataCardStepData();
@@ -106,76 +133,159 @@ public class DataCardDetailActivity extends AppCompatActivity {
         else{
             createStepsBarChart();
         }
+
+        day.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getSteps(0);
+            }
+        });
+
+        week.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getSteps(1);
+            }
+        });
+
+        month.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getSteps(2);
+            }
+        });
+    }
+
+    public void getUserId() {
+        userId = Integer.toString(1);
     }
 
     public static Double calculateDistance(int height, int steps) {
         Double distance = 0.0;
         Double strideLength = height * 0.43;        //https://www.inchcalculator.com/steps-to-distance-calculator/
-        distance = strideLength * steps;
+        distance = (strideLength * steps)/100000;
         return distance;
     }
 
-    //todo: parse data through intent from overviewActivity
-    public void getDailySteps(int dayOfTheYear, boolean graphData) {
-        dailySteps = 0;
-        userId = Integer.toString(50);
-        jsonArrayRequest.getJSONArray(response -> {
-            try {
-                for (int i = 0; i < response.length(); i++) {
-                    JSONObject user = response.getJSONObject(i);
-                    String ts = user.getString("ts");
-                    if (checkDate(ts, dayOfTheYear) && graphData == false) {
-                        dailySteps++;
+    public void getSteps(int value) {
+        apiData.clear();
+        apiData.add(userId);
 
+        if(value == 0) {
+            APIconnection.getInstance().GETRequest("steps", apiData, new ServerCallback() {
+                @Override
+                public void onSuccess() {
+                    String responseString = "";
+                    JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                    try {
+                        JSONObject curObject = responseArray.getJSONObject(responseArray.length() - 1);
+                        responseString = curObject.getString("steps");
+                        steps_text.setText(responseString);
+                        dailySteps = Integer.valueOf(responseString);
+                        Double distance = calculateDistance(userHeight, dailySteps);
+                        distance_text.setText(distance.toString());
+                        checkGoalCompletion(0);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
-                todaySteps.setText(Integer.toString(dailySteps));
-                todayDistance.setText(Double.toString(calculateDistance(heightUser, dailySteps)));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }, prefixURL + "steps/" + userId);
-    }
-
-    public void getPeriodSteps(int startDayOfTheYear, int endDayOfTheYear, boolean week) {
-        steps = 0;
-        userId = Integer.toString(50);
-        jsonArrayRequest.getJSONArray(response -> {
-            try {
-                for (int i = 0; i < response.length(); i++) {
-                    JSONObject user = response.getJSONObject(i);
-                    String ts = user.getString("ts");
-                    if (checkDatePeriod(ts, startDayOfTheYear, endDayOfTheYear)) {
-                        steps++;
-                        //Toast.makeText(this, Integer.toString(steps), Toast.LENGTH_LONG).show();
-
-                    }
-                }
-                if (week) {
-                    weekSteps.setText(Integer.toString(steps));
-                    weekDistance.setText(Double.toString(calculateDistance(heightUser, dailySteps)));
-                } else
-                    monthSteps.setText(Integer.toString(steps));
-                monthDistance.setText(Double.toString(calculateDistance(heightUser, dailySteps)));
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }, prefixURL + "steps/" + userId);
-    }
-
-    public static boolean checkDatePeriod(String ts, int startDayOfTheYear, int endDayOfTheYear) {
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-        LocalDateTime dateTime = LocalDateTime.parse(ts, formatter);
-        int day = dateTime.getDayOfYear();
-        if (day >= startDayOfTheYear && day <= endDayOfTheYear) {
-            return true;
+            });
         }
-        return false;
+
+        else if(value == 1) {
+            APIconnection.getInstance().GETRequest("weekly/steps", apiData, new ServerCallback() {
+                @Override
+                public void onSuccess() {
+                    String responseString = "";
+                    JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                    try {
+                        JSONObject curObject = responseArray.getJSONObject(0);
+                        responseString = curObject.getString("totalSteps");
+                        steps_text.setText(responseString);
+                        weeklySteps = Integer.valueOf(responseString);
+                        Double distance = calculateDistance(userHeight, weeklySteps);
+                        distance_text.setText(distance.toString());
+                        checkGoalCompletion(1);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        else if(value == 2) {
+            APIconnection.getInstance().GETRequest("monthly/steps", apiData, new ServerCallback() {
+                @Override
+                public void onSuccess() {
+                    String responseString = "";
+                    JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                    try {
+                        JSONObject curObject = responseArray.getJSONObject(responseArray.length() - 1);
+                        responseString = curObject.getString("totalSteps");     //totalHeartPoints
+                        steps_text.setText(responseString);
+                        monthlySteps = Integer.valueOf(responseString);
+                        Double distance = calculateDistance(userHeight, monthlySteps);
+                        distance_text.setText(distance.toString());
+                        checkGoalCompletion(2);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
     }
 
-    public void getUserId() {
-        userId = Integer.toString(1);
+    public void getUserHeight() {
+        apiData.clear();
+        apiData.add(userId);
+        APIconnection.getInstance().GETRequest("physicaldata", apiData, new ServerCallback() {
+            @Override
+            public void onSuccess() {
+                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                try {
+                    JSONObject curObject = responseArray.getJSONObject(0);
+                    String height = curObject.getString("height");
+                    userHeight = Integer.parseInt(height);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public String checkGoalCompletion(int value){
+        if(value == 0){
+            int percentage = dailySteps / stepGoal;
+            return String.valueOf(percentage);
+        }
+        else if(value == 1){
+            int percentage = weeklySteps / (stepGoal * 7);
+            return String.valueOf(percentage);
+        }
+        else if(value == 2){
+            int percentage = monthlySteps / (stepGoal * 30);
+            return String.valueOf(percentage);
+        }
+        return "";
+    }
+
+    public void getUserDailyGoal() {
+        apiData.clear();
+        apiData.add(userId);
+        APIconnection.getInstance().GETRequest("goals", apiData, new ServerCallback() {
+            @Override
+            public void onSuccess() {
+                String responseDailySteps = "";
+                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                try {
+                    JSONObject curObject = responseArray.getJSONObject(0);
+                    responseDailySteps = curObject.getString("dailySteps");
+                    stepGoal = Integer.valueOf(responseDailySteps);;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void createStepsBarChart() {
@@ -264,17 +374,14 @@ public class DataCardDetailActivity extends AppCompatActivity {
 
     public void rotateLeft(String array[], int steps, int size)        //rotate array of x size by x steps
     {
-        for (int i = 0; i < steps; i++)
-            rotateLeftOnce(array, size);
-    }
-
-    public void rotateLeftOnce(String array[], int size) {
-        int i;
-        String temp;
-        temp = array[0];
-        for (i = 0; i < size - 1; i++)
-            array[i] = array[i + 1];
-        array[i] = temp;
+        for (int i = 0; i < steps; i++) {
+            int j;
+            String temp;
+            temp = array[0];
+            for (j = 0; j < size - 1; j++)
+                array[j] = array[j + 1];
+            array[6] = temp;
+        }
     }
 
     public void createLineChart() {

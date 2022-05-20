@@ -153,6 +153,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         myRecyclerViewAdapter = new RecyclerViewAdapter(this, dataCards);
         myRecyclerViewAdapter.setOnItemClickListener(this);
         myRecyclerView.setAdapter(myRecyclerViewAdapter);
+        
 
         today = LocalDateTime.now();
         todayDayOfTheYear = today.getDayOfYear();
@@ -197,14 +198,13 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     }
 
     public void parseJson() {
-
         try {
             DataCard dataCard = getIntent().getExtras().getParcelable("dataCard2");
             if (dataCard != null) {
                 getUserId();
+                getStepsToday();
                 getHeartRate();
                 getTemperature();
-                getStepsToday();
 
                 initGraphs();
 

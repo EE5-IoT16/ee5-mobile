@@ -214,7 +214,6 @@
                 android:editable="false"
                 android:fontFamily="@font/sfproregular"
                 android:inputType="number"
-                android:text="1608"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
 
@@ -245,7 +244,6 @@
                 android:editable="false"
                 android:fontFamily="@font/sfproregular"
                 android:inputType="number"
-                android:text="21"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
 
