@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (password.equals(responsePassword)){
                     User user = new User(responseProfileId, responseFirstName, responseSurname, responseEmail);
 
-                    Intent overviewIntent = new Intent(getApplicationContext(), OverviewActivity.class);
+                    Intent overviewIntent = new Intent(getApplicationContext(), UserSelectActivity.class);
                     overviewIntent.putExtra("user", user);
                     startActivity(overviewIntent);
                 } else {
