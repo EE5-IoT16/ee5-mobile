@@ -2,9 +2,18 @@ package com.ee5.mobile.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.Toast;
 
 import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
@@ -19,10 +28,9 @@ import java.util.Arrays;
 
 public class UserSelectActivity extends AppCompatActivity {
 
-    private Button userButton1;
-    private Button userButton2;
+    private JSONArray userInformation = new JSONArray();
 
-    private int profileId;
+    private int profileId = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +57,17 @@ public class UserSelectActivity extends AppCompatActivity {
                                         JSONArray responseArray2 = APIconnection.getInstance().getAPIResponse();
                                         try {
                                             JSONObject Object = responseArray2.getJSONObject(0);
+                                            userInformation.put(Object);
+
+                                            if (responseArray.length() == userInformation.length()) {
+                                                generateUIFromDB(userInformation);
+                                            }
+                                            else {
+                                                Log.i("UserInformation", userInformation.toString());
+                                            }
                                         } catch (JSONException e) {
                                             e.printStackTrace();
+                                            Toast.makeText(UserSelectActivity.this, "Not all data could be fetched from the database", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
@@ -59,24 +76,94 @@ public class UserSelectActivity extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Toast.makeText(UserSelectActivity.this, "Not all data could be fetched from the database", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+    }
 
-                userButton1 = (Button) findViewById(R.id.btnUser1);
-        userButton1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    private void generateUIFromDB(JSONArray results) {
+        ScrollView layout = new ScrollView(this);
+        layout.setLayoutParams(new ScrollView.LayoutParams(ScrollView.LayoutParams.FILL_PARENT, ScrollView.LayoutParams.FILL_PARENT));
+        TableLayout tableLayout = createTableLayout(this);
 
+        JSONObject currentObject;
+        int userID, rowCounter = 0;
+        String userFirstName, userSurname, userName, userEmail;
+        TableRow tableRow = null;
+        Button button;
+
+        for (int i = 0; i < results.length(); i++) {
+            if (rowCounter%3 == 0) {
+                tableRow = createTableRow(this);
+                tableLayout.addView(tableRow);
             }
-        });
 
-        userButton2 = (Button) findViewById(R.id.btnUser2);
-        userButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            try {
+                currentObject = results.getJSONObject(i);
+                userID = Integer.parseInt(currentObject.getString("userId"));
+                userFirstName = currentObject.getString("name");
+                userSurname = currentObject.getString("surname");
+                userName = userFirstName + " " + userSurname;
+                userEmail = currentObject.getString("email");
 
+
+                button = createButton(this, userID, userName);
+                tableRow.addView(button);
+
+                rowCounter++;
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        });
+
+        }
+        layout.addView(tableLayout);
+        setContentView(layout);
+    }
+
+    private TableLayout createTableLayout(Context context) {
+        TableLayout tableLayout = new TableLayout(context);
+        tableLayout.setLayoutParams(new ScrollView.LayoutParams(ScrollView.LayoutParams.FILL_PARENT, ScrollView.LayoutParams.FILL_PARENT));
+        return tableLayout;
+    }
+
+    private TableRow createTableRow(Context context) {
+        TableRow tableRow = new TableRow(context);
+        tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+        tableRow.setPadding(35,0,10,10);
+        return tableRow;
+    }
+
+    private Button createButton(Context context, int id, String name) {
+        Button btnTag = new Button(this);
+        btnTag.setWidth(300);
+        btnTag.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+        //name = DatabaseUtils.reformatText(name);
+        btnTag.setText(name);
+        btnTag.setId(id);
+        btnTag.setAllCaps(false);
+        btnTag.setOnClickListener(this::onButtonClick);
+        //btnTag.setCompoundDrawablesWithIntrinsicBounds(null, getImage(this, imagePath), null, null);
+        btnTag.cancelLongPress();
+        ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) (ViewGroup.MarginLayoutParams) btnTag.getLayoutParams();
+        marginLayoutParams.setMargins(30,0,0,0);
+        return btnTag;
+    }
+
+    /*
+    private Drawable getImage(Context context, String imagePath) {
+        imagePath = imagePath.replaceAll(".png", "");
+        return context.getDrawable(context.getResources().getIdentifier(imagePath, "drawable", context.getPackageName()));
+    }
+    */
+
+    protected void onButtonClick(View caller) {
+        Intent intent = new Intent(this, OverviewActivity.class);
+        String coffeeId = String.valueOf(caller.getId());
+        //String coffeeName = DatabaseUtils.formatText((String) ((Button) caller).getText());
+        //intent.putExtra("coffeeId", coffeeId);
+        //intent.putExtra("coffeeName", coffeeName);
+        startActivity(intent);
     }
 }
