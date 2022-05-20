@@ -106,6 +106,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
             User user = getIntent().getParcelableExtra("user");
             Log.i("userParcel", user.getProfileEmail());
             Log.i("userParcel", user.getUserEmail());
+            userId = String.valueOf(user.getUserId());
         }
         catch(Exception e){
             Log.e("userParcelException", e.toString());
