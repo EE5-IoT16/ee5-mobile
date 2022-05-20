@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
@@ -95,18 +96,19 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     private int currentDailyStepsData;
     LocalDateTime today;
     int todayDayOfTheYear;
+    private User user;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
-
         try{
-            User user = getIntent().getParcelableExtra("user");
-            Log.i("userParcel", user.getProfileEmail());
+            user = getIntent().getParcelableExtra("user");
+            Log.i("userParcel", user.getProfileEmail() + "1");
             Log.i("userParcel", user.getUserEmail());
             userId = String.valueOf(user.getUserId());
+            Log.i("userParcel", userId);
         }
         catch(Exception e){
             Log.e("userParcelException", e.toString());
@@ -169,6 +171,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
             }
         });
         parseJson();
+
         final Handler handler = new Handler();
         final int delay = 1000;        //every 1 sec
 
@@ -201,8 +204,11 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     public void parseJson() {
         try {
             DataCard dataCard = getIntent().getExtras().getParcelable("dataCard2");
+            Toast.makeText(getApplicationContext(), "try1", Toast.LENGTH_SHORT).show();
+            Log.d("try", dataCard.toString());
             if (dataCard != null) {
-                getUserId();
+                Toast.makeText(getApplicationContext(), "try", Toast.LENGTH_SHORT).show();
+                //getUserId();
                 getStepsToday();
                 getHeartRate();
                 getTemperature();
@@ -226,10 +232,10 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                 dataCards.add(dataCard3);
             }
         } catch (NullPointerException e) {
-            getUserId();
-
+            //getUserId();
 
             initGraphs();
+            Toast.makeText(getApplicationContext(), "catch", Toast.LENGTH_SHORT).show();
 
             //add datacards to recyclerview
             DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record", barDataSteps, null, null, stepsData, null, null);
@@ -239,12 +245,13 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
             dataCards.add(dataCard1);
             dataCards.add(dataCard2);
             dataCards.add(dataCard3);
+            Log.e("catch", e.toString());
         }
     }
 
-    public void getUserId() {
+    /*public void getUserId() {
         userId = Integer.toString(1);
-    }
+    }*/
 
     public void getTemperature() {
         apiData.clear();
@@ -340,6 +347,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         heartRateData.clear();
         try {
             DataCard dataCard = getIntent().getExtras().getParcelable("dataCard2");
+            Log.d("try", dataCard.toString());
             if (dataCard != null) {
                 for (int i = 0; i < 7; i++) {
                     stepsData.add(dataCard.getDataCardStepData().get(i));
@@ -451,7 +459,9 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                     DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record",
                             barDataSteps, barDataHeartPoints, null, stepsData, heartPointsData, heartRateData);
                     detailIntent.putExtra("dataCard2", dataCard1);
+                    detailIntent.putExtra("user", user);
                     startActivity(detailIntent);
+                    Log.d("ERROR", dataCard1.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d("ERROR", String.valueOf(e));
