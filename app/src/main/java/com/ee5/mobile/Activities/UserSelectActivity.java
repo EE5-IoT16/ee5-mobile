@@ -42,7 +42,6 @@ public class UserSelectActivity extends AppCompatActivity {
         try{
             user = getIntent().getParcelableExtra("user");
             Log.i("userParcel", user.getProfileEmail());
-            Log.i("userParcel", user.getUserEmail());
             profileId = user.getProfileId();
         }
         catch(Exception e){
