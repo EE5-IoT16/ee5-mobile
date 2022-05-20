@@ -33,7 +33,7 @@ public class User implements Parcelable {
     private int dailyHeartpointGoal;
 
     /*************************************************************
-     * CONSTRUCTOR
+     * CONSTRUCTORS
      *************************************************************/
 
     public User(int profileId, String profileFirstName, String profileSurname, String profileEmail) {
@@ -41,14 +41,24 @@ public class User implements Parcelable {
         this.profileFirstName = profileFirstName;
         this.profileSurname = profileSurname;
         this.profileEmail = profileEmail;
-        this.userId = profileId;
-        this.userFirstName = profileFirstName;
-        this.userSurname = profileSurname;
-        this.userEmail = profileEmail;
+
+    }
+
+    public User(int profileId, String profileFirstName, String profileSurname, String profileEmail,
+                 int userId, String userFirstName, String userSurname, String userEmail) {
+        this.profileId = profileId;
+        this.profileFirstName = profileFirstName;
+        this.profileSurname = profileSurname;
+        this.profileEmail = profileEmail;
+        this.userId = userId;
+        this.userFirstName = userFirstName;
+        this.userSurname = userSurname;
+        this.userEmail = userEmail;
+
     }
 
     /*************************************************************
-     * GETTERS AND SETTERS (some setters need to be updated so that they send the new data to the DB)
+     * GETTERS AND SETTERS
      *************************************************************/
 
     //*** profile data ***
@@ -185,6 +195,14 @@ public class User implements Parcelable {
 
     public void setDailyHeartpointGoal(int dailyHeartpointGoal) {
         this.dailyHeartpointGoal = dailyHeartpointGoal;
+    }
+
+    /*************************************************************
+     * UPDATE DB INFORMATION METHODS
+     *************************************************************/
+
+    public void updatePhysicalData() {
+
     }
 
     /*************************************************************
