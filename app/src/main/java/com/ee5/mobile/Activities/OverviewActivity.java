@@ -204,10 +204,10 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     public void parseJson() {
         try {
             DataCard dataCard = getIntent().getExtras().getParcelable("dataCard2");
-            Toast.makeText(getApplicationContext(), "try1", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "try1", Toast.LENGTH_SHORT).show();
             Log.d("try", dataCard.toString());
             if (dataCard != null) {
-                Toast.makeText(getApplicationContext(), "try", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "try", Toast.LENGTH_SHORT).show();
                 //getUserId();
                 getStepsToday();
                 getHeartRate();
@@ -235,7 +235,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
             //getUserId();
 
             initGraphs();
-            Toast.makeText(getApplicationContext(), "catch", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "catch", Toast.LENGTH_SHORT).show();
 
             //add datacards to recyclerview
             DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record", barDataSteps, null, null, stepsData, null, null);
