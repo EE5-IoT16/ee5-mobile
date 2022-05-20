@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
@@ -24,10 +23,6 @@ import com.ee5.mobile.SupportClasses.DataCard;
 import com.ee5.mobile.SupportClasses.JsonArrayRequest;
 import com.ee5.mobile.SupportClasses.RecyclerViewAdapter;
 import com.ee5.mobile.SupportClasses.User;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -42,7 +37,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Timer;
 
 public class OverviewActivity extends AppCompatActivity implements RecyclerViewAdapter.OnItemClickListener {
 
@@ -128,11 +122,15 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         viewProfile_btn.setOnClickListener(v -> {
             Intent intent = new Intent(OverviewActivity.this, ProfileActivity.class);
             startActivity(intent);
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_out);
+
         });
 
         setup_btn.setOnClickListener(view -> {
             Intent intent = new Intent(OverviewActivity.this, SetupActivity.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_down, android.R.anim.fade_out);
+
         });
 
         currTemp = findViewById(R.id.temp_num);

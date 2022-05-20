@@ -77,6 +77,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), CreateAccountActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_up, android.R.anim.fade_out);
             }
         });
     }
@@ -118,6 +119,8 @@ public class LoginActivity extends AppCompatActivity {
                     Intent overviewIntent = new Intent(getApplicationContext(), UserSelectActivity.class);
                     overviewIntent.putExtra("user", user);
                     startActivity(overviewIntent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
                 } else {
                     Toast.makeText(getApplicationContext(), "Incorrect email or password", Toast.LENGTH_SHORT).show();
                 }

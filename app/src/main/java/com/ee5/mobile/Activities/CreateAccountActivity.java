@@ -100,7 +100,15 @@ public class CreateAccountActivity extends AppCompatActivity {
                 Intent overviewIntent = new Intent(getApplicationContext(), OverviewActivity.class);
                 overviewIntent.putExtra("user", user);
                 startActivity(overviewIntent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
             }
         });
+    }
+
+    private void exitIntent(){
+        final Intent intent = new Intent(CreateAccountActivity.this, LoginActivity.class);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, R.anim.slide_out_down);
     }
 }
