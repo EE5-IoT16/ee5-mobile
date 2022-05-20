@@ -166,6 +166,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
             public void onClick(View view) {
                 Intent intent = new Intent(OverviewActivity.this, ProfileActivity.class);
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
         parseJson();
@@ -459,6 +460,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                     detailIntent.putExtra("dataCard2", dataCard1);
                     detailIntent.putExtra("user", user);
                     startActivity(detailIntent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     Log.d("ERROR", dataCard1.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -516,5 +518,6 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         detailIntent.putExtra("dataCard", clickedItem);
         detailIntent.putExtra("dataCardPosition", position);
         startActivity(detailIntent);
+        overridePendingTransition(R.anim.slide_in_up, android.R.anim.fade_out);
     }
 }

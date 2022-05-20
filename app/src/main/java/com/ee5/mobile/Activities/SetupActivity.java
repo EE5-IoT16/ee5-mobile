@@ -79,6 +79,7 @@ public class SetupActivity extends AppCompatActivity {
         bleAdapter.stopAdapterRefresh();
         final Intent intent = new Intent(SetupActivity.this, OverviewActivity.class);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, R.anim.slide_out_up);
     }
 
 }

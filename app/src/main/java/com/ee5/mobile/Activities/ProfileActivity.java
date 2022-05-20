@@ -93,6 +93,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, FallActivity.class);
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
@@ -102,6 +103,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, ActivityModeActivity.class);
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
@@ -198,5 +200,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void exitIntent() {
         final Intent intent = new Intent(ProfileActivity.this, OverviewActivity.class);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, R.anim.slide_right_out);
+
     }
 }

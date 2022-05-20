@@ -183,6 +183,7 @@ public class UserSelectActivity extends AppCompatActivity {
 
         intent.putExtra("user", user);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         //String coffeeName = DatabaseUtils.formatText((String) ((Button) caller).getText());
         //intent.putExtra("coffeeId", coffeeId);
         //intent.putExtra("coffeeName", coffeeName);

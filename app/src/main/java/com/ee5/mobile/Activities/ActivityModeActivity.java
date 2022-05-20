@@ -35,6 +35,7 @@ public class ActivityModeActivity extends AppCompatActivity implements ActModeRe
             public void onClick(View view) {
                 Intent intent = new Intent(ActivityModeActivity.this, NewActivityActivity.class);
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
         myRecyclerView = findViewById(R.id.am_recyclerView);
