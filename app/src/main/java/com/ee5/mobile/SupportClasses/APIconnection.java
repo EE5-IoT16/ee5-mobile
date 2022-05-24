@@ -96,8 +96,8 @@ public class APIconnection extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        String responseString = error.getLocalizedMessage();
-                        Log.i("onErrorResponse:", responseString);
+                        //String responseString = error.getLocalizedMessage();
+                        Log.i("POST onErrorResponse:", String.valueOf(error.networkResponse.statusCode));
                     }
                 }
         );
@@ -119,7 +119,7 @@ public class APIconnection extends AppCompatActivity {
             }
         }
 
-        Log.i("requestURL:", requestURL);
+        Log.i("POST requestURL:", requestURL);
 
         JsonArrayRequest submitRequest = new JsonArrayRequest(Request.Method.POST, requestURL, null,
 
@@ -138,8 +138,8 @@ public class APIconnection extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        String responseString = error.getLocalizedMessage();
-                        Log.i("onErrorResponse:", responseString);
+                        //String responseString = error.getLocalizedMessage();
+                        Log.i("POST onErrorResponse:", String.valueOf(error.networkResponse.statusCode));
                     }
                 }
         );
@@ -181,8 +181,8 @@ public class APIconnection extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        String responseString = error.getLocalizedMessage();
-                        Log.i("onErrorResponse:", responseString);
+                        //String responseString = error.getLocalizedMessage();
+                        Log.i("POST onErrorResponse:", String.valueOf(error.networkResponse.statusCode));
                     }
                 }
         );

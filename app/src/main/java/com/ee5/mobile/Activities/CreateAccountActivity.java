@@ -14,8 +14,12 @@ import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.APIconnection;
 import com.ee5.mobile.SupportClasses.User;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
@@ -30,6 +34,9 @@ public class CreateAccountActivity extends AppCompatActivity {
     private EditText emailInput;
     private EditText passwordInput;
     private EditText passwordRepeatInput;
+
+    private int profileId;
+    private int userId;
 
     private Button button;
 
@@ -83,7 +90,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         ArrayList<String> accountParameters = new ArrayList<String>(Arrays.asList("profileId", "name", "surname", "email", "password", "salt"));
         String node = "profile";
 
-        accountData.add("21");
         accountData.add(firstName);
         accountData.add(surname);
         accountData.add(email);
@@ -93,9 +99,68 @@ public class CreateAccountActivity extends AppCompatActivity {
         APIconnection.getInstance().POSTRequest(node, accountData, accountParameters, new ServerCallback() {
             @Override
             public void onSuccess() {
+
+                try {
+                    JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                    JSONObject curObject = responseArray.getJSONObject(0);
+                    profileId = curObject.getInt("profileId");
+                } catch (Exception e){
+
+                }
+                createUser();
+            }
+        });
+    }
+
+    private void createUser(){
+
+        ArrayList<String> userData = new ArrayList<String>();
+        //API will be updated to auto increment profileId, after which it doesn't need to be passed anymore
+        ArrayList<String> userParameters = new ArrayList<String>(Arrays.asList("name", "surname", "email", "passcode"));
+        String node = "user";
+
+        int passcode = ThreadLocalRandom.current().nextInt(0, 9999 + 1);
+
+        userData.add(firstName);
+        userData.add(surname);
+        userData.add(email);
+        userData.add(String.valueOf(passcode));
+
+        APIconnection.getInstance().POSTRequest(node, userData, userParameters, new ServerCallback() {
+            @Override
+            public void onSuccess() {
+
+                try {
+                    JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                    JSONObject curObject = responseArray.getJSONObject(0);
+                    userId = curObject.getInt("userId");
+                } catch (Exception e){
+
+                }
+
+                linkProfileUser();
+
+            }
+        });
+    }
+
+    private void linkProfileUser(){
+
+        ArrayList<String> linkData = new ArrayList<String>();
+        //API will be updated to auto increment profileId, after which it doesn't need to be passed anymore
+        ArrayList<String> linkParameters = new ArrayList<String>(Arrays.asList("profileId", "userId", "viewOnly"));
+        String node = "profileUserLink";
+
+        linkData.add(String.valueOf(profileId));
+        linkData.add(String.valueOf(userId));
+        linkData.add("false");
+
+        APIconnection.getInstance().POSTRequest(node, linkData, linkParameters, new ServerCallback() {
+            @Override
+            public void onSuccess() {
                 Toast.makeText(getApplicationContext(), "Great succes!", Toast.LENGTH_SHORT).show();
 
-                User user = new User(21, firstName, surname, email);
+                User user = new User(profileId, firstName, surname, email, userId, firstName, surname, email);
 
                 Intent overviewIntent = new Intent(getApplicationContext(), OverviewActivity.class);
                 overviewIntent.putExtra("user", user);
@@ -103,4 +168,5 @@ public class CreateAccountActivity extends AppCompatActivity {
             }
         });
     }
+
 }

@@ -3,6 +3,7 @@ package com.ee5.mobile.Activities;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -12,12 +13,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
+import com.ee5.mobile.SupportClasses.APIconnection;
 import com.ee5.mobile.SupportClasses.Activity;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -36,7 +44,12 @@ public class NewActivityActivity extends AppCompatActivity {
     TimerTask timerTask;
     Double time = 0.0;
 
-    LocalDateTime startDateTime = null;
+    private int userId = 3;
+
+    LocalDateTime localStartDateTime = null;
+    ZonedDateTime startDateTime = null;
+    ZonedDateTime stopDateTime = null;
+    private DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
 
     boolean timerStarted = false;
     boolean activityEnded = false;
@@ -53,6 +66,8 @@ public class NewActivityActivity extends AppCompatActivity {
         steps = findViewById(R.id.steps_edit);
         distance = findViewById(R.id.distance_edit);
 
+        APIconnection.getInstance(this);
+
         timer = new Timer();
     }
 
@@ -61,10 +76,12 @@ public class NewActivityActivity extends AppCompatActivity {
         if (timerStarted == false) {
             timerStarted = true;
             setButtonUI("Stop", R.color.HeartRed);
-            startDateTime = LocalDateTime.now();
+            localStartDateTime = LocalDateTime.now();
+            startDateTime = localStartDateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
             startTimer();
         } else {
             resetTimer();
+            stopDateTime = LocalDateTime.now().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
             endedActivity();
         }
     }
@@ -89,6 +106,17 @@ public class NewActivityActivity extends AppCompatActivity {
 
         };
         timer.scheduleAtFixedRate(timerTask, 0, 1000);
+
+        ArrayList<String> parameters = new ArrayList<>(Arrays.asList("userId", "startTime"));
+        ArrayList<String> values = new ArrayList<>(Arrays.asList(Integer.toString(userId), startDateTime.format(formatter)));
+        Log.i("POST datetime", values.toString());
+
+        APIconnection.getInstance().POSTRequest("activity", values, parameters, new ServerCallback() {
+            @Override
+            public void onSuccess() {
+                Log.i("POST datetime response", values.toString());
+            }
+        });
     }
 
     private void resetTimer() {
@@ -116,8 +144,19 @@ public class NewActivityActivity extends AppCompatActivity {
 
     public void endedActivity() {
         //get data from activity
-        Activity activity = new Activity(startDateTime, null, null, null, null, null, null, null);
+        Activity activity = new Activity(localStartDateTime, null, null, null, null, null, null, null);
         //post to activityTable in database so it can be fetched in activities recyclerview
+
+        ArrayList<String> parameters = new ArrayList<>(Arrays.asList("userId", "startTime", "endTime"));
+        ArrayList<String> values = new ArrayList<>(Arrays.asList(Integer.toString(userId), startDateTime.format(formatter), stopDateTime.format(formatter)));
+        Log.i("POST datetime", values.toString());
+
+        APIconnection.getInstance().POSTRequest("activity", values, parameters, new ServerCallback() {
+            @Override
+            public void onSuccess() {
+                Log.i("POST datetime response", values.toString());
+            }
+        });
     }
 
 }
