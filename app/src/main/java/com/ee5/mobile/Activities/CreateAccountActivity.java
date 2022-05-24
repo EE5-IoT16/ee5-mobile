@@ -37,6 +37,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private int profileId;
     private int userId;
+    private int passcode;
 
     private Button button;
 
@@ -119,7 +120,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         ArrayList<String> userParameters = new ArrayList<String>(Arrays.asList("name", "surname", "email", "passcode"));
         String node = "user";
 
-        int passcode = ThreadLocalRandom.current().nextInt(0, 9999 + 1);
+        passcode = ThreadLocalRandom.current().nextInt(0, 9999 + 1);
 
         userData.add(firstName);
         userData.add(surname);
@@ -160,7 +161,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             public void onSuccess() {
                 Toast.makeText(getApplicationContext(), "Great succes!", Toast.LENGTH_SHORT).show();
 
-                User user = new User(profileId, firstName, surname, email, userId, firstName, surname, email);
+                User user = new User(profileId, firstName, surname, email, userId, firstName, surname, email, passcode);
 
                 Intent overviewIntent = new Intent(getApplicationContext(), OverviewActivity.class);
                 overviewIntent.putExtra("user", user);
