@@ -4,82 +4,167 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.CreateAccountActivity">
+    tools:context=".Activities.CreateAccountActivity"
+    android:background="@drawable/pulse_list">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passre_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Repeat Password"
+            android:minWidth="180dp"
+            app:boxStrokeColor="@color/Dark"
+            app:hintTextColor="@color/Dark"
+            app:layout_constraintTop_toBottomOf="@+id/pass_layout"
+            app:suffixTextColor="@color/Grey"
+            tools:layout_editor_absoluteX="116dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextPasswordRepeat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cursorVisible="false"
+                android:fontFamily="@font/sfproregular"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="124dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/firstname_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="First Name"
+            android:minWidth="180dp"
+            app:boxStrokeColor="@color/Dark"
+            app:hintTextColor="@color/Dark"
+            app:layout_constraintTop_toTopOf="parent"
+            app:suffixTextColor="@color/Grey"
+            tools:layout_editor_absoluteX="116dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextFirstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cursorVisible="false"
+                android:fontFamily="@font/sfproregular"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="124dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/pass_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Choose Password"
+            android:minWidth="180dp"
+            app:boxStrokeColor="@color/Dark"
+            app:hintTextColor="@color/Dark"
+            app:layout_constraintTop_toBottomOf="@+id/email_layout"
+            app:suffixTextColor="@color/Grey"
+            tools:layout_editor_absoluteX="116dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cursorVisible="false"
+                android:fontFamily="@font/sfproregular"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="124dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/surname_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Surname"
+            android:minWidth="180dp"
+            app:boxStrokeColor="@color/Dark"
+            app:hintTextColor="@color/Dark"
+            app:layout_constraintTop_toBottomOf="@+id/firstname_layout"
+            app:suffixTextColor="@color/Grey"
+            tools:layout_editor_absoluteX="116dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextSurname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cursorVisible="false"
+                android:fontFamily="@font/sfproregular"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="124dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Email"
+            android:minWidth="180dp"
+            app:boxStrokeColor="@color/Dark"
+            app:hintTextColor="@color/Dark"
+            app:layout_constraintTop_toBottomOf="@+id/surname_layout"
+            app:suffixTextColor="@color/Grey"
+            tools:layout_editor_absoluteX="116dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cursorVisible="false"
+                android:fontFamily="@font/sfproregular"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="124dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:text="Button"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="12dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/StepBlue"
+        android:fontFamily="@font/sfproregular"
+        android:includeFontPadding="false"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:stateListAnimator="@null"
+        android:text="Register"
+        android:textAllCaps="false"
+        android:textAppearance="@style/InputText"
+        android:textColor="@color/Dark"
+        android:textSize="18dp"
+        app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:ems="10"
-        android:hint="Choose password"
-        android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/editTextPasswordRepeat"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/editTextPasswordRepeat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:ems="10"
-        android:hint="Repeat password"
-        android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/editTextEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:ems="10"
-        android:hint="Email"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/editTextPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/editTextSurname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:ems="10"
-        android:hint="Surname"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/editTextEmail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/editTextFirstName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="First Name"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/editTextSurname"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.922" />
 </androidx.constraintlayout.widget.ConstraintLayout>
