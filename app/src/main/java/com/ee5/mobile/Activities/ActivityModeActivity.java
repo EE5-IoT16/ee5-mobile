@@ -3,6 +3,7 @@ package com.ee5.mobile.Activities;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.Activity;
 import com.ee5.mobile.SupportClasses.ActModeRecyclerViewAdapter;
+import com.ee5.mobile.SupportClasses.User;
 
 import java.util.ArrayList;
 
@@ -25,8 +27,23 @@ public class ActivityModeActivity extends AppCompatActivity implements ActModeRe
     ActModeRecyclerViewAdapter myRecyclerViewAdapter;
     RecyclerView myRecyclerView;
 
+    private User user;
+    private String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        try{
+            user = getIntent().getParcelableExtra("user");
+            Log.i("userParcel", user.getProfileEmail() + "1");
+            Log.i("userParcel", user.getUserEmail());
+            userId = String.valueOf(user.getUserId());
+            Log.i("userParcel", userId);
+        }
+        catch(Exception e){
+            Log.e("userParcelException", e.toString());
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activitymode);
         newActivityBtn = findViewById(R.id.newActivity_btn);
@@ -34,6 +51,7 @@ public class ActivityModeActivity extends AppCompatActivity implements ActModeRe
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ActivityModeActivity.this, NewActivityActivity.class);
+                intent.putExtra("user", user);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }

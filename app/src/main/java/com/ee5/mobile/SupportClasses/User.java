@@ -27,7 +27,7 @@ public class User implements Parcelable {
     private int weight;     //in kg
     private int height;     //in cm
     private int age;        //in years
-    private String gender;  //"male" or "female"
+    private String gender = "X";  //"male" or "female" or "X"
 
     //goals data table
     private int dailyStepGoal;
@@ -171,21 +171,25 @@ public class User implements Parcelable {
     }
 
     public int getBMI(){
-        return weight / (height^2);
+        return (int) Math.rint(weight / (height^2));
     }
 
     public int getRMR(){
 
         double RMR;
 
-        if(gender.equals("Female")){
-            RMR = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
-        }
-        else {
-            RMR = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
-        }
+        try {
+            if(gender.equals("Female")){
+                RMR = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+            }
+            else {
+                RMR = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+            }
 
-        return (int) Math.rint(RMR);
+            return (int) Math.rint(RMR);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     //goals data table

@@ -121,6 +121,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
 
         viewProfile_btn.setOnClickListener(v -> {
             Intent intent = new Intent(OverviewActivity.this, ProfileActivity.class);
+            intent.putExtra("user", user);
             startActivity(intent);
             overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_out);
 
@@ -165,6 +166,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(OverviewActivity.this, ProfileActivity.class);
+                intent.putExtra("user", user);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
