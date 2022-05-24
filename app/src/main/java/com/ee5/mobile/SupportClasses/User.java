@@ -126,6 +126,16 @@ public class User implements Parcelable {
         this.userEmail = userEmail;
     }
 
+    public int getUserPasscode() {
+        return userPasscode;
+    }
+
+    public void setUserPasscode(int userPasscode) {
+        this.userPasscode = userPasscode;
+    }
+
+    private int userPasscode;
+
     //physical data table
 
     public int getWeight() {

@@ -176,6 +176,7 @@ public class UserSelectActivity extends AppCompatActivity {
             user.setUserFirstName(Object.getString("name"));
             user.setUserSurname(Object.getString("surname"));
             user.setUserEmail(Object.getString("email"));
+            user.setUserPasscode(Object.getInt("passcode"));
         }
         catch (JSONException e) {
             e.printStackTrace();

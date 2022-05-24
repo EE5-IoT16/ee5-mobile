@@ -18,6 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ee5mobile"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".Activities.AddUserActivity"
+            android:exported="false" />
 
         <service android:name=".SupportClasses.Ble.BleService" />
 
@@ -29,7 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.SetupActivity"/>
+        <activity android:name=".Activities.SetupActivity" />
         <activity android:name=".Activities.DeviceControlActivity" />
         <activity android:name=".Activities.DataCardDetailActivity" />
         <activity android:name=".Activities.ProfileActivity" />
