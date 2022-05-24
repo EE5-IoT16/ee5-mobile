@@ -10,88 +10,106 @@
     android:outlineSpotShadowColor="@android:color/transparent">
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/btnContinue"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@color/Grey"
-        android:elevation="10dp"
-        android:fontFamily="@font/sfproregular"
-
-        android:includeFontPadding="false"
-        android:stateListAnimator="@null"
-        android:text="Login"
-        android:textAllCaps="false"
-        android:textAppearance="@style/InputText"
-        android:textColor="@color/Beige"
-        android:translationZ="10dp"
-        app:cornerRadius="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/passwordInput"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordInput" />
-
-    <EditText
-        android:id="@+id/emailInput"
-        android:layout_width="312dp"
-        android:layout_height="45dp"
-        android:background="@drawable/ic_rounded_input"
-        android:ems="10"
-        android:hint="E-mail"
-        android:inputType="textEmailAddress"
-        android:paddingLeft="8dp"
-        android:textAppearance="@style/InputText"
-        android:textColor="@color/Dark"
-        android:textColorHighlight="@color/StepBlue"
-        android:textColorHint="@color/Grey"
-        android:textColorLink="@color/HeartRed"
-        android:textCursorDrawable="@null"
-        app:layout_constraintBottom_toTopOf="@+id/passwordInput"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.913" />
-
-    <EditText
-        android:id="@+id/passwordInput"
-        android:layout_width="312dp"
-        android:layout_height="45dp"
-        android:layout_marginBottom="340dp"
-        android:background="@drawable/ic_rounded_input"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:paddingLeft="8dp"
-        android:textAppearance="@style/InputText"
-        android:textColor="@color/Dark"
-        android:textColorHighlight="@color/StepBlue"
-        android:textColorHint="@color/Grey"
-        android:textColorLink="@color/HeartRed"
-        android:textCursorDrawable="@null"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/emailInput"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/emailInput" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/btnCreateAccount"
-        style="@android:style/Widget.DeviceDefault.Button.Borderless"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="-8dp"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@android:color/transparent"
-        android:elevation="0dp"
-        android:fontFamily="@font/sfproregular"
-        android:text="Create Account"
-        android:textAllCaps="false"
-        android:textColor="@color/Grey"
-        android:textSize="16dp"
-        app:cornerRadius="8dp"
-        app:layout_constraintStart_toStartOf="@+id/passwordInput"
-        app:layout_constraintTop_toBottomOf="@+id/passwordInput"
-        app:rippleColor="@color/Grey" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:minWidth="180dp"
+            app:boxStrokeColor="@color/Dark"
+            app:hintTextColor="@color/Dark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:suffixTextColor="@color/Grey">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cursorVisible="false"
+                android:fontFamily="@font/sfproregular"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="124dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Password"
+            android:minWidth="180dp"
+            app:boxStrokeColor="@color/Dark"
+            app:hintTextColor="@color/Dark"
+            app:layout_constraintEnd_toEndOf="@+id/email_layout"
+            app:layout_constraintStart_toStartOf="@+id/email_layout"
+            app:layout_constraintTop_toBottomOf="@+id/email_layout"
+            app:suffixTextColor="@color/Grey">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cursorVisible="false"
+                android:fontFamily="@font/sfproregular"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="124dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnCreateAccount"
+            style="@android:style/Widget.DeviceDefault.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@android:color/transparent"
+            android:elevation="0dp"
+            android:fontFamily="@font/sfproregular"
+            android:text="Create Account"
+            android:textAllCaps="false"
+            android:textColor="@color/Grey"
+            android:textSize="16dp"
+            app:cornerRadius="8dp"
+            app:layout_constraintStart_toStartOf="@+id/password_layout"
+            app:layout_constraintTop_toBottomOf="@+id/password_layout"
+            app:rippleColor="@color/Grey" />
+
+        <Button
+            android:id="@+id/btnContinue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/Grey"
+            android:elevation="10dp"
+
+            android:fontFamily="@font/sfproregular"
+            android:includeFontPadding="false"
+            android:stateListAnimator="@null"
+            android:text="Login"
+            android:textAllCaps="false"
+            android:textAppearance="@style/InputText"
+            android:textColor="@color/Beige"
+            android:translationZ="10dp"
+            app:cornerRadius="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/password_layout"
+            app:layout_constraintTop_toBottomOf="@+id/password_layout" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
