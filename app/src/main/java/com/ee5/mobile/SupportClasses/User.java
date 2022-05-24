@@ -21,6 +21,7 @@ public class User implements Parcelable {
     private String userFirstName;
     private String userSurname;
     private String userEmail;
+    private int userPasscode;
 
     //physical data table
     private int weight;     //in kg
@@ -45,7 +46,7 @@ public class User implements Parcelable {
     }
 
     public User(int profileId, String profileFirstName, String profileSurname, String profileEmail,
-                 int userId, String userFirstName, String userSurname, String userEmail) {
+                int userId, String userFirstName, String userSurname, String userEmail, int userPasscode) {
         this.profileId = profileId;
         this.profileFirstName = profileFirstName;
         this.profileSurname = profileSurname;
@@ -54,6 +55,7 @@ public class User implements Parcelable {
         this.userFirstName = userFirstName;
         this.userSurname = userSurname;
         this.userEmail = userEmail;
+        this.userPasscode = userPasscode;
 
     }
 
@@ -124,6 +126,14 @@ public class User implements Parcelable {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public int getUserPasscode() {
+        return userPasscode;
+    }
+
+    public void setUserPasscode(int userPasscode) {
+        this.userPasscode = userPasscode;
     }
 
     //physical data table
