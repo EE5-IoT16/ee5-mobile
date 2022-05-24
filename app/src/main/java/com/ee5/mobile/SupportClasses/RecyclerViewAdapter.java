@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,29 +58,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
 
             viewHolderTwo.rv_dataCard_Title_hr.setText(currentItem.getDataCardTitle());
             viewHolderTwo.rv_dataCard_timeIndicator_hr.setText(currentItem.getDataCardTimeIndicator());
-            viewHolderTwo.rv_dataCard_record_hr.setText(currentItem.getDataCardRecord());
+            viewHolderTwo.rv_dataCard_record_hr.setText(currentItem.getDataCardHrRecord());
             viewHolderTwo.rv_dataCard_recordText_hr.setText(currentItem.getDataCardRecordText());
             viewHolderTwo.rv_lineChart.setData(currentItem.getlineDataHr());
-            viewHolderTwo.rv_lineChart.getAxisLeft().setAxisMaximum(maxHr);
-            viewHolderTwo.rv_lineChart.getAxisLeft().setAxisMinimum(minHr);
+            viewHolderTwo.rv_lineChart.getAxisLeft().setAxisMaximum(maxHr + 20);
+            viewHolderTwo.rv_lineChart.getAxisLeft().setAxisMinimum(minHr - 20);
 
 
         } else {
             //bind viewHolderOne
             ViewHolderOne viewHolderOne = (ViewHolderOne) holder;
             DataCard currentItem = dataCardList.get(position);
-
-
             viewHolderOne.rv_dataCard_Title.setText(currentItem.getDataCardTitle());
             viewHolderOne.rv_dataCard_timeIndicator.setText(currentItem.getDataCardTimeIndicator());
-            viewHolderOne.rv_dataCard_record.setText(currentItem.getDataCardRecord());
             viewHolderOne.rv_dataCard_recordText.setText(currentItem.getDataCardRecordText());
             if (dataCardList.get(position).getDataCardTitle() == "Steps") {
+                viewHolderOne.rv_dataCard_record.setText(currentItem.getDataCardStepRecord());
                 viewHolderOne.rv_barChart.setData(currentItem.getBarDataSteps());
                 viewHolderOne.rv_barChart.getAxisLeft().setAxisMaximum(maxSteps);
             } else if (dataCardList.get(position).getDataCardTitle() == "Heart points") {
+                viewHolderOne.rv_dataCard_record.setText(currentItem.getDataCardHpRecord());
                 viewHolderOne.rv_barChart.setData(currentItem.getBarDataHp());
-                viewHolderOne.rv_barChart.getAxisLeft().setAxisMaximum(maxHp); //todo change to maxHp when api impl works
+                viewHolderOne.rv_barChart.getAxisLeft().setAxisMaximum(maxHp);
             }
         }
     }

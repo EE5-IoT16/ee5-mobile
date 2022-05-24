@@ -116,7 +116,7 @@ public class NewActivityActivity extends AppCompatActivity {
 
     public void endedActivity() {
         //get data from activity
-        Activity activity = new Activity(startDateTime, null, null, null, null, null, null, null);
+        //Activity activity = new Activity(startDateTime, null, null, null, null, null, null, null);
         //post to activityTable in database so it can be fetched in activities recyclerview
     }
 

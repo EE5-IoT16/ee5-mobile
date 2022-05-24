@@ -39,11 +39,11 @@ public class FallsRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ViewHolderFalls viewHolderActivityMode = (ViewHolderFalls) holder;
+        ViewHolderFalls viewHolderFalls = (ViewHolderFalls) holder;
         Fall currentItem = falls.get(position);
 
-        viewHolderActivityMode.rv_fall_date.setText(currentItem.getDate());
-        viewHolderActivityMode.rv_fall_time.setText(currentItem.getTime());
+        viewHolderFalls.rv_fall_date.setText(currentItem.getDate());
+        viewHolderFalls.rv_fall_time.setText(currentItem.getTime());
     }
 
     @Override

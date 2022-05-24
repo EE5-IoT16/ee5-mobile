@@ -44,6 +44,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     RecyclerView myRecyclerView;
     ArrayList<DataCard> dataCards = new ArrayList<>();
     ArrayList<String> apiData = new ArrayList<>();
+    ArrayList<String> quoteData = new ArrayList<>();
     ArrayList barEntriesSteps;
     ArrayList barEntriesHeartPoints;
     ArrayList entriesHeartRate;
@@ -53,16 +54,17 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     TextView currSteps;
     TextView stepsLeft;
     TextView stepsLeftText;
+    TextView quoteText;
 
     ArrayList<Integer> stepsData = new ArrayList<>();
     ArrayList<Integer> heartPointsData = new ArrayList<>();
     ArrayList<Integer> heartRateData = new ArrayList<>();
 
     private int steps = 0;
-    private int stepsRecord = 0;
-    private int heartPointsRecord = 0;
+    private String stepsRecord = "";
+    private String hpRecord = "";
     private int hr = 0;
-    private int hrRecord = 0;
+    private String hrRecord = "";
     private Double temp = 0.0;
 
     public static int setGraphAxis = 0;
@@ -98,11 +100,13 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
         try{
+            apiData.clear();
             user = getIntent().getParcelableExtra("user");
-            Log.i("userParcel", user.getProfileEmail() + "1");
+            Log.i("userParcel", user.getProfileEmail());
             Log.i("userParcel", user.getUserEmail());
             userId = String.valueOf(user.getUserId());
             Log.i("userParcel", userId);
+            apiData.add(userId);
         }
         catch(Exception e){
             Log.e("userParcelException", e.toString());
@@ -138,16 +142,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         currSteps = findViewById(R.id.step_num);
         stepsLeft = findViewById(R.id.stepsLeft_num);
         stepsLeftText = findViewById(R.id.stepsleft_text);
-
-        //TODO: get number from User object
-        stepsLeft_num.setText("100");
-
-        String quoteString = "Look in the mirror, that’s the only competition.";
-
-        //quoteString = getColoredText();
-
-        //quote = get from http request to some api
-        quote.setText(getColoredText(quoteString, "#4FA4FF"));
+        quoteText = findViewById(R.id.quote_tv);
 
         myRecyclerView = findViewById(R.id.recyclerView);
         myRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -160,11 +155,14 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         todayDayOfTheYear = today.getDayOfYear();
         currentDailyStepsData = 0;
 
+        setGraphAxis = 0;
+
         profileButton = (Button) findViewById(R.id.viewProfile_Btn);
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(OverviewActivity.this, ProfileActivity.class);
+                intent.putExtra("user", user);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
@@ -185,12 +183,31 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         }, delay);
     }
 
+    public void getQuote(){
+        APIconnection.getInstance().GETRequest("quotes", quoteData, new ServerCallback() {
+            @Override
+            public void onSuccess() {
+                String responseString = "";
+                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                try {
+                    int size = responseArray.length();
+                    int value = (int) ((Math.random() * size));
+                    JSONObject curObject = responseArray.getJSONObject(value);
+                    responseString = curObject.getString("quote");
+                    quoteText.setText(getColoredText(responseString, "#4FA4FF"));
+                    Log.d("QUOTE", responseString);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
     public Spanned getColoredText(String text, String color) {
         String[] words = text.split(" ");
         int wordCount = words.length;
 
-        int backSpace = 4;
+        int backSpace = words.length/2;
         words[backSpace] = words[backSpace];
 
         String[] beforeColor = Arrays.copyOfRange(words, 0, backSpace);
@@ -205,12 +222,14 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
             DataCard dataCard = getIntent().getExtras().getParcelable("dataCard2");
             //Toast.makeText(getApplicationContext(), "try1", Toast.LENGTH_SHORT).show();
             Log.d("try", dataCard.toString());
+            Log.d("try", "record: " + dataCard.getDataCardHrRecord());
             if (dataCard != null) {
                 //Toast.makeText(getApplicationContext(), "try", Toast.LENGTH_SHORT).show();
                 //getUserId();
                 getStepsToday();
                 getHeartRate();
                 getTemperature();
+                getQuote();
 
                 initGraphs();
 
@@ -221,25 +240,25 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                 //daily goal
                 getDailyGoal();
 
+
+                Log.d("try", stepsRecord);
                 //add datacards to recyclerview
-                DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record", barDataSteps, null, null, stepsData, null, null);
-                DataCard dataCard2 = new DataCard("Heart points", "Last 7 days", String.valueOf(heartPointsRecord), "Record", null, barDataHeartPoints, null, null, heartPointsData, null);
-                DataCard dataCard3 = new DataCard("Heartrate", "Last 10 minutes", String.valueOf(hrRecord), "Peak", null, null, lineData, null, null, heartRateData);
+                DataCard dataCard1 = new DataCard("Steps", "Last 7 days",  dataCard.getDataCardStepRecord(), null, null, "Record", barDataSteps, null, null, dataCard.getDataCardStepData(), null, null);
+                DataCard dataCard2 = new DataCard("Heart points", "Last 7 days", null,  dataCard.getDataCardHpRecord(), null, "Record", null, barDataHeartPoints, null, null, dataCard.getDataCardHpData(), null);
+                DataCard dataCard3 = new DataCard("Heartrate", "Last 10 minutes", null, null,  dataCard.getDataCardHrRecord(), "Peak", null, null, lineData, null, null, dataCard.getDataCardHrData());
 
                 dataCards.add(dataCard1);
                 dataCards.add(dataCard2);
                 dataCards.add(dataCard3);
             }
         } catch (NullPointerException e) {
-            //getUserId();
-
             initGraphs();
             //Toast.makeText(getApplicationContext(), "catch", Toast.LENGTH_SHORT).show();
 
             //add datacards to recyclerview
-            DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record", barDataSteps, null, null, stepsData, null, null);
-            DataCard dataCard2 = new DataCard("Heart points", "Last 7 days", String.valueOf(heartPointsRecord), "Record", null, barDataHeartPoints, null, null, heartPointsData, null);
-            DataCard dataCard3 = new DataCard("Heartrate", "Last 10 minutes", String.valueOf(hrRecord), "Peak", null, null, lineData, null, null, heartRateData);
+            DataCard dataCard1 = new DataCard("Steps", "Last 7 days", stepsRecord, null, null, "Record", barDataSteps, null, null, stepsData, null, null);
+            DataCard dataCard2 = new DataCard("Heart points", "Last 7 days", null, hpRecord, hrRecord, "Record", null, barDataHeartPoints, null, null, heartPointsData, null);
+            DataCard dataCard3 = new DataCard("Heartrate", "Last 10 minutes", stepsRecord, hpRecord, hrRecord, "Peak", null, null, lineData, null, null, heartRateData);
 
             dataCards.add(dataCard1);
             dataCards.add(dataCard2);
@@ -248,13 +267,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         }
     }
 
-    /*public void getUserId() {
-        userId = Integer.toString(1);
-    }*/
-
     public void getTemperature() {
-        apiData.clear();
-        apiData.add(userId);
         APIconnection.getInstance().GETRequest("temperature", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
@@ -272,8 +285,6 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     }
 
     public void getHeartRate() {
-        apiData.clear();
-        apiData.add(userId);
         APIconnection.getInstance().GETRequest("heartRate", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
@@ -291,8 +302,6 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     }
 
     public void getStepsToday() {
-        apiData.clear();
-        apiData.add(userId);
         APIconnection.getInstance().GETRequest("steps", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
@@ -311,8 +320,6 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     }
 
     public void getDailyGoal() {
-        apiData.clear();
-        apiData.add(userId);
         APIconnection.getInstance().GETRequest("goals", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
@@ -371,17 +378,8 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         }
     }
 
-    public static boolean checkDate(String ts, int dayOfTheYear) {
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-        LocalDateTime dateTime = LocalDateTime.parse(ts, formatter);
-        int day = dateTime.getDayOfYear();
-        return day == dayOfTheYear;
-    }
-
     public void getStepsGraphData() {
-        apiData.clear();
-        apiData.add(userId);
-
+        maxSteps = 0;
         APIconnection.getInstance().GETRequest("steps", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
@@ -393,8 +391,10 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                         JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (i + 1));
                         responseString = curObject.getString("steps");
                         stepsData.set(6 - i, Integer.valueOf(responseString));
-                        if (Integer.valueOf(responseString) > maxSteps)
+                        if (Integer.valueOf(responseString) > maxSteps) {
                             maxSteps = Integer.valueOf(responseString);
+                            stepsRecord = responseString;
+                        }
                     }
                     getHPGraphData();
                 } catch (JSONException e) {
@@ -407,11 +407,8 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     }
 
     public void getHPGraphData() {
-        userId = String.valueOf(50);        //not enough records in user 1 table //todo: what if not enough data
-        apiData.clear();
-        apiData.add(userId);
-
-        APIconnection.getInstance().GETRequest("steps", apiData, new ServerCallback() {
+        maxHp = 0;
+        APIconnection.getInstance().GETRequest("heartPoints", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
                 String responseString = "";
@@ -420,10 +417,12 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
 
                     for (int i = 0; i < 7; i++) {
                         JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (i + 1));
-                        responseString = curObject.getString("steps");
+                        responseString = curObject.getString("heartPoint");
                         heartPointsData.set(6 - i, Integer.valueOf(responseString));
-                        if (Integer.valueOf(responseString) > maxHp)
+                        if (Integer.valueOf(responseString) > maxHp) {
                             maxHp = Integer.valueOf(responseString);
+                            hpRecord = responseString;
+                        }
                     }
                     getHrGraphData();
                 } catch (JSONException e) {
@@ -435,10 +434,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     }
 
     public void getHrGraphData() {
-        userId = String.valueOf(50);        //not enough records in user 1 table //todo: what if not enough data
-        apiData.clear();
-        apiData.add(userId);
-
+        maxHr = 0;
         APIconnection.getInstance().GETRequest("heartRate", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
@@ -449,17 +445,22 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                         JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (i + 1));
                         responseString = curObject.getString("bpm");
                         heartRateData.set(9 - i, Integer.valueOf(responseString));
-                        if (Integer.valueOf(responseString) > maxHr)
+                        Log.d("hr", i + ": " + responseString + " - " + apiData.toString());
+
+                        if (Integer.valueOf(responseString) > maxHr) {
                             maxHr = Integer.valueOf(responseString);
+                            hrRecord = responseString;
+                        }
                         if (Integer.valueOf(responseString) < minHr)
                             minHr = Integer.valueOf(responseString);
                     }
                     Intent detailIntent = new Intent(getApplicationContext(), OverviewActivity.class);
-                    DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record",
-                            barDataSteps, barDataHeartPoints, null, stepsData, heartPointsData, heartRateData);
+                    DataCard dataCard1 = new DataCard("Steps", "Last 7 days", stepsRecord, hpRecord, hrRecord, "Record",
+                            null, null, null, stepsData, heartPointsData, heartRateData);
                     detailIntent.putExtra("dataCard2", dataCard1);
                     detailIntent.putExtra("user", user);
                     startActivity(detailIntent);
+                    Log.d("ERROR", stepsRecord + " / " + hpRecord + " - " + hrRecord);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     Log.d("ERROR", dataCard1.toString());
                 } catch (JSONException e) {
@@ -517,6 +518,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         DataCard clickedItem = dataCards.get(position);
         detailIntent.putExtra("dataCard", clickedItem);
         detailIntent.putExtra("dataCardPosition", position);
+        detailIntent.putExtra("user", user);
         startActivity(detailIntent);
         overridePendingTransition(R.anim.slide_in_up, android.R.anim.fade_out);
     }

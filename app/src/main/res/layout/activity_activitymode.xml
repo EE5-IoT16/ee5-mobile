@@ -7,6 +7,15 @@
     android:layout_height="match_parent"
     android:background="@color/Beige">
 
+    <ImageButton
+        android:id="@+id/activity_back_btn"
+        style="@style/BackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/Dark"/>
+
     <TextView
         android:id="@+id/am_title"
         android:layout_width="0dp"

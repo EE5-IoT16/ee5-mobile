@@ -1,6 +1,8 @@
 package com.ee5.mobile.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +20,12 @@ import android.widget.Toast;
 import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.APIconnection;
+import com.ee5.mobile.SupportClasses.ActModeRecyclerViewAdapter;
+import com.ee5.mobile.SupportClasses.Fall;
+import com.ee5.mobile.SupportClasses.FallsRecyclerViewAdapter;
+import com.ee5.mobile.SupportClasses.RecyclerViewAdapter;
 import com.ee5.mobile.SupportClasses.User;
+import com.ee5.mobile.SupportClasses.UserSelectRecyclerViewAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,18 +34,20 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class UserSelectActivity extends AppCompatActivity {
+public class UserSelectActivity extends AppCompatActivity /*implements UserSelectRecyclerViewAdapter.OnItemClickListener*/{
 
     private JSONArray userInformation = new JSONArray();
 
     private int profileId;
     private User user;
+    UserSelectRecyclerViewAdapter myRecyclerViewAdapter;
+    RecyclerView myRecyclerView;
+    public static ArrayList<User> users = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_select);
-
         try{
             user = getIntent().getParcelableExtra("user");
             Log.i("userParcel", user.getProfileEmail());
@@ -47,50 +56,64 @@ public class UserSelectActivity extends AppCompatActivity {
         catch(Exception e){
             Log.e("userParcelException", e.toString());
         }
+       /* myRecyclerView = findViewById(R.id.userSelect_recyclerview);
+        myRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        myRecyclerViewAdapter = new UserSelectRecyclerViewAdapter(this, users);
+        //myRecyclerViewAdapter.setOnItemClickListener(this);
+        myRecyclerView.setAdapter(myRecyclerViewAdapter);*/
 
+        getData();
+       /* User user = new User(1, "test", "test", "test");
+        users.add(user);*/
+
+    }
+
+    public void getData(){
         APIconnection.getInstance(this);
 
         APIconnection.getInstance().GETRequest("profileUserLink", new ArrayList<String>(Arrays.asList(Integer.toString(profileId))), new ServerCallback() {
-                    @Override
-                    public void onSuccess() {
+            @Override
+            public void onSuccess() {
 
-                        JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
 
-                        try {
-                            for( int i = 0; i < responseArray.length(); i++ ) {
-                                JSONObject curObject = responseArray.getJSONObject(i);
-                                int userId = curObject.getInt("userId");
+                try {
+                    for( int i = 0; i < responseArray.length(); i++ ) {
+                        JSONObject curObject = responseArray.getJSONObject(i);
+                        int userId = curObject.getInt("userId");
 
-                                APIconnection.getInstance().GETRequest("user", new ArrayList<String>(Arrays.asList(Integer.toString(userId))), new ServerCallback() {
-                                    @Override
-                                    public void onSuccess() {
+                        APIconnection.getInstance().GETRequest("user", new ArrayList<String>(Arrays.asList(Integer.toString(userId))), new ServerCallback() {
+                            @Override
+                            public void onSuccess() {
 
-                                        JSONArray responseArray2 = APIconnection.getInstance().getAPIResponse();
-                                        try {
-                                            JSONObject Object = responseArray2.getJSONObject(0);
-                                            userInformation.put(Object);
+                                JSONArray responseArray2 = APIconnection.getInstance().getAPIResponse();
+                                try {
+                                    JSONObject Object = responseArray2.getJSONObject(0);
+                                    userInformation.put(Object);
 
-                                            if (responseArray.length() == userInformation.length()) {
-                                                generateUIFromDB();
-                                            }
-                                            else {
-                                                Log.i("UserInformation", userInformation.toString());
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                            Toast.makeText(UserSelectActivity.this, "Not all data could be fetched from the database", Toast.LENGTH_SHORT).show();
-                                        }
+                                    if (responseArray.length() == userInformation.length()) {
+                                        generateUIFromDB();
+
+
                                     }
-                                });
-
+                                    else {
+                                        Log.i("UserInformation", userInformation.toString());
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(UserSelectActivity.this, "Not all data could be fetched from the database", Toast.LENGTH_SHORT).show();
+                                }
                             }
+                        });
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(UserSelectActivity.this, "Not all data could be fetched from the database", Toast.LENGTH_SHORT).show();
-                        }
                     }
-                });
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(UserSelectActivity.this, "Not all data could be fetched from the database", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void generateUIFromDB() {
@@ -116,7 +139,8 @@ public class UserSelectActivity extends AppCompatActivity {
                 userSurname = currentObject.getString("surname");
                 userName = userFirstName + " " + userSurname;
 
-
+                /*User user = new User(1, userFirstName, userSurname, null);
+                users.add(user);*/
                 button = createButton(this, i, userName);
                 tableRow.addView(button);
 
@@ -147,6 +171,7 @@ public class UserSelectActivity extends AppCompatActivity {
     private Button createButton(Context context, int id, String name) {
         Button btnTag = new Button(context);
         btnTag.setWidth(300);
+
         btnTag.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
         //name = DatabaseUtils.reformatText(name);
         btnTag.setText(name);
@@ -189,4 +214,23 @@ public class UserSelectActivity extends AppCompatActivity {
         //intent.putExtra("coffeeName", coffeeName);
 
     }
+
+   /* @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(this, OverviewActivity.class);
+        int ObjectNo = posi.getId();
+        try {
+            JSONObject Object = userInformation.getJSONObject(ObjectNo);
+            user.setUserId(Object.getInt("userId"));
+            user.setUserFirstName(Object.getString("name"));
+            user.setUserSurname(Object.getString("surname"));
+            user.setUserEmail(Object.getString("email"));
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        intent.putExtra("user", user);
+        startActivity(intent);
+    }*/
 }
