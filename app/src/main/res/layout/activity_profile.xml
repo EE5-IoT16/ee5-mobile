@@ -426,7 +426,7 @@
         android:layout_marginStart="18dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/sfproregular"
-        android:text="15000 Steps"
+        android:text="0 Steps"
         android:textSize="18dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider3" />
@@ -438,7 +438,7 @@
         android:layout_marginStart="18dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/sfproregular"
-        android:text="8 Consecutive Days"
+        android:text="0 Consecutive Days"
         android:textSize="18dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hp_record" />
@@ -450,7 +450,7 @@
         android:layout_marginStart="18dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/sfproregular"
-        android:text="48 Heart Points"
+        android:text="0 Heart Points"
         android:textSize="18dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/steps_record" />
@@ -462,7 +462,7 @@
         android:layout_marginStart="18dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/sfproregular"
-        android:text="48 Heart Points"
+        android:text="0 Heart Points"
         android:textSize="18dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/streak_record" />
