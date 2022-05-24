@@ -50,7 +50,6 @@ public class NewActivityActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_activity);
-
         try {
             apiData.clear();
             user = getIntent().getParcelableExtra("user");

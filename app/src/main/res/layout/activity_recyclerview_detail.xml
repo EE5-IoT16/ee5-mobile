@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:editable="false"
                 android:fontFamily="@font/sfproregular"
-                android:text="72"
+                android:text="0"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
 
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:editable="false"
                 android:fontFamily="@font/sfproregular"
-                android:text="2994"
+                android:text="0"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
 

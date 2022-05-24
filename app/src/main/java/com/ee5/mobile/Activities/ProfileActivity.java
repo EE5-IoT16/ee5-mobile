@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -36,7 +37,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     TextView profileName;
     TextInputEditText profileAge;
-    TextInputEditText profileGender;
+    AutoCompleteTextView profileGender;
     TextInputEditText profileRmr;
     TextInputEditText profileBmi;
     TextInputEditText profileHeight;
@@ -79,13 +80,13 @@ public class ProfileActivity extends AppCompatActivity {
         profileName = findViewById(R.id.name_tv);
 
         //About you section
-        profileAge = findViewById(R.id.age_layout);
-        profileGender = findViewById(R.id.gender_layout);
-        profileHeight = findViewById(R.id.height_layout);
-        profileWeight = findViewById(R.id.weight_layout);
+        profileAge = findViewById(R.id.age_edit);
+        profileGender = findViewById(R.id.gender_edit);
+        profileHeight = findViewById(R.id.height_edit);
+        profileWeight = findViewById(R.id.weight_edit);
         //non editable from About you section
-        profileRmr = findViewById(R.id.rmr_layout);
-        profileBmi = findViewById(R.id.bmi_layout);
+        profileRmr = findViewById(R.id.rmr_edit);
+        profileBmi = findViewById(R.id.bmi_edit);
 
         profileStepsRecord = findViewById(R.id.steps_record);
         profileHpRecord = findViewById(R.id.hp_record);
@@ -132,7 +133,7 @@ public class ProfileActivity extends AppCompatActivity {
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ProfileActivity.this, UserSelectActivity.class);
+                Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
                 intent.putExtra("user", user);
                 startActivity(intent);
             }

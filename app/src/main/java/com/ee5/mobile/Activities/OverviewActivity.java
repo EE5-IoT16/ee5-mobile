@@ -99,7 +99,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
-        try{
+        try {
             apiData.clear();
             user = getIntent().getParcelableExtra("user");
             Log.i("userParcel", user.getProfileEmail());
@@ -107,8 +107,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
             userId = String.valueOf(user.getUserId());
             Log.i("userParcel", userId);
             apiData.add(userId);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Log.e("userParcelException", e.toString());
         }
 
@@ -149,7 +148,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         myRecyclerViewAdapter = new RecyclerViewAdapter(this, dataCards);
         myRecyclerViewAdapter.setOnItemClickListener(this);
         myRecyclerView.setAdapter(myRecyclerViewAdapter);
-        
+
 
         today = LocalDateTime.now();
         todayDayOfTheYear = today.getDayOfYear();
@@ -183,7 +182,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         }, delay);
     }
 
-    public void getQuote(){
+    public void getQuote() {
         APIconnection.getInstance().GETRequest("quotes", quoteData, new ServerCallback() {
             @Override
             public void onSuccess() {
@@ -207,7 +206,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         String[] words = text.split(" ");
         int wordCount = words.length;
 
-        int backSpace = words.length/2;
+        int backSpace = words.length / 2;
         words[backSpace] = words[backSpace];
 
         String[] beforeColor = Arrays.copyOfRange(words, 0, backSpace);
@@ -221,7 +220,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         try {
             DataCard dataCard = getIntent().getExtras().getParcelable("dataCard2");
             //Toast.makeText(getApplicationContext(), "try1", Toast.LENGTH_SHORT).show();
-            Log.d("try", dataCard.toString());
+            //Log.d("try", dataCard.toString());
             Log.d("try", "record: " + dataCard.getDataCardHrRecord());
             if (dataCard != null) {
                 //Toast.makeText(getApplicationContext(), "try", Toast.LENGTH_SHORT).show();
@@ -243,9 +242,9 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
 
                 Log.d("try", stepsRecord);
                 //add datacards to recyclerview
-                DataCard dataCard1 = new DataCard("Steps", "Last 7 days",  dataCard.getDataCardStepRecord(), null, null, "Record", barDataSteps, null, null, dataCard.getDataCardStepData(), null, null);
-                DataCard dataCard2 = new DataCard("Heart points", "Last 7 days", null,  dataCard.getDataCardHpRecord(), null, "Record", null, barDataHeartPoints, null, null, dataCard.getDataCardHpData(), null);
-                DataCard dataCard3 = new DataCard("Heartrate", "Last 10 minutes", null, null,  dataCard.getDataCardHrRecord(), "Peak", null, null, lineData, null, null, dataCard.getDataCardHrData());
+                DataCard dataCard1 = new DataCard("Steps", "Last 7 days", dataCard.getDataCardStepRecord(), null, null, "Record", barDataSteps, null, null, dataCard.getDataCardStepData(), null, null);
+                DataCard dataCard2 = new DataCard("Heart points", "Last 7 days", null, dataCard.getDataCardHpRecord(), null, "Record", null, barDataHeartPoints, null, null, dataCard.getDataCardHpData(), null);
+                DataCard dataCard3 = new DataCard("Heartrate", "Last 10 minutes", null, null, dataCard.getDataCardHrRecord(), "Peak", null, null, lineData, null, null, dataCard.getDataCardHrData());
 
                 dataCards.add(dataCard1);
                 dataCards.add(dataCard2);
@@ -353,7 +352,8 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         heartRateData.clear();
         try {
             DataCard dataCard = getIntent().getExtras().getParcelable("dataCard2");
-            Log.d("try", dataCard.toString());
+            //Log.d("try", dataCard.toString());
+            Log.d("try", "record: " + dataCard.getDataCardHrRecord());
             if (dataCard != null) {
                 for (int i = 0; i < 7; i++) {
                     stepsData.add(dataCard.getDataCardStepData().get(i));
@@ -366,12 +366,12 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
             }
         } catch (NullPointerException e) {
             for (int i = 0; i < 7; i++) {
-                stepsData.add(1);
-                heartPointsData.add(1);
+                stepsData.add(0);
+                heartPointsData.add(0);
             }
 
             for (int i = 0; i < 10; i++) {
-                heartRateData.add(1);
+                heartRateData.add(0);
             }
 
             getStepsGraphData();
@@ -380,38 +380,43 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
 
     public void getStepsGraphData() {
         maxSteps = 0;
+        Log.d("ERROR0", "initial: " + stepsData.toString());
         APIconnection.getInstance().GETRequest("steps", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
                 String responseString = "";
                 JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
                 try {
-                    if(responseArray.length() < 7){
-                        for(int i = 0; i < (7 - responseArray.length()); i++){
-                            responseArray.put(i, " ");
+                    if (responseArray.length() < 7) {
+                        for (int j = 0; j < responseArray.length(); j++) {
+                            JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (j + 1));
+                            responseString = curObject.getString("steps");
+                            int graphValue = Integer.valueOf(responseString);
+                            stepsData.set(6 - j, graphValue);
+                            Log.d("ERROR0", "between: " + stepsData.toString());
+                            if (graphValue > maxSteps) {
+                                maxSteps = Integer.valueOf(responseString);
+                                stepsRecord = responseString;
+                            }
                         }
-                    }
-                    for (int i = 0; i < 7; i++) {
-                        JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (i + 1));
-                        responseString = curObject.getString("steps");
-                        int graphValue = 0;
-                        if(responseString == " "){
-                            graphValue = 0;
-                        }
-                        else{
-                            graphValue = Integer.valueOf(responseString);
-                        }
-                        stepsData.set(6 - i, graphValue);
-                        if (Integer.valueOf(responseString) > maxSteps) {
-                            maxSteps = Integer.valueOf(responseString);
-                            stepsRecord = responseString;
+                        Log.d("ERROR0", "final: " + stepsData.toString());
+                    } else {
+                        for (int i = 0; i < 7; i++) {
+                            JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (i + 1));
+                            responseString = curObject.getString("steps");
+                            int graphValue = Integer.valueOf(responseString);
+                            stepsData.set(6 - i, graphValue);
+                            Log.d("ERROR0", "between: " + stepsData.toString());
+                            if (graphValue > maxSteps) {
+                                maxSteps = Integer.valueOf(responseString);
+                                stepsRecord = responseString;
+                            }
                         }
                     }
                     getHPGraphData();
                 } catch (JSONException e) {
                     e.printStackTrace();
-
-                    Log.d("ERROR", String.valueOf(e));
+                    Log.d("ERROR0", String.valueOf(e));
                 }
             }
         });
@@ -425,20 +430,36 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                 String responseString = "";
                 JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
                 try {
-
-                    for (int i = 0; i < 7; i++) {
-                        JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (i + 1));
-                        responseString = curObject.getString("heartPoint");
-                        heartPointsData.set(6 - i, Integer.valueOf(responseString));
-                        if (Integer.valueOf(responseString) > maxHp) {
-                            maxHp = Integer.valueOf(responseString);
-                            hpRecord = responseString;
+                    if (responseArray.length() < 7) {
+                        for (int j = 0; j < responseArray.length(); j++) {
+                            JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (j + 1));
+                            responseString = curObject.getString("heartPoint");
+                            int graphValue = 0;
+                            graphValue = Integer.valueOf(responseString);
+                            heartPointsData.set(6 - j, graphValue);
+                            if (graphValue > maxHp) {
+                                maxHp = Integer.valueOf(responseString);
+                                hpRecord = responseString;
+                            }
+                        }
+                        Log.d("ERROR2", "final: " + heartPointsData.toString());
+                    } else {
+                        for (int i = 0; i < 7; i++) {
+                            JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (i + 1));
+                            responseString = curObject.getString("steps");
+                            int graphValue = Integer.valueOf(responseString);
+                            stepsData.set(6 - i, graphValue);
+                            Log.d("ERROR0", "between: " + stepsData.toString());
+                            if (graphValue > maxSteps) {
+                                maxSteps = Integer.valueOf(responseString);
+                                stepsRecord = responseString;
+                            }
                         }
                     }
                     getHrGraphData();
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.d("ERROR", String.valueOf(e));
+                    Log.d("ERROR2", String.valueOf(e));
                 }
             }
         });
@@ -452,19 +473,36 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                 String responseString = "";
                 JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
                 try {
-                    for (int i = 0; i < 10; i++) {
-                        JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (i + 1));
-                        responseString = curObject.getString("bpm");
-                        heartRateData.set(9 - i, Integer.valueOf(responseString));
-                        Log.d("hr", i + ": " + responseString + " - " + apiData.toString());
-
-                        if (Integer.valueOf(responseString) > maxHr) {
-                            maxHr = Integer.valueOf(responseString);
-                            hrRecord = responseString;
+                    if (responseArray.length() < 10) {
+                        for (int j = 0; j < responseArray.length(); j++) {
+                            JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (j + 1));
+                            responseString = curObject.getString("bpm");
+                            int graphValue = Integer.valueOf(responseString);
+                            heartRateData.set(9 - j, graphValue);
+                            if (graphValue > maxHr) {
+                                maxHr = Integer.valueOf(responseString);
+                                hrRecord = responseString;
+                            }
+                            if (graphValue < minHr)
+                                minHr = Integer.valueOf(responseString);
                         }
-                        if (Integer.valueOf(responseString) < minHr)
-                            minHr = Integer.valueOf(responseString);
+                        Log.d("ERROR2", "final: " + heartPointsData.toString());
+                    } else {
+                        for (int i = 0; i < 10; i++) {
+                            JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (i + 1));
+                            responseString = curObject.getString("bpm");
+                            int graphValue = Integer.valueOf(responseString);
+                            heartRateData.set(9 - i, graphValue);
+                            if (graphValue > maxHr) {
+                                maxHr = Integer.valueOf(responseString);
+                                hrRecord = responseString;
+                            }
+                            if (graphValue < minHr)
+                                minHr = Integer.valueOf(responseString);
+                        }
                     }
+                    Log.d("ERROR3", "final: " + heartRateData.toString());
+
                     Intent detailIntent = new Intent(getApplicationContext(), OverviewActivity.class);
                     DataCard dataCard1 = new DataCard("Steps", "Last 7 days", stepsRecord, hpRecord, hrRecord, "Record",
                             null, null, null, stepsData, heartPointsData, heartRateData);
@@ -473,10 +511,11 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                     startActivity(detailIntent);
                     Log.d("ERROR", stepsRecord + " / " + hpRecord + " - " + hrRecord);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    Log.d("ERROR", dataCard1.toString());
-                } catch (JSONException e) {
+                    //Log.d("ERROR", dataCard1.toString());
+                } catch (
+                        JSONException e) {
                     e.printStackTrace();
-                    Log.d("ERROR", String.valueOf(e));
+                    Log.d("ERROR3", String.valueOf(e));
                 }
             }
         });
