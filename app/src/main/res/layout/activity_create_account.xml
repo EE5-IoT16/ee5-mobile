@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:cursorVisible="false"
                 android:fontFamily="@font/sfproregular"
-                android:inputType="textPersonName"
+                android:inputType="textPassword"
                 android:singleLine="true"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
