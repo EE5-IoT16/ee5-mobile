@@ -15,6 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
         android:layout_marginEnd="36dp"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:cursorVisible="false"
                 android:fontFamily="@font/sfproregular"
-                android:inputType="textPersonName"
+                android:inputType="textPassword"
                 android:singleLine="true"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
@@ -76,8 +78,9 @@
         <Button
             android:id="@+id/btnCreateAccount"
             style="@android:style/Widget.DeviceDefault.Button.Borderless"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="-12dp"
             android:layout_marginTop="8dp"
             android:backgroundTint="@android:color/transparent"
             android:elevation="0dp"
@@ -97,7 +100,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/Grey"
-            android:elevation="10dp"
 
             android:fontFamily="@font/sfproregular"
             android:includeFontPadding="false"
@@ -106,7 +108,6 @@
             android:textAllCaps="false"
             android:textAppearance="@style/InputText"
             android:textColor="@color/Beige"
-            android:translationZ="10dp"
             app:cornerRadius="8dp"
             app:layout_constraintEnd_toEndOf="@+id/password_layout"
             app:layout_constraintTop_toBottomOf="@+id/password_layout" />
