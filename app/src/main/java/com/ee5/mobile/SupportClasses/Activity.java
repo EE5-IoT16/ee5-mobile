@@ -8,8 +8,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-public class Activity {
-    public LocalDateTime date;
+public class Activity implements Comparable<Activity> {
+    public Date date;
     public Time duration;
     public String steps;
     public String calories;
@@ -18,7 +18,7 @@ public class Activity {
     public String maxHeartRate;
     public String distance;
 
-    public Activity(LocalDateTime date, Time duration, String steps, String calories, String heartPoints, String avgHeartrate, String maxHeartRate, String distance) {
+    public Activity(Date date, Time duration, String steps, String calories, String heartPoints, String avgHeartrate, String maxHeartRate, String distance) {
         this.date = date;
         this.duration = duration;
         this.steps = steps;
@@ -53,7 +53,7 @@ public class Activity {
         this.distance = distance;
     }
 
-    public LocalDateTime getDate() {
+    public Date getDateTime() {
         return date;
     }
 
@@ -71,5 +71,13 @@ public class Activity {
 
     public String getHeartPoints() {
         return heartPoints;
+    }
+
+
+    @Override
+    public int compareTo(Activity activity) {
+        if (getDateTime() == null || activity.getDateTime() == null)
+            return 0;
+        return getDateTime().compareTo(activity.getDateTime());
     }
 }

@@ -6,6 +6,15 @@
     android:orientation="vertical"
     android:background="@color/Grey">
 
+    <ImageButton
+        android:id="@+id/falls_back_btn"
+        style="@style/BackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/Dark"/>
+
     <TextView
         android:id="@+id/falls_title"
         android:layout_width="match_parent"
@@ -14,7 +23,6 @@
         android:gravity="center"
         android:text="Falls"
         android:textColor="@color/white"
-        android:layout_marginTop="40dp"
         android:textSize="24sp" />
 
     <androidx.recyclerview.widget.RecyclerView

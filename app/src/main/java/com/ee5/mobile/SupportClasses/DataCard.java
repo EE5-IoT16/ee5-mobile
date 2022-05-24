@@ -7,11 +7,14 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.LineData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DataCard implements Parcelable {
     public String cardTitle;
     public String timeIndicator;
-    public String cardRecord;
+    public String stepsRecord;
+    public String hpRecord;
+    public String hrRecord;
     public String recordText;
     BarData barDataSteps;
     BarData barDataHp;
@@ -20,10 +23,12 @@ public class DataCard implements Parcelable {
     ArrayList<Integer> dataCardHpData;
     ArrayList<Integer> dataCardHrData;
 
-    public DataCard(String cardTitle, String timeIndicator, String cardRecord, String recordText, BarData barDataSteps, BarData barDataHp, LineData lineDataHr, ArrayList<Integer> dataCardStepData, ArrayList<Integer> dataCardHpData, ArrayList<Integer> dataCardHrData){
+    public DataCard(String cardTitle, String timeIndicator, String stepsRecord, String hpRecord, String hrRecord, String recordText, BarData barDataSteps, BarData barDataHp, LineData lineDataHr, ArrayList<Integer> dataCardStepData, ArrayList<Integer> dataCardHpData, ArrayList<Integer> dataCardHrData){
         this.cardTitle = cardTitle;
         this.timeIndicator = timeIndicator;
-        this.cardRecord = cardRecord;
+        this.stepsRecord = stepsRecord;
+        this.hpRecord = hpRecord;
+        this.hrRecord = hrRecord;
         this.recordText = recordText;
         this.barDataSteps = barDataSteps;
         this.barDataHp = barDataHp;
@@ -37,7 +42,11 @@ public class DataCard implements Parcelable {
 
     public String getDataCardTimeIndicator(){return timeIndicator;}
 
-    public String getDataCardRecord(){return cardRecord;}
+    public String getDataCardStepRecord(){return stepsRecord;}
+
+    public String getDataCardHpRecord(){return hpRecord;}
+
+    public String getDataCardHrRecord(){return hrRecord;}
 
     public String getDataCardRecordText(){return recordText;}
 
@@ -74,18 +83,22 @@ public class DataCard implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.cardTitle);
-        dest.writeString(this.cardRecord);
         dest.writeList(this.dataCardStepData);
         dest.writeList(this.dataCardHpData);
         dest.writeList(this.dataCardHrData);
+        dest.writeString(this.stepsRecord);
+        dest.writeString(this.hpRecord);
+        dest.writeString(this.hrRecord);
     }
 
     protected DataCard(Parcel in) {
         this.cardTitle = in.readString();
-        this.cardRecord = in.readString();
         this.dataCardStepData = in.readArrayList(null);
         this.dataCardHpData = in.readArrayList(null);
         this.dataCardHrData = in.readArrayList(null);
+        this.stepsRecord = in.readString();
+        this.hpRecord = in.readString();
+        this.hrRecord = in.readString();
     }
 
     public static final Parcelable.Creator<DataCard> CREATOR = new Parcelable.Creator<DataCard>() {

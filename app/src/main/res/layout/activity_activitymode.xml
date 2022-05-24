@@ -7,12 +7,20 @@
     android:background="@color/Grey"
     android:orientation="vertical">
 
+    <ImageButton
+        android:id="@+id/activity_back_btn"
+        style="@style/BackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/Dark"/>
+
     <TextView
         android:id="@+id/am_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Activity mode"
-        android:layout_marginTop="40dp"
         android:textColor="@color/white"
         android:textSize="24sp"
         android:gravity="center"/>
