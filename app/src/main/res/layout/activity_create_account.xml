@@ -2,13 +2,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/createAccount_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.CreateAccountActivity"
-    android:background="@drawable/pulse_list">
+    android:background="@drawable/pulse_list"
+    tools:context=".Activities.CreateAccountActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,9 +26,10 @@
             android:minWidth="180dp"
             app:boxStrokeColor="@color/Dark"
             app:hintTextColor="@color/Dark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pass_layout"
-            app:suffixTextColor="@color/Grey"
-            tools:layout_editor_absoluteX="116dp">
+            app:suffixTextColor="@color/Grey">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextPasswordRepeat"
@@ -50,9 +52,10 @@
             android:minWidth="180dp"
             app:boxStrokeColor="@color/Dark"
             app:hintTextColor="@color/Dark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:suffixTextColor="@color/Grey"
-            tools:layout_editor_absoluteX="116dp">
+            app:suffixTextColor="@color/Grey">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextFirstName"
@@ -76,9 +79,10 @@
             android:minWidth="180dp"
             app:boxStrokeColor="@color/Dark"
             app:hintTextColor="@color/Dark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/email_layout"
-            app:suffixTextColor="@color/Grey"
-            tools:layout_editor_absoluteX="116dp">
+            app:suffixTextColor="@color/Grey">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextPassword"
@@ -102,9 +106,10 @@
             android:minWidth="180dp"
             app:boxStrokeColor="@color/Dark"
             app:hintTextColor="@color/Dark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/firstname_layout"
-            app:suffixTextColor="@color/Grey"
-            tools:layout_editor_absoluteX="116dp">
+            app:suffixTextColor="@color/Grey">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextSurname"
@@ -128,9 +133,10 @@
             android:minWidth="180dp"
             app:boxStrokeColor="@color/Dark"
             app:hintTextColor="@color/Dark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/surname_layout"
-            app:suffixTextColor="@color/Grey"
-            tools:layout_editor_absoluteX="116dp">
+            app:suffixTextColor="@color/Grey">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextEmail"
