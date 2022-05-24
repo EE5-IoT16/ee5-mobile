@@ -95,7 +95,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         ArrayList<String> accountData = new ArrayList<String>();
         //API will be updated to auto increment profileId, after which it doesn't need to be passed anymore
-        ArrayList<String> accountParameters = new ArrayList<String>(Arrays.asList("profileId", "name", "surname", "email", "password", "salt"));
+        ArrayList<String> accountParameters = new ArrayList<String>(Arrays.asList("name", "surname", "email", "password", "salt"));
         String node = "profile";
 
         accountData.add(firstName);

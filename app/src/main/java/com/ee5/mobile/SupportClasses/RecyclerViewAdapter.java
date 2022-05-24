@@ -85,7 +85,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
 
-    //return int which defines the type of layout you want at that position
+
     @Override
     public int getItemViewType(int position) {
         if (dataCardList.get(position).getDataCardTitle() == "Heartrate") {

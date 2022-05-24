@@ -65,6 +65,8 @@ public class FallActivity extends AppCompatActivity implements FallsRecyclerView
         myRecyclerView = findViewById(R.id.falls_recyclerview);
         myRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        falls.clear();
+
         backButton = findViewById(R.id.falls_back_btn);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override

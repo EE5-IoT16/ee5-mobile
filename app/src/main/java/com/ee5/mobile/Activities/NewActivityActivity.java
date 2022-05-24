@@ -3,6 +3,7 @@ package com.ee5.mobile.Activities;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import androidx.core.content.ContextCompat;
 
 import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.Activity;
+import com.ee5.mobile.SupportClasses.User;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -25,6 +27,7 @@ import java.util.TimerTask;
 public class NewActivityActivity extends AppCompatActivity {
 
     ArrayList<Activity> activities = new ArrayList<>();
+    public ArrayList<String> apiData = new ArrayList<>();
     TextView timerText;
     Button stopStartButton;
     TextView calories;
@@ -40,11 +43,23 @@ public class NewActivityActivity extends AppCompatActivity {
 
     boolean timerStarted = false;
     boolean activityEnded = false;
+    private User user;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_activity);
+
+        try {
+            apiData.clear();
+            user = getIntent().getParcelableExtra("user");
+            userId = String.valueOf(user.getUserId());
+            Log.i("userParcel", userId);
+            apiData.add(userId);
+        } catch (Exception e) {
+            Log.e("userParcelException", e.toString());
+        }
 
         timerText = findViewById(R.id.timerText);
         stopStartButton = findViewById(R.id.startStopButton);

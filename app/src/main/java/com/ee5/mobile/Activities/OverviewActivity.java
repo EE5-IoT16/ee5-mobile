@@ -386,11 +386,22 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                 String responseString = "";
                 JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
                 try {
-
+                    if(responseArray.length() < 7){
+                        for(int i = 0; i < (7 - responseArray.length()); i++){
+                            responseArray.put(i, " ");
+                        }
+                    }
                     for (int i = 0; i < 7; i++) {
                         JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (i + 1));
                         responseString = curObject.getString("steps");
-                        stepsData.set(6 - i, Integer.valueOf(responseString));
+                        int graphValue = 0;
+                        if(responseString == " "){
+                            graphValue = 0;
+                        }
+                        else{
+                            graphValue = Integer.valueOf(responseString);
+                        }
+                        stepsData.set(6 - i, graphValue);
                         if (Integer.valueOf(responseString) > maxSteps) {
                             maxSteps = Integer.valueOf(responseString);
                             stepsRecord = responseString;

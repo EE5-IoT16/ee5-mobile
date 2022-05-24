@@ -16,6 +16,7 @@ import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.APIconnection;
 import com.ee5.mobile.SupportClasses.JsonArrayRequest;
 import com.ee5.mobile.SupportClasses.User;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -34,12 +35,12 @@ public class ProfileActivity extends AppCompatActivity {
     private JSONArray streakData = new JSONArray();
 
     TextView profileName;
-    TextInputLayout profileAge;
-    TextInputLayout profileGender;
-    TextInputLayout profileRmr;
-    TextInputLayout profileBmi;
-    TextInputLayout profileHeight;
-    TextInputLayout profileWeight;
+    TextInputEditText profileAge;
+    TextInputEditText profileGender;
+    TextInputEditText profileRmr;
+    TextInputEditText profileBmi;
+    TextInputEditText profileHeight;
+    TextInputEditText profileWeight;
     MaterialTextView profileStepsRecord;
     MaterialTextView profileHpRecord;
     MaterialTextView profileStreakRecord;
@@ -175,12 +176,12 @@ public class ProfileActivity extends AppCompatActivity {
                     String gender = curObject.getString("gender");
                     String bmi = curObject.getString("bmi");
                     String rmr = curObject.getString("rmr");
-                    profileWeight.setPlaceholderText(weight);
-                    profileAge.setPlaceholderText(age);
-                    profileHeight.setPlaceholderText(height);
-                    profileBmi.setPlaceholderText(bmi);
-                    profileRmr.setPlaceholderText(rmr);
-                    profileGender.setPlaceholderText(gender);
+                    profileWeight.setText(weight);
+                    profileAge.setText(age);
+                    profileHeight.setText(height);
+                    profileBmi.setText(bmi);
+                    profileRmr.setText(rmr);
+                    profileGender.setText(gender);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
