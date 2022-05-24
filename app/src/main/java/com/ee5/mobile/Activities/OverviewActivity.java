@@ -23,10 +23,6 @@ import com.ee5.mobile.SupportClasses.DataCard;
 import com.ee5.mobile.SupportClasses.JsonArrayRequest;
 import com.ee5.mobile.SupportClasses.RecyclerViewAdapter;
 import com.ee5.mobile.SupportClasses.User;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -41,7 +37,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Timer;
 
 public class OverviewActivity extends AppCompatActivity implements RecyclerViewAdapter.OnItemClickListener {
 
@@ -95,18 +90,19 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     private int currentDailyStepsData;
     LocalDateTime today;
     int todayDayOfTheYear;
+    private User user;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
-
         try{
-            User user = getIntent().getParcelableExtra("user");
-            Log.i("userParcel", user.getProfileEmail());
+            user = getIntent().getParcelableExtra("user");
+            Log.i("userParcel", user.getProfileEmail() + "1");
             Log.i("userParcel", user.getUserEmail());
             userId = String.valueOf(user.getUserId());
+            Log.i("userParcel", userId);
         }
         catch(Exception e){
             Log.e("userParcelException", e.toString());
@@ -126,11 +122,15 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         viewProfile_btn.setOnClickListener(v -> {
             Intent intent = new Intent(OverviewActivity.this, ProfileActivity.class);
             startActivity(intent);
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_out);
+
         });
 
         setup_btn.setOnClickListener(view -> {
             Intent intent = new Intent(OverviewActivity.this, SetupActivity.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_down, android.R.anim.fade_out);
+
         });
 
         currTemp = findViewById(R.id.temp_num);
@@ -154,6 +154,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         myRecyclerViewAdapter = new RecyclerViewAdapter(this, dataCards);
         myRecyclerViewAdapter.setOnItemClickListener(this);
         myRecyclerView.setAdapter(myRecyclerViewAdapter);
+        
 
         today = LocalDateTime.now();
         todayDayOfTheYear = today.getDayOfYear();
@@ -165,9 +166,11 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
             public void onClick(View view) {
                 Intent intent = new Intent(OverviewActivity.this, ProfileActivity.class);
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
         parseJson();
+
         final Handler handler = new Handler();
         final int delay = 1000;        //every 1 sec
 
@@ -198,14 +201,16 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     }
 
     public void parseJson() {
-
         try {
             DataCard dataCard = getIntent().getExtras().getParcelable("dataCard2");
+            //Toast.makeText(getApplicationContext(), "try1", Toast.LENGTH_SHORT).show();
+            Log.d("try", dataCard.toString());
             if (dataCard != null) {
-                getUserId();
+                //Toast.makeText(getApplicationContext(), "try", Toast.LENGTH_SHORT).show();
+                //getUserId();
+                getStepsToday();
                 getHeartRate();
                 getTemperature();
-                getStepsToday();
 
                 initGraphs();
 
@@ -226,10 +231,10 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                 dataCards.add(dataCard3);
             }
         } catch (NullPointerException e) {
-            getUserId();
-
+            //getUserId();
 
             initGraphs();
+            //Toast.makeText(getApplicationContext(), "catch", Toast.LENGTH_SHORT).show();
 
             //add datacards to recyclerview
             DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record", barDataSteps, null, null, stepsData, null, null);
@@ -239,12 +244,13 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
             dataCards.add(dataCard1);
             dataCards.add(dataCard2);
             dataCards.add(dataCard3);
+            Log.e("catch", e.toString());
         }
     }
 
-    public void getUserId() {
+    /*public void getUserId() {
         userId = Integer.toString(1);
-    }
+    }*/
 
     public void getTemperature() {
         apiData.clear();
@@ -340,6 +346,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         heartRateData.clear();
         try {
             DataCard dataCard = getIntent().getExtras().getParcelable("dataCard2");
+            Log.d("try", dataCard.toString());
             if (dataCard != null) {
                 for (int i = 0; i < 7; i++) {
                     stepsData.add(dataCard.getDataCardStepData().get(i));
@@ -451,7 +458,10 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                     DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record",
                             barDataSteps, barDataHeartPoints, null, stepsData, heartPointsData, heartRateData);
                     detailIntent.putExtra("dataCard2", dataCard1);
+                    detailIntent.putExtra("user", user);
                     startActivity(detailIntent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    Log.d("ERROR", dataCard1.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d("ERROR", String.valueOf(e));
@@ -508,5 +518,6 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         detailIntent.putExtra("dataCard", clickedItem);
         detailIntent.putExtra("dataCardPosition", position);
         startActivity(detailIntent);
+        overridePendingTransition(R.anim.slide_in_up, android.R.anim.fade_out);
     }
 }

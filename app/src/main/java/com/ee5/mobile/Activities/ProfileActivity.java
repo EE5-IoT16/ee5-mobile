@@ -10,11 +10,15 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.APIconnection;
 import com.ee5.mobile.SupportClasses.JsonArrayRequest;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textview.MaterialTextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -33,6 +37,9 @@ public class ProfileActivity extends AppCompatActivity {
     TextInputLayout profileBmi;
     TextInputLayout profileHeight;
     TextInputLayout profileWeight;
+    MaterialTextView profileStepsRecord;
+    MaterialTextView profileHpRecord;
+    MaterialTextView profileStreakRecord;
 
     Button logoutBtn;
     Button fallButton;
@@ -40,6 +47,7 @@ public class ProfileActivity extends AppCompatActivity {
     ImageButton back_btn;
     private APIconnection apiConnection;
     ArrayList<String> parameters;
+    ArrayList<String> apiData = new ArrayList<>();
 
     private JsonArrayRequest jsonArrayRequest;
     private String prefixURL = "https://ee5-huzza.herokuapp.com/";
@@ -60,11 +68,16 @@ public class ProfileActivity extends AppCompatActivity {
         profileWeight = findViewById(R.id.weight_layout);
         //non editable from About you section
         profileRmr = findViewById(R.id.rmr_layout);
-        profileBmi = findViewById(R.id.steps_amount);
+        profileBmi = findViewById(R.id.bmi_layout);
+
+        profileStepsRecord = findViewById(R.id.steps_record);
+        profileHpRecord = findViewById(R.id.hp_record);
+        profileStreakRecord = findViewById(R.id.streak_record);
 
         getUserId();
-        getUser();
-        getPhysicalData();
+        getUserName();
+        getUserPhysicalData();
+        getUserRecords();
 
         back_btn = findViewById(R.id.profile_back_btn);
         back_btn.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +93,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, FallActivity.class);
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
@@ -89,6 +103,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, ActivityModeActivity.class);
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
@@ -107,49 +122,85 @@ public class ProfileActivity extends AppCompatActivity {
         userId = Integer.toString(1);
     }
 
-    public void getUser() {
-        jsonArrayRequest.getJSONArray(response -> {
-            try {
-                Log.i("onResponse:", response.toString());
-
-                JSONObject user = response.getJSONObject(0);
-                String name = user.getString("name");
-                String surName = user.getString("surname");
-                profileName.setText(name + " " + surName);
-                //get other data (add to database)
-
-            } catch (Exception e) {
-                e.printStackTrace();
+    public void getUserName() {
+        apiData.clear();
+        apiData.add(userId);
+        APIconnection.getInstance().GETRequest("user", apiData, new ServerCallback() {
+            @Override
+            public void onSuccess() {
+                String responseString = "";
+                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                try {
+                    JSONObject curObject = responseArray.getJSONObject(0);
+                    responseString = curObject.getString("name");
+                    responseString += " " + curObject.getString("surname");
+                    profileName.setText(responseString);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("ERRER", e.toString());
+                }
             }
-        }, prefixURL + "user/" + userId);
+        });
     }
 
-    public void getPhysicalData() {
-        jsonArrayRequest.getJSONArray(response -> {
-            try {
-                JSONObject user = response.getJSONObject(0);
-                String weight = user.getString("weight");
-                String height = user.getString("height");
-                heightUser = Integer.parseInt(height);
-                Log.d(TAG, "getPhysicalData: ");
-                String age = user.getString("age");
-                String gender = user.getString("gender");
-                String bmi = user.getString("bmi");
-                String rmr = user.getString("rmr");
-                profileWeight.setPlaceholderText(weight);
-                profileAge.setPlaceholderText(age);
-                profileHeight.setPlaceholderText(height);
-                profileBmi.setPlaceholderText(bmi);
-                profileRmr.setPlaceholderText(rmr);
-                profileGender.setPlaceholderText(gender);
-            } catch (Exception e) {
-                e.printStackTrace();
+    public void getUserPhysicalData() {
+        apiData.clear();
+        apiData.add(userId);
+        APIconnection.getInstance().GETRequest("physicaldata", apiData, new ServerCallback() {
+            @Override
+            public void onSuccess() {
+                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                try {
+                    JSONObject curObject = responseArray.getJSONObject(0);
+                    String weight = curObject.getString("weight");
+                    String height = curObject.getString("height");
+                    heightUser = Integer.parseInt(height);
+                    Log.d("abc", curObject.toString());
+                    String age = curObject.getString("age");
+                    String gender = curObject.getString("gender");
+                    String bmi = curObject.getString("bmi");
+                    String rmr = curObject.getString("rmr");
+                    profileWeight.setPlaceholderText(weight);
+                    profileAge.setPlaceholderText(age);
+                    profileHeight.setPlaceholderText(height);
+                    profileBmi.setPlaceholderText(bmi);
+                    profileRmr.setPlaceholderText(rmr);
+                    profileGender.setPlaceholderText(gender);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-        }, prefixURL + "physicalData/" + userId);
+        });
     }
 
-    private void exitIntent(){
+    public void getUserRecords(){
+        apiData.clear();
+        apiData.add(userId);
+        APIconnection.getInstance().GETRequest("records", apiData, new ServerCallback() {
+            @Override
+            public void onSuccess() {
+                String responseString = "";
+                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                try {
+                    JSONObject curObject = responseArray.getJSONObject(0);
+                    Log.d("ERRER", curObject.toString());
+                    String stepRecord = curObject.getString("maxStepDay");
+                    String hpRecord = curObject.getString("maxHeartPointDay");
+                    String streakRecord = curObject.getString("streak");
+                    profileStepsRecord.setText(stepRecord + " steps in a single day");
+                    profileHpRecord.setText(hpRecord + " heart points in a single day");
+                    profileStreakRecord.setText(streakRecord + " days is your longest streak");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void exitIntent() {
         final Intent intent = new Intent(ProfileActivity.this, OverviewActivity.class);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, R.anim.slide_right_out);
+
     }
 }

@@ -32,12 +32,15 @@
     <TextView
         android:id="@+id/name_tv"
         style="@style/InputText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="18dp"
+        android:gravity="right"
+        android:maxLines="1"
         android:text="Name Surname"
         app:layout_constraintBottom_toBottomOf="@+id/profile_back_btn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/profile_back_btn"
         app:layout_constraintTop_toTopOf="@+id/profile_back_btn" />
 
     <ImageButton
@@ -214,7 +217,6 @@
                 android:editable="false"
                 android:fontFamily="@font/sfproregular"
                 android:inputType="number"
-                android:text="1608"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
 
@@ -245,7 +247,6 @@
                 android:editable="false"
                 android:fontFamily="@font/sfproregular"
                 android:inputType="number"
-                android:text="21"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
 
