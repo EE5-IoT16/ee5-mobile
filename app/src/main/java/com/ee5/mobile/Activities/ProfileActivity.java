@@ -53,6 +53,7 @@ public class ProfileActivity extends AppCompatActivity {
     Button logoutBtn;
     Button fallButton;
     Button activityBtn;
+    Button addUserBtn;
     ImageButton back_btn;
     private APIconnection apiConnection;
     ArrayList<String> parameters;
@@ -66,6 +67,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        APIconnection.getInstance(this);
         try {
             apiData.clear();
             user = getIntent().getParcelableExtra("user");
@@ -153,6 +155,19 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        addUserBtn = findViewById(R.id.addUser_btn);
+        addUserBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                updateData();
+
+                final Intent intent = new Intent(ProfileActivity.this, AddUserActivity.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
+            }
+        });
+
 
     }
 
@@ -210,8 +225,8 @@ public class ProfileActivity extends AppCompatActivity {
                     curObject = streakData.getJSONObject(0);
                     String currStreak = curObject.getString("currentStreak");
                     Toast.makeText(getApplicationContext(), currStreak, Toast.LENGTH_SHORT).show();
-                    streakCurrent.setText("Your current streak is " + currStreak + ". Beat your goal for " +
-                            ((Integer.valueOf(streakRecord) - Integer.valueOf(currStreak)) + 1) + " more days to get a new record.");
+                    /*streakCurrent.setText("Your current streak is " + currStreak + ". Beat your goal for " +
+                            ((Integer.valueOf(streakRecord) - Integer.valueOf(currStreak)) + 1) + " more days to get a new record.");*/
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -247,14 +262,18 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void updateData() {
+        try{
+            user.setWeight(Integer.parseInt(profileWeight.getText().toString()));
+            user.setAge(Integer.parseInt(profileAge.getText().toString()));
+            user.setHeight(Integer.parseInt(profileHeight.getText().toString()));
+            user.setGender(profileGender.getText().toString());
+            user.setDailyStepGoal(Integer.valueOf(stepGoal.getText().toString()));
+            user.setDailyHeartpointGoal(Integer.valueOf(heartPointGoal.getText().toString()));
 
-        user.setWeight(Integer.parseInt(profileWeight.getText().toString()));
-        user.setAge(Integer.parseInt(profileAge.getText().toString()));
-        user.setHeight(Integer.parseInt(profileHeight.getText().toString()));
-        user.setGender(profileGender.getText().toString());
-        user.setDailyStepGoal(Integer.parseInt(stepGoal.getText().toString()));
-        user.setDailyHeartpointGoal(Integer.parseInt(heartPointGoal.getText().toString()));
-
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            Log.e("update", e.toString());
+        }
         user.updatePhysicalData();
         user.updateDailyGoals();
     }

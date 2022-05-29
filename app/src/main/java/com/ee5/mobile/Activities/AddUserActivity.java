@@ -62,8 +62,8 @@ public class AddUserActivity extends AppCompatActivity {
         NewId = findViewById(R.id.TextInputNewId);
         NewPasscode = findViewById(R.id.TextInputNewPasscode);
 
-        YourId.setText(String.valueOf(user.getUserId()));
-        YourPasscode.setText(String.valueOf(user.getUserPasscode()));
+        YourId.setText("Your user ID is: " + String.valueOf(user.getUserId()));
+        YourPasscode.setText(String.valueOf("Your passcode is: " + user.getUserPasscode()));
 
         addUserBtn = findViewById(R.id.btnAddUser);
         addUserBtn.setOnClickListener(new View.OnClickListener() {

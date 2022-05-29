@@ -290,7 +290,7 @@ public class User implements Parcelable {
         out.writeString(this.gender);
         out.writeInt(this.dailyStepGoal);
         out.writeInt(this.dailyHeartpointGoal);
-
+        out.writeInt(this.userPasscode);
     }
 
     protected User(Parcel in) {
@@ -308,7 +308,7 @@ public class User implements Parcelable {
         this.gender = in.readString();
         this.dailyStepGoal = in.readInt();
         this.dailyHeartpointGoal = in.readInt();
-
+        this.userPasscode = in.readInt();
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {

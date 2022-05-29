@@ -1,11 +1,13 @@
 package com.ee5.mobile.Activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +40,7 @@ public class NewActivityActivity extends AppCompatActivity {
     public ArrayList<String> apiData = new ArrayList<>();
     TextView timerText;
     Button stopStartButton;
+    ImageButton newAct_back_btn;
     TextView calories;
     TextView avgHeartRate;
     TextView steps;
@@ -63,6 +66,7 @@ public class NewActivityActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_activity);
+        APIconnection.getInstance(this);
         try {
             apiData.clear();
             user = getIntent().getParcelableExtra("user");
@@ -80,9 +84,21 @@ public class NewActivityActivity extends AppCompatActivity {
         steps = findViewById(R.id.steps_edit);
         distance = findViewById(R.id.distance_edit);
 
-        APIconnection.getInstance(this);
+        newAct_back_btn = findViewById(R.id.newAct_back_btn);
+        newAct_back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent intent = new Intent(NewActivityActivity.this, ActivityModeActivity.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_down, android.R.anim.fade_out);
+            }
+        });
+
 
         timer = new Timer();
+
+
     }
 
     //program goes here when button is pressed

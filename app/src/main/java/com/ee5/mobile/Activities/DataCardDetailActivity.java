@@ -302,7 +302,7 @@ public class DataCardDetailActivity extends AppCompatActivity {
                     JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
                     try {
                         JSONObject curObject = responseArray.getJSONObject(responseArray.length() - 1);
-                        responseString = curObject.getString("totalHeartPoints");
+                        responseString = curObject.getString("heartPoint");
                         if (responseString == "null") responseString = "0";
                         steps_text.setText(responseString);
                         dailyHp = Integer.valueOf(responseString);
@@ -567,5 +567,7 @@ public class DataCardDetailActivity extends AppCompatActivity {
         x.setValueFormatter(new IndexAxisValueFormatter(labels));
         Description description = lineChart.getDescription();
         description.setEnabled(false);
+        yLeft.setAxisMaximum(maxHr + 20);
+        //yLeft.setAxisMinimum(minHr - 20);
     }
 }

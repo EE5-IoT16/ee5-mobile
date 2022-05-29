@@ -29,6 +29,8 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -43,23 +45,13 @@ public class ActivityModeActivity extends AppCompatActivity implements ActModeRe
     private User user;
     private String userId;
     ImageButton backButton;
+    LocalDateTime dateTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        try{
-            user = getIntent().getParcelableExtra("user");
-            Log.i("userParcel", user.getProfileEmail() + "1");
-            Log.i("userParcel", user.getUserEmail());
-            userId = String.valueOf(user.getUserId());
-            Log.i("userParcel", userId);
-        }
-        catch(Exception e){
-            Log.e("userParcelException", e.toString());
-        }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activitymode);
+        APIconnection.getInstance(this);
         try {
             apiData.clear();
             user = getIntent().getParcelableExtra("user");
@@ -92,12 +84,13 @@ public class ActivityModeActivity extends AppCompatActivity implements ActModeRe
         parseJson();
 
         backButton = findViewById(R.id.activity_back_btn);
-        newActivityBtn.setOnClickListener(new View.OnClickListener() {
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ActivityModeActivity.this, ProfileActivity.class);
                 intent.putExtra("user", user);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_down, android.R.anim.fade_out);
             }
         });
     }

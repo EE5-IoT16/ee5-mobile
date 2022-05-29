@@ -97,7 +97,7 @@ public class APIconnection extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         //String responseString = error.getLocalizedMessage();
-                        Log.i("POST onErrorResponse:", String.valueOf(error.networkResponse.statusCode));
+                        //Log.i("POST onErrorResponse:", String.valueOf(error.networkResponse.statusCode));
                     }
                 }
         );
@@ -139,7 +139,7 @@ public class APIconnection extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         //String responseString = error.getLocalizedMessage();
-                        Log.i("POST onErrorResponse:", String.valueOf(error.networkResponse.statusCode));
+                        //Log.i("POST onErrorResponse:", String.valueOf(error.networkResponse.statusCode));
                     }
                 }
         );
@@ -182,7 +182,7 @@ public class APIconnection extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         //String responseString = error.getLocalizedMessage();
-                        Log.i("PUT onErrorResponse:", String.valueOf(error.networkResponse.statusCode));
+                        //Log.i("PUT onErrorResponse:", String.valueOf(error.networkResponse.statusCode));
                     }
                 }
         );
