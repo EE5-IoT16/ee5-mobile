@@ -1,7 +1,15 @@
 package com.ee5.mobile.SupportClasses;
 
+import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.Toast;
+
+import com.ee5.mobile.Activities.OverviewActivity;
+import com.ee5.mobile.Interfaces.ServerCallback;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class User implements Parcelable {
 
@@ -216,6 +224,26 @@ public class User implements Parcelable {
      *************************************************************/
 
     public void updatePhysicalData() {
+
+        ArrayList<String> linkData = new ArrayList<String>();
+        ArrayList<String> linkParameters = new ArrayList<String>(Arrays.asList("userId", "weight", "height",
+                "age", "gender", "bmi", "rmr"));
+        String node = "physicalData";
+
+        linkData.add(String.valueOf(userId));
+        linkData.add(String.valueOf(weight));
+        linkData.add(String.valueOf(height));
+        linkData.add(String.valueOf(age));
+        linkData.add(gender);
+        linkData.add(String.valueOf(getBMI()));
+        linkData.add(String.valueOf(getRMR()));
+
+        APIconnection.getInstance().POSTRequest(node, linkData, linkParameters, new ServerCallback() {
+            @Override
+            public void onSuccess() {
+
+            }
+        });
 
     }
 

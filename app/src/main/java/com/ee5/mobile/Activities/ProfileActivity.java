@@ -220,5 +220,7 @@ public class ProfileActivity extends AppCompatActivity {
         user.setAge(Integer.parseInt(profileAge.getText().toString()));
         user.setHeight(Integer.parseInt(profileHeight.getText().toString()));
         user.setGender(profileGender.getText().toString());
+
+        user.updatePhysicalData();
     }
 }
