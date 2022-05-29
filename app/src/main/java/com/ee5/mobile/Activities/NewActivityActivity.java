@@ -27,6 +27,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -50,6 +51,7 @@ public class NewActivityActivity extends AppCompatActivity {
     private String userId;
 
     LocalDateTime localStartDateTime = null;
+    Date localDate = null;
     ZonedDateTime startDateTime = null;
     ZonedDateTime stopDateTime = null;
     private DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
@@ -61,6 +63,15 @@ public class NewActivityActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_activity);
+        try {
+            apiData.clear();
+            user = getIntent().getParcelableExtra("user");
+            userId = String.valueOf(user.getUserId());
+            Log.i("userParcel", userId);
+            apiData.add(userId);
+        } catch (Exception e) {
+            Log.e("userParcelException", e.toString());
+        }
 
         try{
             apiData.clear();
@@ -93,6 +104,7 @@ public class NewActivityActivity extends AppCompatActivity {
             timerStarted = true;
             setButtonUI("Stop", R.color.HeartRed);
             localStartDateTime = LocalDateTime.now();
+            localDate = new Date();
             startDateTime = localStartDateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
             startTimer();
         } else {
@@ -160,7 +172,8 @@ public class NewActivityActivity extends AppCompatActivity {
 
     public void endedActivity() {
         //get data from activity
-        Activity activity = new Activity(localStartDateTime, null, null, null, null, null, null, null);
+        Activity activity = new Activity(localDate, null, null, null, null, null, null, null);
+        //Activity activity = new Activity(startDateTime, null, null, null, null, null, null, null);
         //post to activityTable in database so it can be fetched in activities recyclerview
 
         ArrayList<String> parameters = new ArrayList<>(Arrays.asList("userId", "startTime", "endTime"));
