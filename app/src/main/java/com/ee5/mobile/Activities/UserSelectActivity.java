@@ -232,6 +232,7 @@ public class UserSelectActivity extends AppCompatActivity /*implements UserSelec
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    getGoalsData();
                 }
             }
         });
@@ -257,6 +258,7 @@ public class UserSelectActivity extends AppCompatActivity /*implements UserSelec
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    nextIntent();
                 }
             }
         });

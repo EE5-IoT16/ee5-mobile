@@ -44,9 +44,6 @@ public class ActivityModeActivity extends AppCompatActivity implements ActModeRe
     private String userId;
     ImageButton backButton;
 
-    private User user;
-    private String userId;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
