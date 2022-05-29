@@ -17,6 +17,7 @@ import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.APIconnection;
 import com.ee5.mobile.SupportClasses.Activity;
+import com.ee5.mobile.SupportClasses.User;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -44,7 +45,8 @@ public class NewActivityActivity extends AppCompatActivity {
     TimerTask timerTask;
     Double time = 0.0;
 
-    private int userId = 3;
+    private User user;
+    private String userId;
 
     LocalDateTime localStartDateTime = null;
     ZonedDateTime startDateTime = null;
@@ -58,6 +60,17 @@ public class NewActivityActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_activity);
+
+        try{
+            user = getIntent().getParcelableExtra("user");
+            Log.i("userParcel", user.getProfileEmail() + "1");
+            Log.i("userParcel", user.getUserEmail());
+            userId = String.valueOf(user.getUserId());
+            Log.i("userParcel", userId);
+        }
+        catch(Exception e){
+            Log.e("userParcelException", e.toString());
+        }
 
         timerText = findViewById(R.id.timerText);
         stopStartButton = findViewById(R.id.startStopButton);
@@ -108,7 +121,7 @@ public class NewActivityActivity extends AppCompatActivity {
         timer.scheduleAtFixedRate(timerTask, 0, 1000);
 
         ArrayList<String> parameters = new ArrayList<>(Arrays.asList("userId", "startTime"));
-        ArrayList<String> values = new ArrayList<>(Arrays.asList(Integer.toString(userId), startDateTime.format(formatter)));
+        ArrayList<String> values = new ArrayList<>(Arrays.asList(userId, startDateTime.format(formatter)));
         Log.i("POST datetime", values.toString());
 
         APIconnection.getInstance().POSTRequest("activity", values, parameters, new ServerCallback() {
@@ -148,7 +161,7 @@ public class NewActivityActivity extends AppCompatActivity {
         //post to activityTable in database so it can be fetched in activities recyclerview
 
         ArrayList<String> parameters = new ArrayList<>(Arrays.asList("userId", "startTime", "endTime"));
-        ArrayList<String> values = new ArrayList<>(Arrays.asList(Integer.toString(userId), startDateTime.format(formatter), stopDateTime.format(formatter)));
+        ArrayList<String> values = new ArrayList<>(Arrays.asList(userId, startDateTime.format(formatter), stopDateTime.format(formatter)));
         Log.i("POST datetime", values.toString());
 
         APIconnection.getInstance().POSTRequest("activity", values, parameters, new ServerCallback() {
