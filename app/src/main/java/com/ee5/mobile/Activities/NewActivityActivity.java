@@ -27,6 +27,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -49,6 +50,7 @@ public class NewActivityActivity extends AppCompatActivity {
     private String userId;
 
     LocalDateTime localStartDateTime = null;
+    Date localDate = null;
     ZonedDateTime startDateTime = null;
     ZonedDateTime stopDateTime = null;
     private DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
@@ -90,6 +92,7 @@ public class NewActivityActivity extends AppCompatActivity {
             timerStarted = true;
             setButtonUI("Stop", R.color.HeartRed);
             localStartDateTime = LocalDateTime.now();
+            localDate = new Date();
             startDateTime = localStartDateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
             startTimer();
         } else {
