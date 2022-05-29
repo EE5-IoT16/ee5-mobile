@@ -204,6 +204,7 @@ public class UserSelectActivity extends AppCompatActivity /*implements UserSelec
             user.setUserSurname(Object.getString("surname"));
             user.setUserEmail(Object.getString("email"));
             user.setUserPasscode(Object.getInt("passcode"));
+            Log.i("PASSCODE", String.valueOf(user.getUserPasscode()));
 
             getPhysicalData();
         }
