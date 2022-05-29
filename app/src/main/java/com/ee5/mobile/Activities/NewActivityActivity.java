@@ -35,6 +35,7 @@ import java.util.TimerTask;
 public class NewActivityActivity extends AppCompatActivity {
 
     ArrayList<Activity> activities = new ArrayList<>();
+    public ArrayList<String> apiData = new ArrayList<>();
     TextView timerText;
     Button stopStartButton;
     TextView calories;
@@ -62,6 +63,15 @@ public class NewActivityActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_activity);
+        try {
+            apiData.clear();
+            user = getIntent().getParcelableExtra("user");
+            userId = String.valueOf(user.getUserId());
+            Log.i("userParcel", userId);
+            apiData.add(userId);
+        } catch (Exception e) {
+            Log.e("userParcelException", e.toString());
+        }
 
         try{
             user = getIntent().getParcelableExtra("user");
@@ -160,7 +170,8 @@ public class NewActivityActivity extends AppCompatActivity {
 
     public void endedActivity() {
         //get data from activity
-        Activity activity = new Activity(localStartDateTime, null, null, null, null, null, null, null);
+        Activity activity = new Activity(localDate, null, null, null, null, null, null, null);
+        //Activity activity = new Activity(startDateTime, null, null, null, null, null, null, null);
         //post to activityTable in database so it can be fetched in activities recyclerview
 
         ArrayList<String> parameters = new ArrayList<>(Arrays.asList("userId", "startTime", "endTime"));
