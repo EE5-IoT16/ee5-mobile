@@ -162,14 +162,14 @@ public class APIconnection extends AppCompatActivity {
             }
         }
 
-        Log.i("requestURL:", requestURL);
+        Log.i("PUT requestURL:", requestURL);
 
         JsonArrayRequest submitRequest = new JsonArrayRequest(Request.Method.PUT, requestURL, null,
 
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.i("onResponse:", response.toString());
+                        Log.i("PUT onResponse:", response.toString());
 
                         APIResponse = response;
 
@@ -182,7 +182,7 @@ public class APIconnection extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         //String responseString = error.getLocalizedMessage();
-                        Log.i("POST onErrorResponse:", String.valueOf(error.networkResponse.statusCode));
+                        Log.i("PUT onErrorResponse:", String.valueOf(error.networkResponse.statusCode));
                     }
                 }
         );

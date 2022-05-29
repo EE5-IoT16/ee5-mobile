@@ -3,6 +3,7 @@ package com.ee5.mobile.SupportClasses;
 import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.ee5.mobile.Activities.OverviewActivity;
@@ -239,7 +240,7 @@ public class User implements Parcelable {
         APIconnection.getInstance().PUTRequest(node, linkData, linkParameters, new ServerCallback() {
             @Override
             public void onSuccess() {
-
+                Log.i("UPDATE", "PUT request was succesfully sent");
             }
         });
 
