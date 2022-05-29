@@ -36,6 +36,10 @@ public class BleService extends Service {
             "com.example.bluetooth.le.ACTION_GATT_DISCONNECTED";
     public final static String ACTION_GATT_SERVICES_DISCOVERED =
             "com.example.bluetooth.le.ACTION_GATT_SERVICES_DISCOVERED";
+    public final static String ACTION_GATT_WIFI_PROVISIONED =
+            "com.example.bluetooth.le.ACTION_GATT_WIFI_PROVISIONED";
+    public final static String ACTION_GATT_WIFI_FAILED =
+            "com.example.bluetooth.le.ACTION_GATT_WIFI_FAILED";
 
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTED = 2;
@@ -82,7 +86,13 @@ public class BleService extends Service {
                 broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
                 if(opModeFrame == null || ssidFrame == null || passFrame == null || connectFrame == null) Log.e(TAG, "onServicesDiscovered: frames are not yet made");
 
-                BluetoothGattCharacteristic writeChar = gatt.getService(writeServiceUUID).getCharacteristic(writeCharUUID);
+                BluetoothGattCharacteristic writeChar = null;
+                try {
+                    writeChar = gatt.getService(writeServiceUUID).getCharacteristic(writeCharUUID);
+                }catch (NullPointerException e) {
+                    broadcastUpdate(ACTION_GATT_WIFI_FAILED);
+                }
+
                 writeChar.setValue(infoFrame); //TODO: dataframe not received by esp
                 gatt.writeCharacteristic(writeChar);
             } else {
@@ -95,6 +105,7 @@ public class BleService extends Service {
             super.onCharacteristicWrite(gatt, characteristic, status);
             if(status != BluetoothGatt.GATT_SUCCESS){
                 Log.e(TAG, "onCharacteristicWrite: " + status);
+                broadcastUpdate(ACTION_GATT_WIFI_FAILED);
             } else {
                 if (iterate<frameList.size()){
                     try {
@@ -109,6 +120,7 @@ public class BleService extends Service {
                     Log.d(TAG, "iterate framelist: " + iterate);
                 }
             }
+            if(iterate == frameList.size()-1) broadcastUpdate(ACTION_GATT_WIFI_PROVISIONED);
             Log.d(TAG, "onCharacteristicWrite: Succesfull write");
         }
     };

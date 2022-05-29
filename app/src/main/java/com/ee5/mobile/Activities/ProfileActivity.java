@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +16,8 @@ import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.APIconnection;
 import com.ee5.mobile.SupportClasses.JsonArrayRequest;
+import com.ee5.mobile.SupportClasses.User;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -29,17 +33,21 @@ public class ProfileActivity extends AppCompatActivity {
     private String userId;
     public static int heightUser;
     private static final String TAG = "ProfileActivity";
+    private JSONArray streakData = new JSONArray();
 
     TextView profileName;
-    TextInputLayout profileAge;
-    TextInputLayout profileGender;
-    TextInputLayout profileRmr;
-    TextInputLayout profileBmi;
-    TextInputLayout profileHeight;
-    TextInputLayout profileWeight;
+    TextInputEditText profileAge;
+    AutoCompleteTextView profileGender;
+    TextInputEditText profileRmr;
+    TextInputEditText profileBmi;
+    TextInputEditText profileHeight;
+    TextInputEditText profileWeight;
     MaterialTextView profileStepsRecord;
     MaterialTextView profileHpRecord;
     MaterialTextView profileStreakRecord;
+    MaterialTextView streakCurrent;
+    Button logoutButton;
+    User user;
 
     Button logoutBtn;
     Button fallButton;
@@ -48,6 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
     private APIconnection apiConnection;
     ArrayList<String> parameters;
     ArrayList<String> apiData = new ArrayList<>();
+    String currentStreak = "a";
 
     private JsonArrayRequest jsonArrayRequest;
     private String prefixURL = "https://ee5-huzza.herokuapp.com/";
@@ -56,27 +65,38 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        try {
+            apiData.clear();
+            user = getIntent().getParcelableExtra("user");
+            userId = String.valueOf(user.getUserId());
+            Log.i("userParcel", userId);
+            apiData.add(userId);
+        } catch (Exception e) {
+            Log.e("userParcelException", e.toString());
+        }
         jsonArrayRequest = new JsonArrayRequest(this);
 
         //top section
         profileName = findViewById(R.id.name_tv);
 
         //About you section
-        profileAge = findViewById(R.id.age_layout);
-        profileGender = findViewById(R.id.gender_layout);
-        profileHeight = findViewById(R.id.height_layout);
-        profileWeight = findViewById(R.id.weight_layout);
+        profileAge = findViewById(R.id.age_edit);
+        profileGender = findViewById(R.id.gender_edit);
+        profileHeight = findViewById(R.id.height_edit);
+        profileWeight = findViewById(R.id.weight_edit);
         //non editable from About you section
-        profileRmr = findViewById(R.id.rmr_layout);
-        profileBmi = findViewById(R.id.bmi_layout);
+        profileRmr = findViewById(R.id.rmr_edit);
+        profileBmi = findViewById(R.id.bmi_edit);
 
         profileStepsRecord = findViewById(R.id.steps_record);
         profileHpRecord = findViewById(R.id.hp_record);
         profileStreakRecord = findViewById(R.id.streak_record);
+        streakCurrent = findViewById(R.id.streak_record_current);
 
-        getUserId();
+        //getUserId();
         getUserName();
         getUserPhysicalData();
+        getCurrentStreak();
         getUserRecords();
 
         back_btn = findViewById(R.id.profile_back_btn);
@@ -92,7 +112,9 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, FallActivity.class);
+                intent.putExtra("user", user);
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
@@ -101,7 +123,9 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, ActivityModeActivity.class);
+                intent.putExtra("user", user);
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
@@ -109,20 +133,17 @@ public class ProfileActivity extends AppCompatActivity {
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Log user out of app
+                Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+                intent.putExtra("user", user);
+                startActivity(intent);
             }
         });
 
 
     }
 
-    public void getUserId() {
-        userId = Integer.toString(1);
-    }
 
     public void getUserName() {
-        apiData.clear();
-        apiData.add(userId);
         APIconnection.getInstance().GETRequest("user", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
@@ -142,8 +163,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void getUserPhysicalData() {
-        apiData.clear();
-        apiData.add(userId);
         APIconnection.getInstance().GETRequest("physicaldata", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
@@ -158,12 +177,12 @@ public class ProfileActivity extends AppCompatActivity {
                     String gender = curObject.getString("gender");
                     String bmi = curObject.getString("bmi");
                     String rmr = curObject.getString("rmr");
-                    profileWeight.setPlaceholderText(weight);
-                    profileAge.setPlaceholderText(age);
-                    profileHeight.setPlaceholderText(height);
-                    profileBmi.setPlaceholderText(bmi);
-                    profileRmr.setPlaceholderText(rmr);
-                    profileGender.setPlaceholderText(gender);
+                    profileWeight.setText(weight);
+                    profileAge.setText(age);
+                    profileHeight.setText(height);
+                    profileBmi.setText(bmi);
+                    profileRmr.setText(rmr);
+                    profileGender.setText(gender);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -171,9 +190,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    public void getUserRecords(){
-        apiData.clear();
-        apiData.add(userId);
+    public void getUserRecords() {
         APIconnection.getInstance().GETRequest("records", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
@@ -188,6 +205,27 @@ public class ProfileActivity extends AppCompatActivity {
                     profileStepsRecord.setText(stepRecord + " steps in a single day");
                     profileHpRecord.setText(hpRecord + " heart points in a single day");
                     profileStreakRecord.setText(streakRecord + " days is your longest streak");
+                    curObject = streakData.getJSONObject(0);
+                    String currStreak = curObject.getString("currentStreak");
+                    Toast.makeText(getApplicationContext(), currStreak, Toast.LENGTH_SHORT).show();
+                    streakCurrent.setText("Your current streak is " + currStreak + ". Beat your goal for " +
+                            ((Integer.valueOf(streakRecord) - Integer.valueOf(currStreak)) + 1) + " more days to get a new record.");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void getCurrentStreak() {
+        APIconnection.getInstance().GETRequest("goalsCompleted", apiData, new ServerCallback() {
+            @Override
+            public void onSuccess() {
+                String responseString = "";
+                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                try {
+                    JSONObject curObject = responseArray.getJSONObject(responseArray.length() - 1);
+                    streakData.put(curObject);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -197,6 +235,10 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void exitIntent() {
         final Intent intent = new Intent(ProfileActivity.this, OverviewActivity.class);
+        intent.putExtra("user", user);
+
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, R.anim.slide_right_out);
+
     }
 }

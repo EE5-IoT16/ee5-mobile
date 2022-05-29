@@ -21,13 +21,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="18dp"
             android:hint="Goal Completion"
             android:minWidth="180dp"
             app:boxStrokeColor="@color/Dark"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/distance_amount"
+            app:layout_constraintStart_toEndOf="@+id/stepsDetail_layout"
+            app:layout_constraintTop_toTopOf="parent"
             app:suffixText="%"
             app:suffixTextColor="@color/Grey">
 
@@ -37,28 +38,30 @@
                 android:layout_height="wrap_content"
                 android:editable="false"
                 android:fontFamily="@font/sfproregular"
-                android:text="72"
+                android:text="0"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
+
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/distance_amount"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="18dp"
             android:hint="Distance"
             android:minWidth="180dp"
             app:boxStrokeColor="@color/Dark"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/steps_amount"
-            app:layout_constraintTop_toTopOf="@+id/steps_amount"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stepsDetail_layout"
             app:suffixText="Km"
             app:suffixTextColor="@color/Grey">
+
+            app:suffixTextColor="@color/Grey">-->
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/distance_edit"
@@ -69,6 +72,7 @@
                 android:text="2994"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
+
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -83,7 +87,7 @@
             android:hint="Steps"
             android:minWidth="180dp"
             app:boxStrokeColor="@color/Dark"
-            app:layout_constraintEnd_toStartOf="@+id/distance_amount"
+            app:layout_constraintEnd_toStartOf="@+id/completion_amount"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -93,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:editable="false"
                 android:fontFamily="@font/sfproregular"
-                android:text="2994"
+                android:text="0"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="124dp" />
 

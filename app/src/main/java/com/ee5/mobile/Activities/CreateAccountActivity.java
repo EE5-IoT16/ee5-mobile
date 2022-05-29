@@ -1,8 +1,10 @@
 package com.ee5.mobile.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -37,7 +39,6 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private int profileId;
     private int userId;
-    private int passcode;
 
     private Button button;
 
@@ -45,6 +46,12 @@ public class CreateAccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
+
+        ConstraintLayout constraintLayout = findViewById(R.id.createAccount_layout);
+        AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(0);
+        animationDrawable.setExitFadeDuration(4000);
+        animationDrawable.start();
 
         APIconnection.getInstance(this);
 
@@ -70,7 +77,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 passwordRepeat = passwordRepeatInput.getText().toString();
 
                 if (firstName.equals("") || surname.equals("") || email.equals("") ||
-                password.equals("") || passwordRepeat.equals("")) {
+                        password.equals("") || passwordRepeat.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
                 }
                 else if (!password.equals(passwordRepeat)){
@@ -88,7 +95,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         ArrayList<String> accountData = new ArrayList<String>();
         //API will be updated to auto increment profileId, after which it doesn't need to be passed anymore
-        ArrayList<String> accountParameters = new ArrayList<String>(Arrays.asList("profileId", "name", "surname", "email", "password", "salt"));
+        ArrayList<String> accountParameters = new ArrayList<String>(Arrays.asList("name", "surname", "email", "password", "salt"));
         String node = "profile";
 
         accountData.add(firstName);
@@ -120,7 +127,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         ArrayList<String> userParameters = new ArrayList<String>(Arrays.asList("name", "surname", "email", "passcode"));
         String node = "user";
 
-        passcode = ThreadLocalRandom.current().nextInt(0, 9999 + 1);
+        int passcode = ThreadLocalRandom.current().nextInt(0, 9999 + 1);
 
         userData.add(firstName);
         userData.add(surname);
@@ -161,13 +168,20 @@ public class CreateAccountActivity extends AppCompatActivity {
             public void onSuccess() {
                 Toast.makeText(getApplicationContext(), "Great succes!", Toast.LENGTH_SHORT).show();
 
-                User user = new User(profileId, firstName, surname, email, userId, firstName, surname, email, passcode);
+                User user = new User(profileId, firstName, surname, email, userId, firstName, surname, email);
 
                 Intent overviewIntent = new Intent(getApplicationContext(), OverviewActivity.class);
                 overviewIntent.putExtra("user", user);
                 startActivity(overviewIntent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
             }
         });
     }
 
+    private void exitIntent(){
+        final Intent intent = new Intent(CreateAccountActivity.this, LoginActivity.class);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, R.anim.slide_out_down);
+    }
 }

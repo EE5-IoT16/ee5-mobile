@@ -2,11 +2,13 @@ package com.ee5.mobile.Activities;
 
 import static com.ee5.mobile.Activities.ProfileActivity.heightUser;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +20,7 @@ import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.APIconnection;
 import com.ee5.mobile.SupportClasses.DataCard;
 import com.ee5.mobile.SupportClasses.JsonArrayRequest;
+import com.ee5.mobile.SupportClasses.User;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
@@ -36,20 +39,29 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class DataCardDetailActivity extends AppCompatActivity {
     private TextView title;
+    private TextView title_hr;
     private BarChart barChart;
     private LineChart lineChart;
     private TextInputLayout steps_layout;
+    private TextInputLayout steps_layout_hr;
     private TextInputEditText steps_text;
+    private TextInputEditText steps_text_hr;
     private TextInputLayout distance_amount;
+    private TextInputLayout distance_amount_hr;
     private TextInputEditText distance_text;
+    private TextInputEditText distance_text_hr;
+    private TextInputEditText completion;
+    private TextInputEditText completion_hr;
     private TextView todayDistance;
     private TextView weekSteps;
     private TextView weekDistance;
@@ -58,6 +70,11 @@ public class DataCardDetailActivity extends AppCompatActivity {
     private Button day;
     private Button week;
     private Button month;
+    private ImageButton returnButton;
+    private ImageButton returnButton_hr;
+
+
+    private User user;
 
     private JsonArrayRequest jsonArrayRequest;
     private String prefixURL = "https://ee5-huzza.herokuapp.com/";
@@ -75,6 +92,11 @@ public class DataCardDetailActivity extends AppCompatActivity {
     int dailySteps = 0;
     int weeklySteps = 0;
     int monthlySteps = 0;
+    int dailyHp = 0;
+    int weeklyHp = 0;
+    int monthlyHp = 0;
+    int avgHr = 0;
+    int maxHr = 0;
     LocalDateTime today;
     int todayDayOfTheYear;
 
@@ -86,92 +108,128 @@ public class DataCardDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            apiData.clear();
+            user = getIntent().getParcelableExtra("user");
+            userId = String.valueOf(user.getUserId());
+            Log.i("userParcel1", String.valueOf(user.getUserId()));
+            apiData.add(userId);
+        } catch (Exception e) {
+            Log.e("userParcelException", e.toString());
+        }
+
         position = getIntent().getExtras().getInt("dataCardPosition");
-        if (position == 2) {
+        if (position == 2) {    //heart rate
             setContentView(R.layout.activity_recyclerview_detail_hr);
-        } else if(position == 1) {
+            title_hr = findViewById(R.id.rv_detail_cardTitle_hr);
+            lineChart = findViewById(R.id.LineChart_datacard_detail);
+            steps_layout_hr = findViewById(R.id.stepsDetail_layout_hr);
+            steps_text_hr = findViewById(R.id.stepsDetail_edit_hr);
+            completion_hr = findViewById(R.id.completion_edit_hr);
+            returnButton_hr = findViewById(R.id.detail_back_btn_hr);
+        } else if (position == 0 || position == 1)  {      //steps + heart points
             setContentView(R.layout.activity_recyclerview_detail);
+            title = findViewById(R.id.rv_detail_cardTitle);
+            barChart = findViewById(R.id.BarChart_datacard_detail);
+            day = findViewById(R.id.day);
+            week = findViewById(R.id.week);
+            month = findViewById(R.id.month);
+            steps_layout = findViewById(R.id.stepsDetail_layout);
+            steps_text = findViewById(R.id.stepsDetail_edit);
+            distance_amount = findViewById(R.id.distance_amount);
+            distance_text = findViewById(R.id.distance_edit);
+            completion = findViewById(R.id.completion_edit);
+            returnButton = findViewById(R.id.detail_back_btn);
         }
-        else{
-            setContentView(R.layout.activity_recyclerview_detail);
-        }
+
         jsonArrayRequest = new JsonArrayRequest(this);
 
         today = LocalDateTime.now();
         todayDayOfTheYear = today.getDayOfYear();
-
-        getUserId();
         getUserHeight();
         getUserDailyGoal();
-        getSteps(0);
-
-        title = findViewById(R.id.rv_detail_cardTitle);
-        barChart = findViewById(R.id.BarChart_datacard_detail);
-        lineChart = findViewById(R.id.LineChart_datacard_detail);
-        day = findViewById(R.id.day);
-        week = findViewById(R.id.week);
-        month = findViewById(R.id.month);
-
-        steps_layout = findViewById(R.id.stepsDetail_layout);
-        steps_text = findViewById(R.id.stepsDetail_edit);
-        distance_amount = findViewById(R.id.distance_amount);
-        distance_text = findViewById(R.id.distance_edit);
 
         dataCard = getIntent().getExtras().getParcelable("dataCard");
         dataCardStepDataList = dataCard.getDataCardStepData();
         dataCardHpDataList = dataCard.getDataCardHpData();
         dataCardHrDataList = dataCard.getDataCardHrData();
-        //Log.d("FF", dataCard.getDataCardStepData().toString());       //todo: why is it arraylist of 8 elements instead of 7?
 
-        title.setText(dataCard.getDataCardTitle());
 
         if (position == 2) {
+            title_hr.setText(dataCard.getDataCardTitle());
+            getHr();
             createLineChart();
-        } else if(position == 1) {
+            returnButton_hr.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent detailIntent = new Intent(DataCardDetailActivity.this, OverviewActivity.class);
+                    detailIntent.putExtra("user", user);
+                    startActivity(detailIntent);
+                }
+            });
+        } else if (position == 1) {
+            getHp(0);
             createHpBarChart();
-        }
-        else{
+            steps_layout.setHint("Heart points");
+            distance_amount.setVisibility(View.GONE);
+            returnButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent detailIntent = new Intent(DataCardDetailActivity.this, OverviewActivity.class);
+                    detailIntent.putExtra("user", user);
+                    startActivity(detailIntent);
+                }
+            });
+        } else {
+            getSteps(0);
             createStepsBarChart();
+            returnButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent detailIntent = new Intent(DataCardDetailActivity.this, OverviewActivity.class);
+                    detailIntent.putExtra("user", user);
+                    startActivity(detailIntent);
+                }
+            });
         }
 
-        day.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getSteps(0);
-            }
-        });
+        if(position == 0 || position == 1) {
+            title.setText(dataCard.getDataCardTitle());
+            day.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (position == 0) getSteps(0);
+                    else if (position == 1) getHp(0);
+                }
+            });
 
-        week.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getSteps(1);
-            }
-        });
+            week.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (position == 0) getSteps(1);
+                    else if (position == 1) getHp(1);
+                }
+            });
 
-        month.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getSteps(2);
-            }
-        });
-    }
-
-    public void getUserId() {
-        userId = Integer.toString(1);
+            month.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (position == 0) getSteps(2);
+                    else if (position == 1) getHp(2);
+                }
+            });
+        }
     }
 
     public static Double calculateDistance(int height, int steps) {
         Double distance = 0.0;
         Double strideLength = height * 0.43;        //https://www.inchcalculator.com/steps-to-distance-calculator/
-        distance = (strideLength * steps)/100000;
+        distance = (strideLength * steps) / 100000;
         return distance;
     }
 
     public void getSteps(int value) {
-        apiData.clear();
-        apiData.add(userId);
-
-        if(value == 0) {
+        if (value == 0) {
             APIconnection.getInstance().GETRequest("steps", apiData, new ServerCallback() {
                 @Override
                 public void onSuccess() {
@@ -180,40 +238,39 @@ public class DataCardDetailActivity extends AppCompatActivity {
                     try {
                         JSONObject curObject = responseArray.getJSONObject(responseArray.length() - 1);
                         responseString = curObject.getString("steps");
+                        if (responseString == "null") responseString = "0";
                         steps_text.setText(responseString);
                         dailySteps = Integer.valueOf(responseString);
                         Double distance = calculateDistance(userHeight, dailySteps);
                         distance_text.setText(distance.toString());
-                        checkGoalCompletion(0);
+                        completion.setText(checkGoalCompletion(0, dailySteps));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
             });
-        }
-
-        else if(value == 1) {
+        } else if (value == 1) {
             APIconnection.getInstance().GETRequest("weekly/steps", apiData, new ServerCallback() {
                 @Override
                 public void onSuccess() {
                     String responseString = "";
-                    JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                    JSONArray responseArray = (JSONArray) APIconnection.getInstance().getAPIResponse();
                     try {
                         JSONObject curObject = responseArray.getJSONObject(0);
                         responseString = curObject.getString("totalSteps");
+                        if (responseString == "null") responseString = "0";
                         steps_text.setText(responseString);
                         weeklySteps = Integer.valueOf(responseString);
                         Double distance = calculateDistance(userHeight, weeklySteps);
                         distance_text.setText(distance.toString());
-                        checkGoalCompletion(1);
+                        completion.setText(checkGoalCompletion(1, weeklySteps));
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        Log.e("ER", e.toString());
                     }
                 }
             });
-        }
-
-        else if(value == 2) {
+        } else if (value == 2) {
             APIconnection.getInstance().GETRequest("monthly/steps", apiData, new ServerCallback() {
                 @Override
                 public void onSuccess() {
@@ -221,12 +278,13 @@ public class DataCardDetailActivity extends AppCompatActivity {
                     JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
                     try {
                         JSONObject curObject = responseArray.getJSONObject(responseArray.length() - 1);
-                        responseString = curObject.getString("totalSteps");     //totalHeartPoints
+                        responseString = curObject.getString("totalSteps");
+                        if (responseString == "null") responseString = "0";
                         steps_text.setText(responseString);
                         monthlySteps = Integer.valueOf(responseString);
                         Double distance = calculateDistance(userHeight, monthlySteps);
                         distance_text.setText(distance.toString());
-                        checkGoalCompletion(2);
+                        completion.setText(checkGoalCompletion(2, monthlySteps));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -235,12 +293,96 @@ public class DataCardDetailActivity extends AppCompatActivity {
         }
     }
 
+    public void getHp(int value) {
+        if (value == 0) {
+            APIconnection.getInstance().GETRequest("heartPoints", apiData, new ServerCallback() {
+                @Override
+                public void onSuccess() {
+                    String responseString = "";
+                    JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                    try {
+                        JSONObject curObject = responseArray.getJSONObject(responseArray.length() - 1);
+                        responseString = curObject.getString("totalHeartPoints");
+                        if (responseString == "null") responseString = "0";
+                        steps_text.setText(responseString);
+                        dailyHp = Integer.valueOf(responseString);
+                        completion.setText(checkGoalCompletion(0, dailyHp));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } else if (value == 1) {
+            APIconnection.getInstance().GETRequest("weekly/heartPoints", apiData, new ServerCallback() {
+                @Override
+                public void onSuccess() {
+                    String responseString = "";
+                    JSONArray responseArray = (JSONArray) APIconnection.getInstance().getAPIResponse();
+                    try {
+                        JSONObject curObject = responseArray.getJSONObject(0);
+                        responseString = curObject.getString("totalHeartPoints");
+                        if (responseString == "null") responseString = "0";
+                        Log.i("HP", responseString);
+                        steps_text.setText(responseString);
+                        weeklyHp = Integer.valueOf(responseString);
+                        completion.setText(checkGoalCompletion(1, weeklyHp));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.e("ER", e.toString());
+                    }
+                }
+            });
+        } else if (value == 2) {
+            APIconnection.getInstance().GETRequest("monthly/heartPoints", apiData, new ServerCallback() {
+                @Override
+                public void onSuccess() {
+                    String responseString = "";
+                    JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                    try {
+                        JSONObject curObject = responseArray.getJSONObject(responseArray.length() - 1);
+                        responseString = curObject.getString("totalHeartPoints");
+                        if (responseString == "null") responseString = "0";
+                        steps_text.setText(responseString);
+                        monthlyHp = Integer.valueOf(responseString);
+                        completion.setText(checkGoalCompletion(2, monthlyHp));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+    }
+
+    public void getHr() {
+        APIconnection.getInstance().GETRequest("tenMinutes/heartRate", apiData, new ServerCallback() {
+            @Override
+            public void onSuccess() {
+                String responseString = "";
+                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                try {
+                    for (int i = 0; i < responseArray.length(); i++) {
+                        JSONObject curObject = responseArray.getJSONObject(i);
+                        responseString = curObject.getString("bpm");
+                        int graphValue = Integer.valueOf(responseString);
+                        avgHr += avgHr;
+                        if (graphValue > maxHr) {
+                            maxHr = graphValue;
+                        }
+                    }
+                    //completion_hr.setText(maxHr);
+                    //steps_text_hr.setText(avgHr);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     public void getUserHeight() {
-        apiData.clear();
-        apiData.add(userId);
         APIconnection.getInstance().GETRequest("physicaldata", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
+                String responseTemp = "";
                 JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
                 try {
                     JSONObject curObject = responseArray.getJSONObject(0);
@@ -253,25 +395,25 @@ public class DataCardDetailActivity extends AppCompatActivity {
         });
     }
 
-    public String checkGoalCompletion(int value){
-        if(value == 0){
-            int percentage = dailySteps / stepGoal;
-            return String.valueOf(percentage);
+    public String checkGoalCompletion(int value, int steps) {
+        Double percentage = 0.0;
+
+        if (value == 0) {
+            percentage = (double) steps / stepGoal;
+        } else if (value == 1) {
+            percentage = (double) steps / (stepGoal * 7);
+        } else if (value == 2) {
+            Calendar c = Calendar.getInstance();
+            int monthMaxDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+            percentage = (double) steps / (stepGoal * monthMaxDays);
         }
-        else if(value == 1){
-            int percentage = weeklySteps / (stepGoal * 7);
-            return String.valueOf(percentage);
-        }
-        else if(value == 2){
-            int percentage = monthlySteps / (stepGoal * 30);
-            return String.valueOf(percentage);
-        }
-        return "";
+        if (percentage > 1) percentage = 1.0;
+        percentage *= 100;
+        DecimalFormat df = new DecimalFormat("0.00");
+        return (df.format(percentage));
     }
 
     public void getUserDailyGoal() {
-        apiData.clear();
-        apiData.add(userId);
         APIconnection.getInstance().GETRequest("goals", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
@@ -280,7 +422,8 @@ public class DataCardDetailActivity extends AppCompatActivity {
                 try {
                     JSONObject curObject = responseArray.getJSONObject(0);
                     responseDailySteps = curObject.getString("dailySteps");
-                    stepGoal = Integer.valueOf(responseDailySteps);;
+                    stepGoal = Integer.valueOf(responseDailySteps);
+                    ;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -306,7 +449,7 @@ public class DataCardDetailActivity extends AppCompatActivity {
         barDataSet.setValueTextSize(0);
         barDataSet.setFormSize(0);
         barDataSet.setBarBorderWidth(1);
-        barDataSet.setBarBorderColor(Color.rgb(231,226,211));
+        barDataSet.setBarBorderColor(Color.rgb(231, 226, 211));
 
         XAxis x = barChart.getXAxis();
         YAxis yLeft = barChart.getAxisLeft();

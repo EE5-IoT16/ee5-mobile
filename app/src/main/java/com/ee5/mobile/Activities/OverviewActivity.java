@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
@@ -24,10 +23,6 @@ import com.ee5.mobile.SupportClasses.DataCard;
 import com.ee5.mobile.SupportClasses.JsonArrayRequest;
 import com.ee5.mobile.SupportClasses.RecyclerViewAdapter;
 import com.ee5.mobile.SupportClasses.User;
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -42,7 +37,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Timer;
 
 public class OverviewActivity extends AppCompatActivity implements RecyclerViewAdapter.OnItemClickListener {
 
@@ -50,6 +44,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     RecyclerView myRecyclerView;
     ArrayList<DataCard> dataCards = new ArrayList<>();
     ArrayList<String> apiData = new ArrayList<>();
+    ArrayList<String> quoteData = new ArrayList<>();
     ArrayList barEntriesSteps;
     ArrayList barEntriesHeartPoints;
     ArrayList entriesHeartRate;
@@ -59,16 +54,17 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     TextView currSteps;
     TextView stepsLeft;
     TextView stepsLeftText;
+    TextView quoteText;
 
     ArrayList<Integer> stepsData = new ArrayList<>();
     ArrayList<Integer> heartPointsData = new ArrayList<>();
     ArrayList<Integer> heartRateData = new ArrayList<>();
 
     private int steps = 0;
-    private int stepsRecord = 0;
-    private int heartPointsRecord = 0;
+    private String stepsRecord = "";
+    private String hpRecord = "";
     private int hr = 0;
-    private int hrRecord = 0;
+    private String hrRecord = "";
     private Double temp = 0.0;
 
     public static int setGraphAxis = 0;
@@ -103,14 +99,15 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
-        try{
+        try {
+            apiData.clear();
             user = getIntent().getParcelableExtra("user");
-            Log.i("userParcel", user.getProfileEmail() + "1");
+            Log.i("userParcel", user.getProfileEmail());
             Log.i("userParcel", user.getUserEmail());
             userId = String.valueOf(user.getUserId());
             Log.i("userParcel", userId);
-        }
-        catch(Exception e){
+            apiData.add(userId);
+        } catch (Exception e) {
             Log.e("userParcelException", e.toString());
         }
 
@@ -129,11 +126,15 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
             Intent intent = new Intent(OverviewActivity.this, ProfileActivity.class);
             intent.putExtra("user", user);
             startActivity(intent);
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_out);
+
         });
 
         setup_btn.setOnClickListener(view -> {
             Intent intent = new Intent(OverviewActivity.this, SetupActivity.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_down, android.R.anim.fade_out);
+
         });
 
         currTemp = findViewById(R.id.temp_num);
@@ -141,27 +142,20 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         currSteps = findViewById(R.id.step_num);
         stepsLeft = findViewById(R.id.stepsLeft_num);
         stepsLeftText = findViewById(R.id.stepsleft_text);
-
-        //TODO: get number from User object
-        stepsLeft_num.setText("100");
-
-        String quoteString = "Look in the mirror, that’s the only competition.";
-
-        //quoteString = getColoredText();
-
-        //quote = get from http request to some api
-        quote.setText(getColoredText(quoteString, "#4FA4FF"));
+        quoteText = findViewById(R.id.quote_tv);
 
         myRecyclerView = findViewById(R.id.recyclerView);
         myRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         myRecyclerViewAdapter = new RecyclerViewAdapter(this, dataCards);
         myRecyclerViewAdapter.setOnItemClickListener(this);
         myRecyclerView.setAdapter(myRecyclerViewAdapter);
-        
+
 
         today = LocalDateTime.now();
         todayDayOfTheYear = today.getDayOfYear();
         currentDailyStepsData = 0;
+
+        setGraphAxis = 0;
 
         profileButton = (Button) findViewById(R.id.viewProfile_Btn);
         profileButton.setOnClickListener(new View.OnClickListener() {
@@ -170,6 +164,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                 Intent intent = new Intent(OverviewActivity.this, ProfileActivity.class);
                 intent.putExtra("user", user);
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
         parseJson();
@@ -188,12 +183,31 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         }, delay);
     }
 
+    public void getQuote() {
+        APIconnection.getInstance().GETRequest("quotes", quoteData, new ServerCallback() {
+            @Override
+            public void onSuccess() {
+                String responseString = "";
+                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                try {
+                    int size = responseArray.length();
+                    int value = (int) ((Math.random() * size));
+                    JSONObject curObject = responseArray.getJSONObject(value);
+                    responseString = curObject.getString("quote");
+                    quoteText.setText(getColoredText(responseString, "#4FA4FF"));
+                    Log.d("QUOTE", responseString);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
     public Spanned getColoredText(String text, String color) {
         String[] words = text.split(" ");
         int wordCount = words.length;
 
-        int backSpace = 4;
+        int backSpace = words.length / 2;
         words[backSpace] = words[backSpace];
 
         String[] beforeColor = Arrays.copyOfRange(words, 0, backSpace);
@@ -206,14 +220,16 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     public void parseJson() {
         try {
             DataCard dataCard = getIntent().getExtras().getParcelable("dataCard2");
-            Toast.makeText(getApplicationContext(), "try1", Toast.LENGTH_SHORT).show();
-            Log.d("try", dataCard.toString());
+            //Toast.makeText(getApplicationContext(), "try1", Toast.LENGTH_SHORT).show();
+            //Log.d("try", dataCard.toString());
+            Log.d("try", "record: " + dataCard.getDataCardHrRecord());
             if (dataCard != null) {
-                Toast.makeText(getApplicationContext(), "try", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "try", Toast.LENGTH_SHORT).show();
                 //getUserId();
                 getStepsToday();
                 getHeartRate();
                 getTemperature();
+                getQuote();
 
                 initGraphs();
 
@@ -224,25 +240,25 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                 //daily goal
                 getDailyGoal();
 
+
+                Log.d("try", stepsRecord);
                 //add datacards to recyclerview
-                DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record", barDataSteps, null, null, stepsData, null, null);
-                DataCard dataCard2 = new DataCard("Heart points", "Last 7 days", String.valueOf(heartPointsRecord), "Record", null, barDataHeartPoints, null, null, heartPointsData, null);
-                DataCard dataCard3 = new DataCard("Heartrate", "Last 10 minutes", String.valueOf(hrRecord), "Peak", null, null, lineData, null, null, heartRateData);
+                DataCard dataCard1 = new DataCard("Steps", "Last 7 days", dataCard.getDataCardStepRecord(), null, null, "Record", barDataSteps, null, null, dataCard.getDataCardStepData(), null, null);
+                DataCard dataCard2 = new DataCard("Heart points", "Last 7 days", null, dataCard.getDataCardHpRecord(), null, "Record", null, barDataHeartPoints, null, null, dataCard.getDataCardHpData(), null);
+                DataCard dataCard3 = new DataCard("Heartrate", "Last 10 minutes", null, null, dataCard.getDataCardHrRecord(), "Peak", null, null, lineData, null, null, dataCard.getDataCardHrData());
 
                 dataCards.add(dataCard1);
                 dataCards.add(dataCard2);
                 dataCards.add(dataCard3);
             }
         } catch (NullPointerException e) {
-            //getUserId();
-
             initGraphs();
-            Toast.makeText(getApplicationContext(), "catch", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "catch", Toast.LENGTH_SHORT).show();
 
             //add datacards to recyclerview
-            DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record", barDataSteps, null, null, stepsData, null, null);
-            DataCard dataCard2 = new DataCard("Heart points", "Last 7 days", String.valueOf(heartPointsRecord), "Record", null, barDataHeartPoints, null, null, heartPointsData, null);
-            DataCard dataCard3 = new DataCard("Heartrate", "Last 10 minutes", String.valueOf(hrRecord), "Peak", null, null, lineData, null, null, heartRateData);
+            DataCard dataCard1 = new DataCard("Steps", "Last 7 days", stepsRecord, null, null, "Record", barDataSteps, null, null, stepsData, null, null);
+            DataCard dataCard2 = new DataCard("Heart points", "Last 7 days", null, hpRecord, hrRecord, "Record", null, barDataHeartPoints, null, null, heartPointsData, null);
+            DataCard dataCard3 = new DataCard("Heartrate", "Last 10 minutes", stepsRecord, hpRecord, hrRecord, "Peak", null, null, lineData, null, null, heartRateData);
 
             dataCards.add(dataCard1);
             dataCards.add(dataCard2);
@@ -251,13 +267,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         }
     }
 
-    /*public void getUserId() {
-        userId = Integer.toString(1);
-    }*/
-
     public void getTemperature() {
-        apiData.clear();
-        apiData.add(userId);
         APIconnection.getInstance().GETRequest("temperature", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
@@ -275,8 +285,6 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     }
 
     public void getHeartRate() {
-        apiData.clear();
-        apiData.add(userId);
         APIconnection.getInstance().GETRequest("heartRate", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
@@ -294,8 +302,6 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     }
 
     public void getStepsToday() {
-        apiData.clear();
-        apiData.add(userId);
         APIconnection.getInstance().GETRequest("steps", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
@@ -314,8 +320,6 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     }
 
     public void getDailyGoal() {
-        apiData.clear();
-        apiData.add(userId);
         APIconnection.getInstance().GETRequest("goals", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
@@ -349,7 +353,8 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         heartRateData.clear();
         try {
             DataCard dataCard = getIntent().getExtras().getParcelable("dataCard2");
-            Log.d("try", dataCard.toString());
+            //Log.d("try", dataCard.toString());
+            Log.d("try", "record: " + dataCard.getDataCardHrRecord());
             if (dataCard != null) {
                 for (int i = 0; i < 7; i++) {
                     stepsData.add(dataCard.getDataCardStepData().get(i));
@@ -362,111 +367,156 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
             }
         } catch (NullPointerException e) {
             for (int i = 0; i < 7; i++) {
-                stepsData.add(1);
-                heartPointsData.add(1);
+                stepsData.add(0);
+                heartPointsData.add(0);
             }
 
             for (int i = 0; i < 10; i++) {
-                heartRateData.add(1);
+                heartRateData.add(0);
             }
 
             getStepsGraphData();
         }
     }
 
-    public static boolean checkDate(String ts, int dayOfTheYear) {
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-        LocalDateTime dateTime = LocalDateTime.parse(ts, formatter);
-        int day = dateTime.getDayOfYear();
-        return day == dayOfTheYear;
-    }
-
     public void getStepsGraphData() {
-        apiData.clear();
-        apiData.add(userId);
-
+        maxSteps = 0;
+        Log.d("ERROR0", "initial: " + stepsData.toString());
         APIconnection.getInstance().GETRequest("steps", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
                 String responseString = "";
                 JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
                 try {
-
-                    for (int i = 0; i < 7; i++) {
-                        JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (i + 1));
-                        responseString = curObject.getString("steps");
-                        stepsData.set(6 - i, Integer.valueOf(responseString));
-                        if (Integer.valueOf(responseString) > maxSteps)
-                            maxSteps = Integer.valueOf(responseString);
+                    if (responseArray.length() < 7) {
+                        for (int j = 0; j < responseArray.length(); j++) {
+                            JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (j + 1));
+                            responseString = curObject.getString("steps");
+                            int graphValue = Integer.valueOf(responseString);
+                            stepsData.set(6 - j, graphValue);
+                            Log.d("ERROR0", "between: " + stepsData.toString());
+                            if (graphValue > maxSteps) {
+                                maxSteps = Integer.valueOf(responseString);
+                                stepsRecord = responseString;
+                            }
+                        }
+                        Log.d("ERROR0", "final: " + stepsData.toString());
+                    } else {
+                        for (int i = 0; i < 7; i++) {
+                            JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (i + 1));
+                            responseString = curObject.getString("steps");
+                            int graphValue = Integer.valueOf(responseString);
+                            stepsData.set(6 - i, graphValue);
+                            Log.d("ERROR0", "between: " + stepsData.toString());
+                            if (graphValue > maxSteps) {
+                                maxSteps = Integer.valueOf(responseString);
+                                stepsRecord = responseString;
+                            }
+                        }
                     }
                     getHPGraphData();
                 } catch (JSONException e) {
                     e.printStackTrace();
-
-                    Log.d("ERROR", String.valueOf(e));
+                    Log.d("ERROR0", String.valueOf(e));
                 }
             }
         });
     }
 
     public void getHPGraphData() {
-        userId = String.valueOf(50);        //not enough records in user 1 table //todo: what if not enough data
-        apiData.clear();
-        apiData.add(userId);
-
-        APIconnection.getInstance().GETRequest("steps", apiData, new ServerCallback() {
+        maxHp = 0;
+        APIconnection.getInstance().GETRequest("heartPoints", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
                 String responseString = "";
                 JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
                 try {
-
-                    for (int i = 0; i < 7; i++) {
-                        JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (i + 1));
-                        responseString = curObject.getString("steps");
-                        heartPointsData.set(6 - i, Integer.valueOf(responseString));
-                        if (Integer.valueOf(responseString) > maxHp)
-                            maxHp = Integer.valueOf(responseString);
+                    if (responseArray.length() < 7) {
+                        for (int j = 0; j < responseArray.length(); j++) {
+                            JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (j + 1));
+                            responseString = curObject.getString("heartPoint");
+                            int graphValue = 0;
+                            graphValue = Integer.valueOf(responseString);
+                            heartPointsData.set(6 - j, graphValue);
+                            if (graphValue > maxHp) {
+                                maxHp = Integer.valueOf(responseString);
+                                hpRecord = responseString;
+                            }
+                        }
+                        Log.d("ERROR2", "final: " + heartPointsData.toString());
+                    } else {
+                        for (int i = 0; i < 7; i++) {
+                            JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (i + 1));
+                            responseString = curObject.getString("steps");
+                            int graphValue = Integer.valueOf(responseString);
+                            stepsData.set(6 - i, graphValue);
+                            Log.d("ERROR0", "between: " + stepsData.toString());
+                            if (graphValue > maxSteps) {
+                                maxSteps = Integer.valueOf(responseString);
+                                stepsRecord = responseString;
+                            }
+                        }
                     }
                     getHrGraphData();
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.d("ERROR", String.valueOf(e));
+                    Log.d("ERROR2", String.valueOf(e));
                 }
             }
         });
     }
 
     public void getHrGraphData() {
-        userId = String.valueOf(50);        //not enough records in user 1 table //todo: what if not enough data
-        apiData.clear();
-        apiData.add(userId);
-
+        maxHr = 0;
         APIconnection.getInstance().GETRequest("heartRate", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
                 String responseString = "";
                 JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
                 try {
-                    for (int i = 0; i < 10; i++) {
-                        JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (i + 1));
-                        responseString = curObject.getString("bpm");
-                        heartRateData.set(9 - i, Integer.valueOf(responseString));
-                        if (Integer.valueOf(responseString) > maxHr)
-                            maxHr = Integer.valueOf(responseString);
-                        if (Integer.valueOf(responseString) < minHr)
-                            minHr = Integer.valueOf(responseString);
+                    if (responseArray.length() < 10) {
+                        for (int j = 0; j < responseArray.length(); j++) {
+                            JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (j + 1));
+                            responseString = curObject.getString("bpm");
+                            int graphValue = Integer.valueOf(responseString);
+                            heartRateData.set(9 - j, graphValue);
+                            if (graphValue > maxHr) {
+                                maxHr = Integer.valueOf(responseString);
+                                hrRecord = responseString;
+                            }
+                            if (graphValue < minHr)
+                                minHr = Integer.valueOf(responseString);
+                        }
+                        Log.d("ERROR2", "final: " + heartPointsData.toString());
+                    } else {
+                        for (int i = 0; i < 10; i++) {
+                            JSONObject curObject = responseArray.getJSONObject(responseArray.length() - (i + 1));
+                            responseString = curObject.getString("bpm");
+                            int graphValue = Integer.valueOf(responseString);
+                            heartRateData.set(9 - i, graphValue);
+                            if (graphValue > maxHr) {
+                                maxHr = Integer.valueOf(responseString);
+                                hrRecord = responseString;
+                            }
+                            if (graphValue < minHr)
+                                minHr = Integer.valueOf(responseString);
+                        }
                     }
+                    Log.d("ERROR3", "final: " + heartRateData.toString());
+
                     Intent detailIntent = new Intent(getApplicationContext(), OverviewActivity.class);
-                    DataCard dataCard1 = new DataCard("Steps", "Last 7 days", String.valueOf(stepsRecord), "Record",
-                            barDataSteps, barDataHeartPoints, null, stepsData, heartPointsData, heartRateData);
+                    DataCard dataCard1 = new DataCard("Steps", "Last 7 days", stepsRecord, hpRecord, hrRecord, "Record",
+                            null, null, null, stepsData, heartPointsData, heartRateData);
                     detailIntent.putExtra("dataCard2", dataCard1);
                     detailIntent.putExtra("user", user);
                     startActivity(detailIntent);
-                    Log.d("ERROR", dataCard1.toString());
-                } catch (JSONException e) {
+                    Log.d("ERROR", stepsRecord + " / " + hpRecord + " - " + hrRecord);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    //Log.d("ERROR", dataCard1.toString());
+                } catch (
+                        JSONException e) {
                     e.printStackTrace();
-                    Log.d("ERROR", String.valueOf(e));
+                    Log.d("ERROR3", String.valueOf(e));
                 }
             }
         });
@@ -519,6 +569,8 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         DataCard clickedItem = dataCards.get(position);
         detailIntent.putExtra("dataCard", clickedItem);
         detailIntent.putExtra("dataCardPosition", position);
+        detailIntent.putExtra("user", user);
         startActivity(detailIntent);
+        overridePendingTransition(R.anim.slide_in_up, android.R.anim.fade_out);
     }
 }
