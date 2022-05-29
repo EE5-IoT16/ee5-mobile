@@ -39,6 +39,7 @@ public class UserSelectActivity extends AppCompatActivity /*implements UserSelec
     private JSONArray userInformation = new JSONArray();
 
     private int profileId;
+    private int userId;
     private User user;
     UserSelectRecyclerViewAdapter myRecyclerViewAdapter;
     RecyclerView myRecyclerView;
@@ -48,6 +49,7 @@ public class UserSelectActivity extends AppCompatActivity /*implements UserSelec
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_select);
+
         try{
             user = getIntent().getParcelableExtra("user");
             Log.i("userParcel", user.getProfileEmail());
@@ -139,8 +141,7 @@ public class UserSelectActivity extends AppCompatActivity /*implements UserSelec
                 userSurname = currentObject.getString("surname");
                 userName = userFirstName + " " + userSurname;
 
-                /*User user = new User(1, userFirstName, userSurname, null);
-                users.add(user);*/
+
                 button = createButton(this, i, userName);
                 tableRow.addView(button);
 
@@ -193,45 +194,79 @@ public class UserSelectActivity extends AppCompatActivity /*implements UserSelec
     */
 
     protected void onButtonClick(View caller) {
-        Intent intent = new Intent(this, OverviewActivity.class);
+
         int ObjectNo = caller.getId();
         try {
             JSONObject Object = userInformation.getJSONObject(ObjectNo);
-            user.setUserId(Object.getInt("userId"));
+            userId = Object.getInt("userId");
+            user.setUserId(userId);
             user.setUserFirstName(Object.getString("name"));
             user.setUserSurname(Object.getString("surname"));
             user.setUserEmail(Object.getString("email"));
-            user.setUserPasscode(Object.getInt("passcode"));
+
+            getPhysicalData();
         }
         catch (JSONException e) {
             e.printStackTrace();
         }
+    }
 
-        intent.putExtra("user", user);
-        startActivity(intent);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        //String coffeeName = DatabaseUtils.formatText((String) ((Button) caller).getText());
-        //intent.putExtra("coffeeId", coffeeId);
-        //intent.putExtra("coffeeName", coffeeName);
+    private void getPhysicalData(){
+
+        APIconnection.getInstance().GETRequest("physicalData", new ArrayList<String>(Arrays.asList(String.valueOf(userId))), new ServerCallback() {
+
+            @Override
+            public void onSuccess() {
+
+                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+
+                try {
+
+                    JSONObject curObject = responseArray.getJSONObject(0);
+                    user.setWeight(curObject.getInt("weight"));
+                    user.setHeight(curObject.getInt("height"));
+                    user.setAge(curObject.getInt("age"));
+                    user.setGender(curObject.getString("gender"));
+                    Log.i("API response", curObject.getString("gender"));
+                    getGoalsData();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
     }
 
-   /* @Override
-    public void onItemClick(int position) {
-        Intent intent = new Intent(this, OverviewActivity.class);
-        int ObjectNo = posi.getId();
-        try {
-            JSONObject Object = userInformation.getJSONObject(ObjectNo);
-            user.setUserId(Object.getInt("userId"));
-            user.setUserFirstName(Object.getString("name"));
-            user.setUserSurname(Object.getString("surname"));
-            user.setUserEmail(Object.getString("email"));
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
+    private void getGoalsData(){
 
+        APIconnection.getInstance().GETRequest("goals", new ArrayList<String>(Arrays.asList(String.valueOf(userId))), new ServerCallback() {
+
+            @Override
+            public void onSuccess() {
+
+                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+
+                try {
+
+                    JSONObject curObject = responseArray.getJSONObject(0);
+                    user.setDailyStepGoal(curObject.getInt("dailySteps"));
+                    user.setDailyHeartpointGoal(curObject.getInt("dailyHeartP"));
+                    Log.i("API response", String.valueOf(curObject.getInt("dailyHeartP")));
+                    nextIntent();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+    private void nextIntent(){
+        Intent intent = new Intent(this, OverviewActivity.class);
         intent.putExtra("user", user);
         startActivity(intent);
-    }*/
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
 }

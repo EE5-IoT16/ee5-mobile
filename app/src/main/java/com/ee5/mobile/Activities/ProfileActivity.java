@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private String name;
+    private User user;
     private String userId;
     public static int heightUser;
     private static final String TAG = "ProfileActivity";
@@ -47,7 +47,6 @@ public class ProfileActivity extends AppCompatActivity {
     MaterialTextView profileStreakRecord;
     MaterialTextView streakCurrent;
     Button logoutButton;
-    User user;
 
     Button logoutBtn;
     Button fallButton;
@@ -93,7 +92,7 @@ public class ProfileActivity extends AppCompatActivity {
         profileStreakRecord = findViewById(R.id.streak_record);
         streakCurrent = findViewById(R.id.streak_record_current);
 
-        //getUserId();
+        getUserId();
         getUserName();
         getUserPhysicalData();
         getCurrentStreak();
@@ -111,6 +110,9 @@ public class ProfileActivity extends AppCompatActivity {
         fallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                updateData();
+
                 Intent intent = new Intent(ProfileActivity.this, FallActivity.class);
                 intent.putExtra("user", user);
                 startActivity(intent);
@@ -122,6 +124,9 @@ public class ProfileActivity extends AppCompatActivity {
         activityBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                updateData();
+
                 Intent intent = new Intent(ProfileActivity.this, ActivityModeActivity.class);
                 intent.putExtra("user", user);
                 startActivity(intent);
@@ -133,7 +138,10 @@ public class ProfileActivity extends AppCompatActivity {
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+
+                updateData();
+
+                final Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
                 intent.putExtra("user", user);
                 startActivity(intent);
             }
@@ -142,8 +150,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    public void getUserId() {
+        userId = Integer.toString(1);
+    }
 
     public void getUserName() {
+        apiData.clear();
+        apiData.add(userId);
         APIconnection.getInstance().GETRequest("user", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
@@ -156,41 +169,24 @@ public class ProfileActivity extends AppCompatActivity {
                     profileName.setText(responseString);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.d("ERRER", e.toString());
+                    Log.d("ERROR", e.toString());
                 }
             }
         });
     }
 
     public void getUserPhysicalData() {
-        APIconnection.getInstance().GETRequest("physicaldata", apiData, new ServerCallback() {
-            @Override
-            public void onSuccess() {
-                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
-                try {
-                    JSONObject curObject = responseArray.getJSONObject(0);
-                    String weight = curObject.getString("weight");
-                    String height = curObject.getString("height");
-                    heightUser = Integer.parseInt(height);
-                    Log.d("abc", curObject.toString());
-                    String age = curObject.getString("age");
-                    String gender = curObject.getString("gender");
-                    String bmi = curObject.getString("bmi");
-                    String rmr = curObject.getString("rmr");
-                    profileWeight.setText(weight);
-                    profileAge.setText(age);
-                    profileHeight.setText(height);
-                    profileBmi.setText(bmi);
-                    profileRmr.setText(rmr);
-                    profileGender.setText(gender);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        profileWeight.setText(String.valueOf(user.getWeight()));
+        profileAge.setText(String.valueOf(user.getAge()));
+        profileHeight.setText(String.valueOf(user.getHeight()));
+        profileBmi.setText(String.valueOf(user.getBMI()));
+        profileRmr.setText(String.valueOf(user.getRMR()));
+        profileGender.setText(String.valueOf(user.getGender()), false);
     }
 
-    public void getUserRecords() {
+    public void getUserRecords(){
+        apiData.clear();
+        apiData.add(userId);
         APIconnection.getInstance().GETRequest("records", apiData, new ServerCallback() {
             @Override
             public void onSuccess() {
@@ -198,7 +194,7 @@ public class ProfileActivity extends AppCompatActivity {
                 JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
                 try {
                     JSONObject curObject = responseArray.getJSONObject(0);
-                    Log.d("ERRER", curObject.toString());
+                    Log.d("ERROR", curObject.toString());
                     String stepRecord = curObject.getString("maxStepDay");
                     String hpRecord = curObject.getString("maxHeartPointDay");
                     String streakRecord = curObject.getString("streak");
@@ -234,11 +230,23 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void exitIntent() {
+
+        updateData();
+
         final Intent intent = new Intent(ProfileActivity.this, OverviewActivity.class);
         intent.putExtra("user", user);
-
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, R.anim.slide_right_out);
 
+    }
+
+    private void updateData() {
+
+        user.setWeight(Integer.parseInt(profileWeight.getText().toString()));
+        user.setAge(Integer.parseInt(profileAge.getText().toString()));
+        user.setHeight(Integer.parseInt(profileHeight.getText().toString()));
+        user.setGender(profileGender.getText().toString());
+
+        user.updatePhysicalData();
     }
 }

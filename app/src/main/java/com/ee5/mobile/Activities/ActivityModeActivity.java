@@ -44,8 +44,23 @@ public class ActivityModeActivity extends AppCompatActivity implements ActModeRe
     private String userId;
     ImageButton backButton;
 
+    private User user;
+    private String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        try{
+            user = getIntent().getParcelableExtra("user");
+            Log.i("userParcel", user.getProfileEmail() + "1");
+            Log.i("userParcel", user.getUserEmail());
+            userId = String.valueOf(user.getUserId());
+            Log.i("userParcel", userId);
+        }
+        catch(Exception e){
+            Log.e("userParcelException", e.toString());
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activitymode);
         try {
