@@ -227,7 +227,7 @@ public class User implements Parcelable {
 
         ArrayList<String> linkData = new ArrayList<String>();
         ArrayList<String> linkParameters = new ArrayList<String>(Arrays.asList("userId", "weight", "height",
-                "age", "gender", "bmi", "rmr"));
+                "age", "gender"));
         String node = "physicalData";
 
         linkData.add(String.valueOf(userId));
@@ -235,10 +235,8 @@ public class User implements Parcelable {
         linkData.add(String.valueOf(height));
         linkData.add(String.valueOf(age));
         linkData.add(gender);
-        linkData.add(String.valueOf(getBMI()));
-        linkData.add(String.valueOf(getRMR()));
 
-        APIconnection.getInstance().POSTRequest(node, linkData, linkParameters, new ServerCallback() {
+        APIconnection.getInstance().PUTRequest(node, linkData, linkParameters, new ServerCallback() {
             @Override
             public void onSuccess() {
 
