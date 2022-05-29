@@ -73,19 +73,6 @@ public class NewActivityActivity extends AppCompatActivity {
             Log.e("userParcelException", e.toString());
         }
 
-        try{
-            apiData.clear();
-            user = getIntent().getParcelableExtra("user");
-            Log.i("userParcel", user.getProfileEmail() + "1");
-            Log.i("userParcel", user.getUserEmail());
-            userId = String.valueOf(user.getUserId());
-            Log.i("userParcel", userId);
-            apiData.add(userId);
-        }
-        catch(Exception e){
-            Log.e("userParcelException", e.toString());
-        }
-
         timerText = findViewById(R.id.timerText);
         stopStartButton = findViewById(R.id.startStopButton);
         calories = findViewById(R.id.calories_edit);

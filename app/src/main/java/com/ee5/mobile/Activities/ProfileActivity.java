@@ -42,6 +42,8 @@ public class ProfileActivity extends AppCompatActivity {
     TextInputEditText profileBmi;
     TextInputEditText profileHeight;
     TextInputEditText profileWeight;
+    TextInputEditText stepGoal;
+    TextInputEditText heartPointGoal;
     MaterialTextView profileStepsRecord;
     MaterialTextView profileHpRecord;
     MaterialTextView profileStreakRecord;
@@ -86,6 +88,10 @@ public class ProfileActivity extends AppCompatActivity {
         //non editable from About you section
         profileRmr = findViewById(R.id.rmr_edit);
         profileBmi = findViewById(R.id.bmi_edit);
+
+        //Goal section
+        stepGoal = findViewById(R.id.stepgoal_edit);
+        heartPointGoal = findViewById(R.id.heartpointgoal_edit);
 
         profileStepsRecord = findViewById(R.id.steps_record);
         profileHpRecord = findViewById(R.id.hp_record);
@@ -246,7 +252,10 @@ public class ProfileActivity extends AppCompatActivity {
         user.setAge(Integer.parseInt(profileAge.getText().toString()));
         user.setHeight(Integer.parseInt(profileHeight.getText().toString()));
         user.setGender(profileGender.getText().toString());
+        user.setDailyStepGoal(Integer.parseInt(stepGoal.getText().toString()));
+        user.setDailyHeartpointGoal(Integer.parseInt(heartPointGoal.getText().toString()));
 
         user.updatePhysicalData();
+        user.updateDailyGoals();
     }
 }

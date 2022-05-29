@@ -246,6 +246,25 @@ public class User implements Parcelable {
 
     }
 
+    public void updateDailyGoals() {
+
+        ArrayList<String> linkData = new ArrayList<String>();
+        ArrayList<String> linkParameters = new ArrayList<String>(Arrays.asList("userId", "dailySteps", "dailyHeartP"));
+        String node = "goals";
+
+        linkData.add(String.valueOf(userId));
+        linkData.add(String.valueOf(dailyStepGoal));
+        linkData.add(String.valueOf(dailyHeartpointGoal));
+
+        APIconnection.getInstance().PUTRequest(node, linkData, linkParameters, new ServerCallback() {
+            @Override
+            public void onSuccess() {
+                Log.i("UPDATE", "PUT request was succesfully sent");
+            }
+        });
+
+    }
+
     /*************************************************************
      * Parcelable interface method overrides
      *************************************************************/
