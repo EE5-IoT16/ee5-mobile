@@ -205,7 +205,13 @@ public class ProfileActivity extends AppCompatActivity {
                             profileStepsRecord.setText(stepRecord + " steps in a single day");
                             profileHpRecord.setText(hpRecord + " heart points in a single day");
                             profileStreakRecord.setText(streakRecord + " days is your longest streak");
-                            streakCurrent.setText("Your current streak is " + currentStreak + ". Beat your goal for " + ((Integer.valueOf(streakRecord) - Integer.valueOf(currentStreak)) + 1) + " more days to get a new record.");
+                            if(currentStreak == "null"){
+                                streakCurrent.setVisibility(View.GONE);
+                            }
+                            else{
+                                streakCurrent.setText("Your current streak is " + currentStreak + ". Beat your goal for " + ((Integer.valueOf(streakRecord) - Integer.valueOf(currentStreak)) + 1) + " more days to get a new record.");
+
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

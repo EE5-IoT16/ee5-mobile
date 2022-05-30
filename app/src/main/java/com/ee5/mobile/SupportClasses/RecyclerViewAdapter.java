@@ -4,7 +4,8 @@ import static com.ee5.mobile.Activities.OverviewActivity.maxHp;
 import static com.ee5.mobile.Activities.OverviewActivity.maxHr;
 import static com.ee5.mobile.Activities.OverviewActivity.maxSteps;
 import static com.ee5.mobile.Activities.OverviewActivity.minHr;
-import static com.ee5.mobile.Activities.OverviewActivity.setGraphAxis;
+import static com.ee5.mobile.Activities.OverviewActivity.setGraphAxisHp;
+import static com.ee5.mobile.Activities.OverviewActivity.setGraphAxisSteps;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -12,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,7 +35,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
     private Context myContext;
     private ArrayList<DataCard> dataCardList;
     private OnItemClickListener myListener;
-    String graphAxis[] = new String[]{"M", "T", "W", "T", "F", "S", "S"};
+    String graphAxisSteps[] = new String[]{"T", "W", "T", "F", "S", "S", "M"};
 
     @NonNull
     @Override
@@ -80,10 +80,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
                 viewHolderOne.rv_dataCard_record.setText(currentItem.getDataCardHpRecord());
                 viewHolderOne.rv_barChart.setData(currentItem.getBarDataHp());
                 viewHolderOne.rv_barChart.getAxisLeft().setAxisMaximum(maxHp);
+                setGraphAxisSteps = 0;
             }
         }
     }
-
 
 
     @Override
@@ -140,10 +140,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             x.setPosition(XAxis.XAxisPosition.BOTTOM);
             x.setTextColor(Color.argb(180, 255, 255, 255));
             x.setDrawGridLines(false);
-            if (setGraphAxis == 1) {
-                String[] labels = setGraphAxis();
+            /*if (setGraphAxisSteps == 1) {
+                String[] labels = setGraphAxis(graphAxisSteps);
                 x.setValueFormatter(new IndexAxisValueFormatter(labels));
-            }
+                setGraphAxisSteps = 0;
+            }*/
+            x.setValueFormatter(new IndexAxisValueFormatter(graphAxisSteps));
             Description description = rv_barChart.getDescription();
             description.setEnabled(false);
             yLeft.setAxisMinimum(0f);
@@ -167,12 +169,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             });
         }
 
-        public String[] setGraphAxis() {
+        public String[] setGraphAxis(String[] labels) {
             LocalDate today = LocalDate.now();
             DayOfWeek dayOfWeek = DayOfWeek.from(today);
             int value = dayOfWeek.getValue();
-            rotateLeft(graphAxis, value, 7);
-            return graphAxis;
+            rotateLeft(labels, value, 7);
+            return labels;
         }
 
         public void rotateLeft(String array[], int steps, int size)        //rotate array of x size by x steps
@@ -186,15 +188,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
                 array[6] = temp;
             }
         }
-
-       /* public void rotateLeftOnce(String array[], int size) {
-            int j;
-            String temp;
-            temp = array[0];
-            for (j = 0; j < size - 1; j++)
-                array[j] = array[j + 1];
-            array[j] = temp;
-        }*/
     }
 
 

@@ -35,7 +35,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -69,7 +68,9 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
     private String hrRecord = "";
     private Double temp = 0.0;
 
-    public static int setGraphAxis = 0;
+    public static int setGraphAxisSteps = 0;
+    public static int setGraphAxisHp = 0;
+
 
     private int stepsToday = 0;
     private int stepsLeftToday = 0;
@@ -135,6 +136,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
 
         setup_btn.setOnClickListener(view -> {
             Intent intent = new Intent(OverviewActivity.this, SetupActivity.class);
+            intent.putExtra("user", user);
             startActivity(intent);
             overridePendingTransition(R.anim.slide_in_down, android.R.anim.fade_out);
 
@@ -159,7 +161,7 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
         todayDayOfTheYear = today.getDayOfYear();
         currentDailyStepsData = 0;
 
-        setGraphAxis = 0;
+        setGraphAxisSteps = 0;
 
         profileButton = (Button) findViewById(R.id.viewProfile_Btn);
         profileButton.setOnClickListener(new View.OnClickListener() {
@@ -240,7 +242,8 @@ public class OverviewActivity extends AppCompatActivity implements RecyclerViewA
                 initGraphs();
 
                 //graphs
-                setGraphAxis = 1;
+                setGraphAxisSteps = 1;
+                setGraphAxisHp = 1;
                 createCharts();
 
                 //daily goal

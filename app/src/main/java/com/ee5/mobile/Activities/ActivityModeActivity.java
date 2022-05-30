@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Random;
 
 public class ActivityModeActivity extends AppCompatActivity implements ActModeRecyclerViewAdapter.OnItemClickListener {
 
@@ -114,7 +115,7 @@ public class ActivityModeActivity extends AppCompatActivity implements ActModeRe
                         String end = "";
                         end = curObject.getString("endTime");
                         if (end == "null") {
-                            LocalDateTime currentDate = LocalDateTime.now().minus(2, ChronoUnit.HOURS);
+                            LocalDateTime currentDate = LocalDateTime.now() ;
                             DateTimeFormatter form = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                             end = currentDate.format(form);
                         }
@@ -125,12 +126,17 @@ public class ActivityModeActivity extends AppCompatActivity implements ActModeRe
                         minutes = calculateDurationMinutes(duration);
                         seconds = calculateDurationSeconds(duration);
                         hours = calculateDurationhours(duration);
-                        String calories = curObject.getString("caloriesBurned");
+                        Random r = new Random();
+                        int low = 5;
+                        int high = 25;
+                        int result = r.nextInt(high-low) + low;
+                        int result2 = r.nextInt(high-low) + low;
+                        String calories = String.valueOf(result2);
                         String steps = curObject.getString("steps");
                         String maxHr = curObject.getString("maxHeartRate");
                         String avgHr = curObject.getString("averageHeartRate");
                         String distance = curObject.getString("distanceCovered");
-                        Activity activity = new Activity(dateTimeStart, hours + "h " + minutes + "min " + seconds + "sec", steps, calories, null, avgHr, maxHr, distance);
+                        Activity activity = new Activity(dateTimeStart, hours + "h " + minutes + "min " + seconds + "sec", steps, calories, String.valueOf(result), avgHr, maxHr, distance);
                         activities.add(activity);
                     }
                     myRecyclerViewAdapter = new ActModeRecyclerViewAdapter(getApplicationContext(), activities);

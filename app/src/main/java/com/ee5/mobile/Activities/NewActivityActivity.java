@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +21,13 @@ import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.APIconnection;
 import com.ee5.mobile.SupportClasses.Activity;
 import com.ee5.mobile.SupportClasses.User;
+import com.google.android.material.textfield.TextInputEditText;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,10 +49,10 @@ public class NewActivityActivity extends AppCompatActivity {
     TextView timerText;
     Button stopStartButton;
     ImageButton newAct_back_btn;
-    TextView calories;
-    TextView avgHeartRate;
-    TextView steps;
-    TextView distance;
+    TextInputEditText calories;
+    TextInputEditText heartRate;
+    TextInputEditText distanceText;
+    TextInputEditText activitySteps;
 
     Timer timer;
     TimerTask timerTask;
@@ -53,6 +60,10 @@ public class NewActivityActivity extends AppCompatActivity {
 
     private User user;
     private String userId;
+    int stepsStart = 0;
+    int stepsActivity = 0;
+    int currHR = 0;
+    Boolean startedActivity = false;
 
     LocalDateTime localStartDateTime = null;
     Date localDate = null;
@@ -81,9 +92,9 @@ public class NewActivityActivity extends AppCompatActivity {
         timerText = findViewById(R.id.timerText);
         stopStartButton = findViewById(R.id.startStopButton);
         calories = findViewById(R.id.calories_edit);
-        avgHeartRate = findViewById(R.id.bpm_edit);
-        steps = findViewById(R.id.steps_edit);
-        distance = findViewById(R.id.distance_edit);
+        heartRate = findViewById(R.id.bpm_edit);
+        distanceText = findViewById(R.id.distance_edit);
+        activitySteps = findViewById(R.id.steps_edit);
 
         newAct_back_btn = findViewById(R.id.newAct_back_btn);
         newAct_back_btn.setOnClickListener(new View.OnClickListener() {
@@ -95,25 +106,37 @@ public class NewActivityActivity extends AppCompatActivity {
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_out);
             }
         });
-
-
         timer = new Timer();
 
+        final Handler handler = new Handler();
+        final int delay = 1000;        //every 5 sec
 
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                getCurrentSteps();
+                getLiveHr();
+                calculate();
+                Log.d("steps", String.valueOf(stepsActivity));
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
     }
 
     //program goes here when button is pressed
     public void startStopPressed(View view) {
         if (timerStarted == false) {
+            startedActivity = true;
             timerStarted = true;
             setButtonUI("Stop", R.color.HeartRed);
             localStartDateTime = LocalDateTime.now();
             localDate = new Date();
-            startDateTime = localStartDateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
+            startDateTime = localStartDateTime.atZone(ZoneId.of("UTC-2")).withZoneSameInstant(ZoneId.of("UTC"));
             startTimer();
+            getStepsAtStart();
         } else {
+            startedActivity = false;
             resetTimer();
-            stopDateTime = LocalDateTime.now().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
+            stopDateTime = LocalDateTime.now().atZone(ZoneId.of("UTC-2")).withZoneSameInstant(ZoneId.of("UTC"));
             Log.d("endtime", "endtime = " + stopDateTime.toString());
             endedActivity();
         }
@@ -161,6 +184,87 @@ public class NewActivityActivity extends AppCompatActivity {
 
     }
 
+    public void getStepsAtStart() {
+        APIconnection.getInstance().GETRequest("steps", apiData, new ServerCallback() {
+            @Override
+            public void onSuccess() {
+                String responseString = "";
+                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                try {
+                    JSONObject curObject = responseArray.getJSONObject(responseArray.length() - 1);
+                    stepsStart = curObject.getInt("steps");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void getCurrentSteps() {
+        APIconnection.getInstance().GETRequest("steps", apiData, new ServerCallback() {
+            @Override
+            public void onSuccess() {
+                String responseString = "";
+                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                try {
+                    JSONObject curObject = responseArray.getJSONObject(responseArray.length() - 1);
+                    int currentSteps = curObject.getInt("steps");
+                    Log.d("steps", "read: " + String.valueOf(currentSteps));
+                    stepsActivity = currentSteps - stepsStart;
+                    if (startedActivity) activitySteps.setText(String.valueOf(stepsActivity));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void getLiveHr() {
+        APIconnection.getInstance().GETRequest("heartRate", apiData, new ServerCallback() {
+            @Override
+            public void onSuccess() {
+                String responseString = "";
+                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                try {
+                    JSONObject curObject = responseArray.getJSONObject(responseArray.length() - 1);
+                    currHR = curObject.getInt("bpm");
+                    if (startedActivity) heartRate.setText(String.valueOf(currHR));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void calculate() {
+        int height = user.getHeight();
+        calculateDistance(height, stepsActivity);
+        calculateCalories();
+    }
+
+    public void calculateDistance(int height, int steps) {
+        Double dist = 0.0;
+        Double strideLength = height * 0.43;        //https://www.inchcalculator.com/steps-to-distance-calculator/
+        dist = (strideLength * steps) / 100000;
+        DecimalFormat df = new DecimalFormat("0.00");
+        String result =df.format(dist);
+        if (startedActivity) distanceText.setText(String.valueOf(result));
+    }
+
+    public void calculateCalories() {
+        Double caloriesBurned = 0.0;
+        double weight = user.getWeight();
+        int height = user.getHeight();
+        int age = user.getAge();
+
+        // Need new formula that uses time spend as well;
+        double cal = ((time/60) * (currHR - 60) * weight)/200;
+
+        DecimalFormat df = new DecimalFormat("0.00");
+        String result =df.format(cal);
+        if (startedActivity) calories.setText(String.valueOf(result));
+    }
+
     private String getTimerText() {
         int rounded = (int) Math.round(time);
 
@@ -190,12 +294,12 @@ public class NewActivityActivity extends AppCompatActivity {
         Log.d("time", "MIN = " + String.valueOf(minutes));
         long seconds = ChronoUnit.SECONDS.between(startDateTime, stopDateTime);
         Log.d("time", "SEC = " + String.valueOf(seconds));
-        long hours = (ChronoUnit.HOURS.between(startDateTime, stopDateTime))*3600;
+        long hours = (ChronoUnit.HOURS.between(startDateTime, stopDateTime)) * 3600;
         Log.d("time", "HOUR = " + String.valueOf(hours));
         long total = minutes + seconds + hours;
 
-        ArrayList<String> parameters = new ArrayList<>(Arrays.asList("userId", "startTime", "endTime"));
-        ArrayList<String> values = new ArrayList<>(Arrays.asList(userId, startDateTime.format(formatter), stopDateTime.format(formatter) + String.valueOf(total)));
+        ArrayList<String> parameters = new ArrayList<>(Arrays.asList("userId", "startTime", "endTime", "duration"));
+        ArrayList<String> values = new ArrayList<>(Arrays.asList(userId, startDateTime.format(formatter), stopDateTime.format(formatter), String.valueOf(total)));
         Log.i("POST datetime", values.toString());
 
         APIconnection.getInstance().POSTRequest("activity", values, parameters, new ServerCallback() {

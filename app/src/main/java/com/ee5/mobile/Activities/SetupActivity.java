@@ -33,6 +33,7 @@ import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.Ble.BleAdapter;
 import com.ee5.mobile.SupportClasses.Ble.BleScanner;
 import com.ee5.mobile.SupportClasses.Ble.BleService;
+import com.ee5.mobile.SupportClasses.User;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -45,12 +46,23 @@ public class SetupActivity extends AppCompatActivity {
     private static final int REQUEST_PERMISSION = 0x01;
     private BleAdapter bleAdapter;
     private final static String espAddress = "C4:DD:57:9E:88:0E";
-
+    private User user;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
+
+        try {
+            user = getIntent().getParcelableExtra("user");
+            Log.i("userParcel", user.getProfileEmail());
+            Log.i("userParcel", user.getUserEmail());
+            userId = String.valueOf(user.getUserId());
+            Log.i("userParcel", userId);
+        } catch (Exception e) {
+            Log.e("userParcelException", e.toString());
+        }
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION);
 
@@ -78,6 +90,7 @@ public class SetupActivity extends AppCompatActivity {
     private void exitIntent(){
         bleAdapter.stopAdapterRefresh();
         final Intent intent = new Intent(SetupActivity.this, OverviewActivity.class);
+        intent.putExtra("user", user);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, R.anim.slide_out_up);
     }

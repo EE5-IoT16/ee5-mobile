@@ -99,7 +99,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         ArrayList<String> accountParameters = new ArrayList<String>(Arrays.asList("name", "surname", "email", "password", "salt"));
         String node = "profile";
 
-        accountData.add("21");
         accountData.add(firstName);
         accountData.add(surname);
         accountData.add(email);
