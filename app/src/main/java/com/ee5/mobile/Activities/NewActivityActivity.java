@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -91,7 +92,7 @@ public class NewActivityActivity extends AppCompatActivity {
                 final Intent intent = new Intent(NewActivityActivity.this, ActivityModeActivity.class);
                 intent.putExtra("user", user);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_down, android.R.anim.fade_out);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_out);
             }
         });
 
@@ -113,6 +114,7 @@ public class NewActivityActivity extends AppCompatActivity {
         } else {
             resetTimer();
             stopDateTime = LocalDateTime.now().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"));
+            Log.d("endtime", "endtime = " + stopDateTime.toString());
             endedActivity();
         }
     }
@@ -179,8 +181,21 @@ public class NewActivityActivity extends AppCompatActivity {
         //Activity activity = new Activity(startDateTime, null, null, null, null, null, null, null);
         //post to activityTable in database so it can be fetched in activities recyclerview
 
+        /*ChronoUnit chronoUnit = null;*/
+        //Log.d("time", "START = " + String.valueOf(startDateTime));
+        //Log.d("time", "STOP = " +String.valueOf(stopDateTime));
+        long duration = ChronoUnit.MILLIS.between(startDateTime, stopDateTime);
+        Log.d("time", "DURATION = " + String.valueOf(duration));
+        long minutes = (ChronoUnit.MINUTES.between(startDateTime, stopDateTime)) * 60;
+        Log.d("time", "MIN = " + String.valueOf(minutes));
+        long seconds = ChronoUnit.SECONDS.between(startDateTime, stopDateTime);
+        Log.d("time", "SEC = " + String.valueOf(seconds));
+        long hours = (ChronoUnit.HOURS.between(startDateTime, stopDateTime))*3600;
+        Log.d("time", "HOUR = " + String.valueOf(hours));
+        long total = minutes + seconds + hours;
+
         ArrayList<String> parameters = new ArrayList<>(Arrays.asList("userId", "startTime", "endTime"));
-        ArrayList<String> values = new ArrayList<>(Arrays.asList(userId, startDateTime.format(formatter), stopDateTime.format(formatter)));
+        ArrayList<String> values = new ArrayList<>(Arrays.asList(userId, startDateTime.format(formatter), stopDateTime.format(formatter) + String.valueOf(total)));
         Log.i("POST datetime", values.toString());
 
         APIconnection.getInstance().POSTRequest("activity", values, parameters, new ServerCallback() {
@@ -190,6 +205,7 @@ public class NewActivityActivity extends AppCompatActivity {
             }
         });
     }
+
 
 }
 

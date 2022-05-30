@@ -41,8 +41,6 @@ public class UserSelectActivity extends AppCompatActivity /*implements UserSelec
     private int profileId;
     private int userId;
     private User user;
-    UserSelectRecyclerViewAdapter myRecyclerViewAdapter;
-    RecyclerView myRecyclerView;
     public static ArrayList<User> users = new ArrayList<>();
 
     @Override
@@ -58,15 +56,7 @@ public class UserSelectActivity extends AppCompatActivity /*implements UserSelec
         catch(Exception e){
             Log.e("userParcelException", e.toString());
         }
-       /* myRecyclerView = findViewById(R.id.userSelect_recyclerview);
-        myRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        myRecyclerViewAdapter = new UserSelectRecyclerViewAdapter(this, users);
-        //myRecyclerViewAdapter.setOnItemClickListener(this);
-        myRecyclerView.setAdapter(myRecyclerViewAdapter);*/
-
         getData();
-       /* User user = new User(1, "test", "test", "test");
-        users.add(user);*/
 
     }
 

@@ -31,7 +31,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
@@ -45,7 +48,9 @@ public class ActivityModeActivity extends AppCompatActivity implements ActModeRe
     private User user;
     private String userId;
     ImageButton backButton;
-    LocalDateTime dateTime;
+    int seconds;
+    int minutes;
+    int hours;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +83,6 @@ public class ActivityModeActivity extends AppCompatActivity implements ActModeRe
         myRecyclerViewAdapter.setOnItemClickListener(this);
         myRecyclerView.setAdapter(myRecyclerViewAdapter);
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(myRecyclerView);
-
         parseJson();
 
         backButton = findViewById(R.id.activity_back_btn);
@@ -90,7 +92,7 @@ public class ActivityModeActivity extends AppCompatActivity implements ActModeRe
                 Intent intent = new Intent(ActivityModeActivity.this, ProfileActivity.class);
                 intent.putExtra("user", user);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_down, android.R.anim.fade_out);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_out);
             }
         });
     }
@@ -104,18 +106,31 @@ public class ActivityModeActivity extends AppCompatActivity implements ActModeRe
                 try {
                     for (int i = 0; i < responseArray.length(); i++) {
                         JSONObject curObject = responseArray.getJSONObject(i);
-                        responseString = curObject.getString("startTime");
-                        String date = responseString.substring(0, 10);
-                        String time = responseString.substring(11, 19);
+                        String start = curObject.getString("startTime");
+                        String startDate = start.substring(0, 10);
+                        String startTime = start.substring(11, 19);
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dddd HH:mm:ss");
-                        Date dateTime = formatter.parse(date + " " + time);
-                        String endTime = curObject.getString("endTime");
+                        Date dateTimeStart = formatter.parse(startDate + " " + startTime);
+                        String end = "";
+                        end = curObject.getString("endTime");
+                        if (end == "null") {
+                            LocalDateTime currentDate = LocalDateTime.now().minus(2, ChronoUnit.HOURS);
+                            DateTimeFormatter form = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                            end = currentDate.format(form);
+                        }
+                        String endDate = end.substring(0, 10);
+                        String endTime = end.substring(11, 19);
+                        Date dateTimeEnd = formatter.parse(endDate + " " + endTime);
+                        long duration = dateTimeEnd.getTime() - dateTimeStart.getTime();
+                        minutes = calculateDurationMinutes(duration);
+                        seconds = calculateDurationSeconds(duration);
+                        hours = calculateDurationhours(duration);
                         String calories = curObject.getString("caloriesBurned");
                         String steps = curObject.getString("steps");
                         String maxHr = curObject.getString("maxHeartRate");
                         String avgHr = curObject.getString("averageHeartRate");
                         String distance = curObject.getString("distanceCovered");
-                        Activity activity = new Activity(dateTime, null, steps, calories, null, avgHr, maxHr, distance);
+                        Activity activity = new Activity(dateTimeStart, hours + "h " + minutes + "min " + seconds + "sec", steps, calories, null, avgHr, maxHr, distance);
                         activities.add(activity);
                     }
                     myRecyclerViewAdapter = new ActModeRecyclerViewAdapter(getApplicationContext(), activities);
@@ -135,23 +150,18 @@ public class ActivityModeActivity extends AppCompatActivity implements ActModeRe
 
     }
 
-    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+    public int calculateDurationMinutes(long duration) {
+        int minutes = (int) ((duration / (1000 * 60)) % 60);
+        return minutes;
+    }
 
-        @Override
-        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-            Toast.makeText(ActivityModeActivity.this, "on Move", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+    public int calculateDurationSeconds(long duration) {
+        int seconds = (int) ((duration / 1000) % 60);
+        return seconds;
+    }
 
-        @Override
-        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-            //Remove swiped item from list and notify the RecyclerView
-            int position = viewHolder.getAdapterPosition();
-            activities.remove(position);
-            myRecyclerViewAdapter.notifyDataSetChanged();
-            //delete from database
-
-        }
-    };
-
+    public int calculateDurationhours(long duration) {
+        int hours = (int) ((duration / (1000 * 60 * 60)) % 60);
+        return hours;
+    }
 }

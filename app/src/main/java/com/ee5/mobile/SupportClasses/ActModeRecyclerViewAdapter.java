@@ -11,9 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.ee5.mobile.R;
 import com.github.mikephil.charting.charts.BarChart;
@@ -41,17 +44,18 @@ public class ActModeRecyclerViewAdapter extends RecyclerView.Adapter {
         ViewHolderActivityMode viewHolderActivityMode = (ViewHolderActivityMode) holder;
         Activity currentItem = activitiesList.get(position);
 
-        //viewHolderActivityMode.rv_am_date.setText(formatDate(currentItem.getDate()));
+        viewHolderActivityMode.rv_am_date.setText(formatDate(currentItem.getDateTime()));
         viewHolderActivityMode.rv_am_duration.setText((CharSequence) currentItem.getDuration());
         viewHolderActivityMode.rv_am_steps.setText(currentItem.getSteps());
         viewHolderActivityMode.rv_am_calories.setText(currentItem.getCalories());
         viewHolderActivityMode.rv_am_heartpoints.setText(currentItem.getHeartPoints());
     }
 
-    public String formatDate(LocalDateTime dateTime){
+    public String formatDate(Date dateTime){
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-        return dateTime.format(dateTimeFormatter);
+        return dateFormat.format(dateTime);
     }
 
     @Override

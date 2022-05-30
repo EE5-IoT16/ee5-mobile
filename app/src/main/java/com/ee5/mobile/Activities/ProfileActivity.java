@@ -26,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -101,9 +102,7 @@ public class ProfileActivity extends AppCompatActivity {
         streakCurrent = findViewById(R.id.streak_record_current);
 
         getUserId();
-        getUserName();
         getUserPhysicalData();
-        getCurrentStreak();
         getUserRecords();
 
         back_btn = findViewById(R.id.profile_back_btn);
@@ -167,85 +166,51 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
     }
 
     public void getUserId() {
         userId = Integer.toString(1);
     }
 
-    public void getUserName() {
-        apiData.clear();
-        apiData.add(userId);
-        APIconnection.getInstance().GETRequest("user", apiData, new ServerCallback() {
-            @Override
-            public void onSuccess() {
-                String responseString = "";
-                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
-                try {
-                    JSONObject curObject = responseArray.getJSONObject(0);
-                    responseString = curObject.getString("name");
-                    responseString += " " + curObject.getString("surname");
-                    profileName.setText(responseString);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.d("ERROR", e.toString());
-                }
-            }
-        });
-    }
-
     public void getUserPhysicalData() {
+        profileName.setText(user.getUserFirstName() + " " + user.getUserSurname());
         profileWeight.setText(String.valueOf(user.getWeight()));
         profileAge.setText(String.valueOf(user.getAge()));
         profileHeight.setText(String.valueOf(user.getHeight()));
         profileBmi.setText(String.valueOf(user.getBMI()));
         profileRmr.setText(String.valueOf(user.getRMR()));
         profileGender.setText(String.valueOf(user.getGender()), false);
+        stepGoal.setText(String.valueOf(user.getDailyStepGoal()));
+        heartPointGoal.setText(String.valueOf(user.getDailyHeartpointGoal()));
     }
 
-    public void getUserRecords(){
+    public void getUserRecords() {
         apiData.clear();
-        apiData.add(userId);
-        APIconnection.getInstance().GETRequest("records", apiData, new ServerCallback() {
+        apiData.add(String.valueOf(user.getUserId()));
+        APIconnection.getInstance().POSTRequest("records", apiData, new ArrayList<String>(Arrays.asList("userId")), new ServerCallback() {
             @Override
             public void onSuccess() {
-                String responseString = "";
-                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
-                try {
-                    JSONObject curObject = responseArray.getJSONObject(0);
-                    Log.d("ERROR", curObject.toString());
-                    String stepRecord = curObject.getString("maxStepDay");
-                    String hpRecord = curObject.getString("maxHeartPointDay");
-                    String streakRecord = curObject.getString("streak");
-                    profileStepsRecord.setText(stepRecord + " steps in a single day");
-                    profileHpRecord.setText(hpRecord + " heart points in a single day");
-                    profileStreakRecord.setText(streakRecord + " days is your longest streak");
-                    curObject = streakData.getJSONObject(0);
-                    String currStreak = curObject.getString("currentStreak");
-                    Toast.makeText(getApplicationContext(), currStreak, Toast.LENGTH_SHORT).show();
-                    /*streakCurrent.setText("Your current streak is " + currStreak + ". Beat your goal for " +
-                            ((Integer.valueOf(streakRecord) - Integer.valueOf(currStreak)) + 1) + " more days to get a new record.");*/
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    public void getCurrentStreak() {
-        APIconnection.getInstance().GETRequest("goalsCompleted", apiData, new ServerCallback() {
-            @Override
-            public void onSuccess() {
-                String responseString = "";
-                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
-                try {
-                    JSONObject curObject = responseArray.getJSONObject(responseArray.length() - 1);
-                    streakData.put(curObject);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                APIconnection.getInstance().GETRequest("records", apiData, new ServerCallback() {
+                    @Override
+                    public void onSuccess() {
+                        String responseString = "";
+                        JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
+                        try {
+                            JSONObject curObject = responseArray.getJSONObject(0);
+                            Log.d("ERROR", curObject.toString());
+                            String stepRecord = curObject.getString("maxStepDay");
+                            String hpRecord = curObject.getString("maxHeartPointDay");
+                            String streakRecord = curObject.getString("streak");
+                            String currentStreak = curObject.getString("currentStreak");
+                            profileStepsRecord.setText(stepRecord + " steps in a single day");
+                            profileHpRecord.setText(hpRecord + " heart points in a single day");
+                            profileStreakRecord.setText(streakRecord + " days is your longest streak");
+                            streakCurrent.setText("Your current streak is " + currentStreak + ". Beat your goal for " + ((Integer.valueOf(streakRecord) - Integer.valueOf(currentStreak)) + 1) + " more days to get a new record.");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
         });
     }
@@ -262,7 +227,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void updateData() {
-        try{
+        try {
             user.setWeight(Integer.parseInt(profileWeight.getText().toString()));
             user.setAge(Integer.parseInt(profileAge.getText().toString()));
             user.setHeight(Integer.parseInt(profileHeight.getText().toString()));

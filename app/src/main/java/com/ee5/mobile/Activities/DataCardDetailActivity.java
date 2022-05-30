@@ -1,7 +1,5 @@
 package com.ee5.mobile.Activities;
 
-import static com.ee5.mobile.Activities.ProfileActivity.heightUser;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,11 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ee5.mobile.Interfaces.GraphCallback;
 import com.ee5.mobile.Interfaces.ServerCallback;
 import com.ee5.mobile.R;
 import com.ee5.mobile.SupportClasses.APIconnection;
@@ -43,7 +39,6 @@ import java.text.DecimalFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -157,7 +152,6 @@ public class DataCardDetailActivity extends AppCompatActivity {
 
         if (position == 2) {
             title_hr.setText(dataCard.getDataCardTitle());
-            getHr();
             createLineChart();
             returnButton_hr.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -353,31 +347,6 @@ public class DataCardDetailActivity extends AppCompatActivity {
         }
     }
 
-    public void getHr() {
-        APIconnection.getInstance().GETRequest("tenMinutes/heartRate", apiData, new ServerCallback() {
-            @Override
-            public void onSuccess() {
-                String responseString = "";
-                JSONArray responseArray = APIconnection.getInstance().getAPIResponse();
-                try {
-                    for (int i = 0; i < responseArray.length(); i++) {
-                        JSONObject curObject = responseArray.getJSONObject(i);
-                        responseString = curObject.getString("bpm");
-                        int graphValue = Integer.valueOf(responseString);
-                        avgHr += avgHr;
-                        if (graphValue > maxHr) {
-                            maxHr = graphValue;
-                        }
-                    }
-                    //completion_hr.setText(maxHr);
-                    //steps_text_hr.setText(avgHr);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
     public void getUserHeight() {
         APIconnection.getInstance().GETRequest("physicaldata", apiData, new ServerCallback() {
             @Override
@@ -528,6 +497,21 @@ public class DataCardDetailActivity extends AppCompatActivity {
     }
 
     public void createLineChart() {
+        int currentValue = 0;
+        int avgHr = 0;
+        for(int i = 0; i < 10; i++){
+            currentValue = dataCard.getDataCardHrData().get(i);
+            dataCardHrDataList.add(currentValue);
+            avgHr += currentValue;
+            if (currentValue > maxHr) {
+                maxHr = currentValue;
+            }
+        }
+        avgHr = currentValue/10;
+        completion_hr.setText(String.valueOf(maxHr));
+        steps_text_hr.setText(String.valueOf(avgHr));
+
+
         graphEntries = new ArrayList<>();
         graphEntries.add(new BarEntry(0f, dataCardHrDataList.get(0)));
         graphEntries.add(new BarEntry(1f, dataCardHrDataList.get(1)));
@@ -567,7 +551,5 @@ public class DataCardDetailActivity extends AppCompatActivity {
         x.setValueFormatter(new IndexAxisValueFormatter(labels));
         Description description = lineChart.getDescription();
         description.setEnabled(false);
-        yLeft.setAxisMaximum(maxHr + 20);
-        //yLeft.setAxisMinimum(minHr - 20);
     }
 }

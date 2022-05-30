@@ -39,8 +39,8 @@ public class User implements Parcelable {
     private String gender = "X";  //"male" or "female" or "X"
 
     //goals data table
-    private int dailyStepGoal;
-    private int dailyHeartpointGoal;
+    private int dailyStepGoal = 0;
+    private int dailyHeartpointGoal = 0;
 
     /*************************************************************
      * CONSTRUCTORS
@@ -179,8 +179,12 @@ public class User implements Parcelable {
         this.gender = gender;
     }
 
-    public int getBMI(){
-        return (int) Math.rint(weight / (height^2));
+    public Double getBMI(){
+        Log.d("bmi", "weight: " + weight);
+        Log.d("bmi", "height: " + height);
+        double bmi = (weight / ((height/100)^2));
+        Log.d("bmi", "bmi: " + bmi);
+        return bmi;
     }
 
     public int getRMR(){
@@ -243,7 +247,6 @@ public class User implements Parcelable {
                 Log.i("UPDATE", "PUT request was succesfully sent");
             }
         });
-
     }
 
     public void updateDailyGoals() {

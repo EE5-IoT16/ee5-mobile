@@ -480,13 +480,15 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/streak_record_current"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="18dp"
         android:fontFamily="@font/sfproregular"
         android:text="0 Heart Points"
         android:textSize="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/streak_record" />
 

@@ -4,25 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="invisible"
     tools:context=".Activities.UserSelectActivity"
-    tools:visibility="visible"
-    android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="test"
-        android:textColor="@color/black">
-
-    </TextView>
-
-   <!-- <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/userSelect_recyclerview"
-        android:layout_marginTop="25dp"
-        android:layout_width="409dp"
-        android:layout_height="889dp"
-        android:background="@color/Grey"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp"
-        tools:ignore="MissingConstraints" />-->
+    android:orientation="vertical"
+    android:background="@color/Beige">
 </LinearLayout>

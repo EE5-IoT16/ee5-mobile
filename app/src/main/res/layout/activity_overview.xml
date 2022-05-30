@@ -25,6 +25,23 @@
         app:layout_constraintTop_toTopOf="@+id/stepsleft_text" />
 
     <TextView
+        android:id="@+id/goalCompletedText"
+        android:layout_width="wrap_content"
+        android:layout_height="37dp"
+        android:fontFamily="@font/sfprobold"
+        android:gravity="center"
+        android:textColor="@color/StepBlue"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/stepsleft_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/stepsLeft_num"
+        app:layout_constraintTop_toBottomOf="@+id/quote_tv">
+
+    </TextView>
+
+    <TextView
         android:id="@+id/stepsleft_text"
         android:layout_width="188dp"
         android:layout_height="37dp"

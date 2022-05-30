@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class Activity implements Comparable<Activity> {
     public Date date;
-    public Time duration;
+    public String duration;
     public String steps;
     public String calories;
     public String heartPoints;
@@ -18,7 +18,7 @@ public class Activity implements Comparable<Activity> {
     public String maxHeartRate;
     public String distance;
 
-    public Activity(Date date, Time duration, String steps, String calories, String heartPoints, String avgHeartrate, String maxHeartRate, String distance) {
+    public Activity(Date date, String duration, String steps, String calories, String heartPoints, String avgHeartrate, String maxHeartRate, String distance) {
         this.date = date;
         this.duration = duration;
         this.steps = steps;
@@ -57,7 +57,7 @@ public class Activity implements Comparable<Activity> {
         return date;
     }
 
-    public Time getDuration() {
+    public String getDuration() {
         return duration;
     }
 

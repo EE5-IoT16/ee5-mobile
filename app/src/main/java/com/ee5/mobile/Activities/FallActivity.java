@@ -74,6 +74,7 @@ public class FallActivity extends AppCompatActivity implements FallsRecyclerView
                 Intent intent = new Intent(FallActivity.this, ProfileActivity.class);
                 intent.putExtra("user", user);
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_out);
             }
         });
 
